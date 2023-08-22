@@ -1,0 +1,73 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Baserun",
+  "logo": {
+    "dark": "/logo/dark.svg",
+    "light": "/logo/light.svg"
+  },
+  "favicon": "/favicon.svg",
+  "colors": {
+    "primary": "#818cf8",
+    "light": "#A5B4FC",
+    "dark": "#6366F1",
+    "background": {
+      "dark": "#0E1015"
+    },
+    "anchors": {
+      "from": "#6366F1",
+      "to": "#818cf8"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "Book a demo",
+      "url": "https://calendly.com/baserun/30min"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Get started",
+    "url": "https://baserun.ai/sign-up"
+  },
+  "tabs": [
+    {
+      "name": "API Reference",
+      "url": "api-reference"
+    }
+  ],
+  "anchors": [
+    {
+      "name": "Python SDK",
+      "icon": "python",
+      "url": "https://pypi.org/project/baserun"
+    },
+    {
+      "name": "TypeScript SDK",
+      "icon": "npm",
+      "url": "https://www.npmjs.com/package/baserun"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Get Started",
+      "pages": ["introduction", "python", "typescript"]
+    },
+    {
+      "group": "API Documentation",
+      "pages": ["api-reference/authentication"]
+    },
+    {
+      "group": "Endpoint Examples",
+      "pages": [
+        "api-reference/endpoint/get",
+        "api-reference/endpoint/create",
+        "api-reference/endpoint/update",
+        "api-reference/endpoint/delete"
+      ]
+    }
+  ],
+  "footerSocials": {
+    "discord": "https://discord.gg/xEPFsvSmkb",
+    "twitter": "https://twitter.com/baserunai",
+    "linkedin": "https://www.linkedin.com/company/baserun"
+  }
+}
