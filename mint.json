@@ -28,41 +28,19 @@
     "name": "Get started",
     "url": "https://baserun.ai/sign-up"
   },
-  "tabs": [
-    {
-      "name": "API Reference",
-      "url": "api-reference"
-    }
-  ],
-  "anchors": [
-    {
-      "name": "Python SDK",
-      "icon": "python",
-      "url": "https://pypi.org/project/baserun"
-    },
-    {
-      "name": "TypeScript SDK",
-      "icon": "npm",
-      "url": "https://www.npmjs.com/package/baserun"
-    }
-  ],
+  "tabs": [],
   "navigation": [
     {
-      "group": "Get Started",
-      "pages": ["introduction", "python", "typescript"]
+      "group": "Getting Started",
+      "pages": ["introduction", "quickstart"]
     },
     {
-      "group": "API Documentation",
-      "pages": ["api-reference/authentication"]
+      "group": "Reference",
+      "pages": ["testing", "evaluation", "tracing", "logging"]
     },
     {
-      "group": "Endpoint Examples",
-      "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/update",
-        "api-reference/endpoint/delete"
-      ]
+      "group": "Integrations",
+      "pages": ["pytest", "jest"]
     }
   ],
   "footerSocials": {

@@ -1,0 +1,45 @@
+---
+title: "pytest"
+---
+
+When using python and pytest you can simply install the `baserun` plugin and start testing immediately.
+
+The plugin works by automatically collecting and aggregating all LLM and baserun logs during the course of a test and then uploading them to baserun to review and collaborate on with your team.
+
+
+## Setup
+
+```bash
+pip install baserun
+
+pytest --baserun test_module.py
+========================Baserun========================
+Test results available at: https://baserun.ai/runs/<id>
+=======================================================
+```
+
+## Running multiple tests
+
+It's often helpful to exercise the same test over multiple examples. To do this, we suggest using the parametrize decorator and for larger numbers of examples you can read from a file or other data structure.
+
+```python
+
+@pytest.mark.parametrize("place,expected", [("Paris", "Eiffel Tower"), ("Rome", "Colosseum")])
+def test_trip(place, expected):
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": f"What are three activities to do in {place}?"
+            }
+        ],
+    )
+
+    assert expected in response['choices'][0]['message']['content']
+```
+
+## Naming
+
+Baserun lets you compare test results and debug each step side by side. We consider the name of the pytest function and its parameters as a unique identifier for the test. In the example above, two tests would be run and identified by `(test_trip, "Paris", "Eiffel Tower")` and `(test_trip, "Rome", "Colosseum")`

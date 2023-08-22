@@ -1,0 +1,318 @@
+---
+title: Evaluation
+---
+
+Our evaluation framework is heavily inspired by the [OpenAI Evals](https://github.com/openai/evals) project and offers a number of built-in evaluations which we record and aggregate in the Baserun dashboard.
+
+## Setup
+
+<CodeGroup>
+
+```python python
+# test_module.py
+
+import baserun
+import openai
+
+def test_paris_trip():
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": "What are three activities to do in Paris?"
+            }
+        ],
+    )
+
+    output = response['choices'][0]['message']['content']
+    not_has_ai_language_model = baserun.evals.not_includes('AI Language Model', output, ['AI language model'])
+    # Optional: will fail the test if "AI language model" is present in the output
+    assert not_has_ai_language_model
+```
+
+```typescript typescript
+// test_module.spec.ts
+
+import {baserun} from "baserun";
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+});
+
+describe('Baserun end-to-end', () => {
+    it('should suggest the Eiffel Tower', async () => {
+        const chatCompletion = await openai.chat.completions.create({
+            model: "gpt-3.5-turbo",
+            temperature: 0.7,
+            messages: [
+                {
+                    role: "user",
+                    content: "What are three activities to do in Paris?"
+                }
+            ],
+        });
+
+        const output = chatCompletion.choices[0].message!.content!;
+        const notHasLanguageModel = baserun.evals.notIncludes('AI Language Model', output, ['AI language model']);
+        // Optional: will fail the test if "AI language model" is present in the output
+        expect(notHasLanguageModel).toBeTruthy();
+    });
+});
+```
+</CodeGroup>
+
+---
+
+### match
+
+Checks if the `submission` starts with any of the `expected` values.
+
+Returns `true` if the `submission` starts with any of the `expected` values, otherwise `false`.
+
+<Expandable title="params">
+    <ParamField path="name" type="string">
+        Name of the evaluation.
+    </ParamField>
+    <ParamField path="submission" type="string">
+        The input string.
+    </ParamField>
+    <ParamField path="expected" type="string | string[]">
+        A string or an array of strings to check against.
+    </ParamField>
+</Expandable>
+
+---
+
+### includes
+
+Checks if the `submission` includes any of the `expected` values.
+<ResponseField type="Returns boolean">
+    `true` if the `submission` includes any of the `expected` values, otherwise `false`
+</ResponseField>
+
+<Expandable title="params">
+    <ParamField path="name" type="string">
+        Name of the evaluation.
+    </ParamField>
+    <ParamField path="submission" type="string">
+        The input string.
+    </ParamField>
+    <ParamField path="expected" type="string | string[]">
+        A string or an array of strings to check against.
+    </ParamField>
+</Expandable>
+
+---
+
+### fuzzyMatch
+
+Checks if the `submission` includes any of the `expected` values or vice versa.
+<ResponseField type="Returns boolean">
+    `true` if there's a fuzzy match, otherwise `false`
+</ResponseField>
+
+<Expandable title="params">
+    <ParamField path="name" type="string">
+        Name of the evaluation.
+    </ParamField>
+    <ParamField path="submission" type="string">
+        The input string.
+    </ParamField>
+    <ParamField path="expected" type="string | string[]">
+        A string or an array of strings to check against.
+    </ParamField>
+</Expandable>
+
+---
+
+### notMatch
+
+Checks if the `submission` does not start with any of the `expected` values.
+<ResponseField type="Returns boolean">
+    `true` if the `submission` does not start with any of the `expected` values, otherwise `false`
+</ResponseField>
+
+<Expandable title="params">
+    <ParamField path="name" type="string">
+        Name of the evaluation.
+    </ParamField>
+    <ParamField path="submission" type="string">
+        The input string.
+    </ParamField>
+    <ParamField path="expected" type="string | string[]">
+        A string or an array of strings to check against.
+    </ParamField>
+</Expandable>
+
+---
+
+### notIncludes
+
+Checks if the `submission` does not include any of the `expected` values.
+<ResponseField type="Returns boolean">
+    `true` if the `submission` does not include any of the `expected` values, otherwise `false`
+</ResponseField>
+
+<Expandable title="params">
+    <ParamField path="name" type="string">
+        Name of the evaluation.
+    </ParamField>
+    <ParamField path="submission" type="string">
+        The input string.
+    </ParamField>
+    <ParamField path="expected" type="string | string[]">
+        A string or an array of strings to check against.
+    </ParamField>
+</Expandable>
+
+---
+
+### notFuzzyMatch
+
+Checks if there's no fuzzy match between the `submission` and any of the `expected` values.
+<ResponseField type="Returns boolean">
+    `true` if there's no fuzzy match, otherwise `false`
+</ResponseField>
+
+<Expandable title="params">
+    <ParamField path="name" type="string">
+        Name of the evaluation.
+    </ParamField>
+    <ParamField path="submission" type="string">
+        The input string.
+    </ParamField>
+    <ParamField path="expected" type="string | string[]">
+        A string or an array of strings to check against.
+    </ParamField>
+</Expandable>
+
+---
+
+### validJson
+
+Checks if the `submission` is a valid JSON string.
+<ResponseField type="Returns boolean">
+    `true` if the `submission` is a valid JSON string, otherwise `false`
+</ResponseField>
+
+<Expandable title="params">
+    <ParamField path="name" type="string">
+        Name of the evaluation.
+    </ParamField>
+    <ParamField path="submission" type="string">
+        The input string.
+    </ParamField>
+</Expandable>
+
+---
+
+### custom
+
+Evaluates the `submission` using a custom function.
+<ResponseField type="Returns boolean">
+    The result of the custom function.
+</ResponseField>
+
+<Expandable title="params">
+    <ParamField path="name" type="string">
+        Name of the evaluation.
+    </ParamField>
+    <ParamField path="submission" type="string">
+        The input string.
+    </ParamField>
+    <ParamField path="fn" type="(submission: string) => boolean">
+        A custom function that takes the `submission` and returns a boolean.
+    </ParamField>
+</Expandable>
+
+---
+
+### customAsync
+
+Asynchronously evaluates the `submission` using a custom function.
+<ResponseField type="Returns Promise<boolean>">
+    The result of the custom function.
+</ResponseField>
+
+<Expandable title="params">
+    <ParamField path="name" type="string">
+        Name of the evaluation.
+    </ParamField>
+    <ParamField path="submission" type="string">
+        The input string.
+    </ParamField>
+    <ParamField path="fn" type="(submission: string) => Promise<boolean>">
+        A custom function that takes the `submission` and returns a promise that resolves to a boolean.
+    </ParamField>
+</Expandable>
+
+---
+
+### modelGradedFact
+
+Compares a submitted answer to an expert answer on a given question using a model.
+<ResponseField type="Returns Promise<string>">
+    The result of the comparison.
+</ResponseField>
+
+<Expandable title="params">
+    <ParamField path="name" type="string">
+        Name of the evaluation.
+    </ParamField>
+    <ParamField path="question" type="string">
+        The question.
+    </ParamField>
+    <ParamField path="expert" type="string">
+        The expert's answer.
+    </ParamField>
+    <ParamField path="submission" type="string">
+        The submitted answer.
+    </ParamField>
+</Expandable>
+
+---
+
+### modelGradedClosedQA
+
+Assesses a submitted answer on a given task based on a criterion using a model.
+<ResponseField type="Returns Promise<string>">
+    The result of the assessment.
+</ResponseField>
+
+<Expandable title="params">
+    <ParamField path="name" type="string">
+        Name of the evaluation.
+    </ParamField>
+    <ParamField path="task" type="string">
+        The task.
+    </ParamField>
+    <ParamField path="submission" type="string">
+        The submitted answer.
+    </ParamField>
+    <ParamField path="criterion" type="string">
+        The criterion.
+    </ParamField>
+</Expandable>
+
+---
+
+### modelGradedSecurity
+
+Assesses if a string is malicious using a model.
+<ResponseField type="Returns Promise<string>">
+    The result of the assessment.
+</ResponseField>
+
+<Expandable title="params">
+    <ParamField path="name" type="string">
+        Name of the evaluation.
+    </ParamField>
+    <ParamField path="submission" type="string">
+        The input string.
+    </ParamField>
+</Expandable>
+
+---
