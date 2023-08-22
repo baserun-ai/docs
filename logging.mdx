@@ -1,0 +1,43 @@
+---
+title: Logging
+---
+
+## Automatic Logging
+
+When the Baserun SDK is initialized explicitly or via our testing plugins, all OpenAI and Anthropic chat and completion requests are automatically logged with no additional code changes. We capture LLM prompts, configuration, and usage. We do this by injecting a very thin wrapper around the client libraries.
+
+## Custom Logging
+
+In addition to LLM logs, it's often helpful to debug and understand your workflow by capturing additional information such as other 3rd party API results or interesting business logic. To accomplish this, you can add a custom baserun.log call.
+
+### log
+
+Logs a custom message to Baserun. If Baserun is not initialized, this function will have no effect.
+
+<ParamField path="message" type="string">
+    The name of the custom log message to be recorded.
+</ParamField>
+<ParamField path="payload" type="string | object">
+    The log's additional data, which can be either a string or an object.
+</ParamField>
+
+<CodeGroup>
+```python python
+    import baserun
+
+    def get_response(product_id, message):
+        product_data = fetch_product_data(product_id)
+        baserun.log("Product data", product_data)
+        ...
+```
+
+```typescript typescript
+    import {baserun} from 'baserun';
+
+    async function getResponse(productId: string, message: string) {
+        const productData = await fetchProductData(productId);
+        baserun.log("Product data", productData);
+        ...
+    }
+```
+</CodeGroup>
