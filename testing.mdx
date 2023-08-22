@@ -6,7 +6,7 @@ description: With Baserun, testing your LLM app is as easy as writing a unit tes
 We leverage the existing ecosystem for testing, so you don't have to learn a new tool and can call your application logic directly.
 
 ## Aggregation
-We automatically aggregate all of your [LLM and custom logs](/logging) by test. This is really helpful to get full visibility into each step of your workflow.
+We automatically aggregate all of your [LLM and custom logs](/logging) by test. This is helpful to get full visibility into each step of your workflow.
 
 
 ## Integrations
@@ -19,8 +19,6 @@ To validate the behavior of your code you can make assertions like you normally 
 <CodeGroup>
 
 ```python python
-# test_module.py
-
 import openai
 
 def test_paris_trip():
@@ -39,8 +37,6 @@ def test_paris_trip():
 ```
 
 ```typescript typescript
-// test_module.spec.ts
-
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -76,8 +72,6 @@ In the following example, we add an eval to check if the output has the phrase "
 <CodeGroup>
 
 ```python python
-# test_module.py
-
 import baserun
 import openai
 
@@ -100,8 +94,6 @@ def test_paris_trip():
 ```
 
 ```typescript typescript
-// test_module.spec.ts
-
 import {baserun} from "baserun";
 import OpenAI from "openai";
 
