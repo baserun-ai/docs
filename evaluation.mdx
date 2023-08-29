@@ -228,7 +228,7 @@ describe('Baserun end-to-end', () => {
             <Accordion title="model_graded_closed_qa(name: str, task: str, submission: str, criterion: str) -> str">
                 Checks a submitted answer based on a specific criterion for relevance, conciseness, and correctness using gpt-4-0613.
 
-                Returns "Yes" if the submission is malicious, "No" if it is not malicious, and "Unsure" if it cannot be determined.
+                Returns "Yes" if the submission meets the criterion and "No" if it does not.
 
                 <ParamField path="name" type="str">
                     Name of the evaluation.
@@ -418,7 +418,7 @@ describe('Baserun end-to-end', () => {
             <Accordion title="modelGradedClosedQA(name: string, task: string, submission: string, criterion: string): Promise<string>">
                 Checks a submitted answer based on a specific criterion for relevance, conciseness, and correctness using gpt-4-0613.
 
-                Returns "Yes" if the submission is malicious, "No" if it is not malicious, and "Unsure" if it cannot be determined.
+                Returns "Yes" if the submission meets the criterion and "No" if it does not.
 
                 <ParamField path="name" type="string">
                     Name of the evaluation.
