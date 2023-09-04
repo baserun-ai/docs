@@ -19,7 +19,7 @@ Use the [Next.js instrumentation hook](https://nextjs.org/docs/app/building-your
 import { baserun } from 'baserun';
 
 export function register() {
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV === 'production' && process.env.NEXT_RUNTIME === 'nodejs') {
     baserun.init();
   }
 }
