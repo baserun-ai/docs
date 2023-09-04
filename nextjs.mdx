@@ -1,0 +1,51 @@
+---
+title: "Next.js"
+description: "Start tracing your Next.js app."
+---
+
+## 1. Generate an API key
+Create an account at [https://baserun.ai](https://baserun.ai). Then generate an API key for your project in the [settings](https://baserun.ai/settings) tab and set it as an environment variable.
+
+```bash
+export BASERUN_API_KEY="your_api_key_here"
+```
+
+## 2. Initialize baserun
+Use the [Next.js instrumentation hook](https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation) to ensure baserun is initialized exactly once during server startup.
+
+```typescript typescript
+// instrumentation.ts or src/instrumentation.ts
+
+import { baserun } from 'baserun';
+
+export function register() {
+  if (process.env.NODE_ENV === 'production') {
+    baserun.init();
+  }
+}
+```
+
+## 3. Update next.config.js
+Add the following to your next.config.js to ensure the instrumentation hook is used and that we can automatically log LLM calls.
+```javascript javascript
+/** @type {import('next').NextConfig} */
+
+module.exports = {
+    experimental: {
+        instrumentationHook: true,
+        // Libraries you want to automatically log
+        // Options are: 'openai', 'openai-edge', and '@anthropic-ai/sdk'
+        serverComponentsExternalPackages: ['openai']
+    }
+}
+```
+
+## 4. Add a trace
+Add a trace to start logging to Baserun.
+
+```typescript typescript
+import { baserun } from 'baserun';
+
+const traceGetResponse = baserun.trace(aiService.getResponse, { userId: 123 });
+const response = await traceGetResponse(message);
+```

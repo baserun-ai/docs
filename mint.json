@@ -39,8 +39,12 @@
       "pages": ["testing", "evaluation", "tracing", "logging"]
     },
     {
-      "group": "Integrations",
+      "group": "Test Integrations",
       "pages": ["pytest", "jest"]
+    },
+    {
+      "group": "Trace Guides",
+      "pages": ["nextjs"]
     }
   ],
   "footerSocials": {
