@@ -3,7 +3,7 @@ title: Tracing
 description: Monitor your LLM workflows in production.
 ---
 
-Tracing behaves very similar to testing but is intended for use with your production application. When tracing a function we automatically aggregate all of your [LLM and custom logs](/logging) in that function's callstack.
+Tracing behaves very similar to testing but is intended for use with your production application. When tracing a function we automatically aggregate all of your [LLM and custom logs](/logging) in that function's callstack, otherwise we will capture one trace per LLM call.
 
 ## Setup
 
@@ -26,7 +26,7 @@ if (process.env.NODE_ENV === 'production') {
 ```
 </CodeGroup>
 
-Trace a function
+Aggregating all logs in the call stack of a function
 <CodeGroup>
 ```python python
 # Decorate the function that you would like to trace:
