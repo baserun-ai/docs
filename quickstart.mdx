@@ -3,26 +3,32 @@ title: "Quickstart"
 description: "Start testing your LLM app in 2 minutes."
 ---
 
-## 1. Generate an API key
-Create an account at [https://baserun.ai](https://baserun.ai). Then generate an API key for your project in the [settings](https://baserun.ai/settings) tab and set it as an environment variable.
+## 1. Install Baserun
+<CodeGroup>
+
+    ```bash python
+    pip install baserun
+    ```
+
+    ```bash typescript
+    npm install baserun
+    # or
+    yarn add baserun
+    ```
+</CodeGroup>
+
+## 2. Generate an API key
+Create an account at [https://baserun.ai](https://baserun.ai). Then generate an API key for your project in the [settings](https://baserun.ai/settings) tab. Set it as an environment variable:
 
 ```bash
 export BASERUN_API_KEY="your_api_key_here"
 ```
 
-## 2. Install Baserun
-<CodeGroup>
+Or if using python, set `baserun.api_key` to its value:
 
-```bash python
-pip install baserun
+```python
+baserun.api_key = "br-..."
 ```
-
-```bash typescript
-npm install baserun
-# or
-yarn add baserun
-```
-</CodeGroup>
 
 ## 3. Start testing
 Use our [pytest](/pytest) or [jest](/jest) plugin and immediately start testing with Baserun. By default all OpenAI and Anthropic requests will be automatically logged.
