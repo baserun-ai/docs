@@ -18,6 +18,14 @@ Test results available at: https://baserun.ai/runs/<id>
 =======================================================
 ```
 
+### Automatically using Baserun in tests
+You can automatically include the `--baserun` option on every invocation of `pytest` by creating or updating your `pytest.ini` file with:
+
+```
+[pytest]
+addopts = --baserun
+```
+
 ## Running multiple tests
 
 It's often helpful to exercise the same test over multiple examples. To do this, we suggest using the parametrize decorator and for larger numbers of examples you can read from a file or other data structure.
