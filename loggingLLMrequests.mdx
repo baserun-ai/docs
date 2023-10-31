@@ -1,0 +1,87 @@
+---
+title: "Logging LLM requests"
+description: "Get started by logging your LLM requests with Baserun within 3 mins."
+---
+
+## Use case:
+
+Get insight into individual LLM requests, including prompt templates, input, output, duration, token usage cost, and duration.
+
+## Features:
+
+- Support Python and Typescript
+- Automatically log OpenAI and Anthropic without additional code
+- Generative token usage
+- Context token
+- Cost
+- Evaluation
+- Duration
+- User feedback (Coming soon)
+
+## Introduction:
+
+When the Baserun SDK is initialized explicitly or via our testing plugins, all OpenAI and Anthropic chat and completion requests are automatically logged with no additional code changes. We capture LLM prompts, configuration, and usage. We do this by injecting a very thin wrapper around the client libraries.
+
+For an in-depth overview of how our logging data is structured, please see our Logging Overview page.
+
+## 1. Install Baserun SDK
+
+<CodeGroup>
+
+    ```bash python
+    pip install baserun
+    ```
+
+    ```bash typescript
+    npm install baserun
+    # or
+    yarn add baserun
+    ```
+
+</CodeGroup>
+
+## 2. Generate an API key
+
+Create an account at [https://baserun.ai](https://baserun.ai). Then generate an API key for your project in the [settings](https://baserun.ai/settings) tab. Set it as an environment variable:
+
+```bash
+export BASERUN_API_KEY="your_api_key_here"
+```
+
+Or if using python, set `baserun.api_key` to its value:
+
+```python
+baserun.api_key = "br-..."
+```
+
+## 3. Initialize
+
+At your application’s startup:
+
+<CodeGroup>
+```python python
+import baserun
+
+if env == 'production':
+baserun.init()
+
+````
+
+```typescript typescript
+import { baserun } from 'baserun';
+
+if (process.env.NODE_ENV === 'production') {
+    baserun.init();
+}
+````
+
+</CodeGroup>
+
+Congrats, you are done! Now, you can navigate to the monitoring tab. Here is what you will see interact with your application:
+
+![Logging LLM requests](/images/logging-llm-requests.png)
+
+[python example repo](https://github.com/baserun-ai/testing-agent/),
+[typescript example repo](https://github.com/baserun-ai/testing-agent-js)
+
+If you have any questions or feature requests, join our [Discord channel](https://discord.com/invite/xEPFsvSmkb) or send us an email at [hello@baserun.ai](mailto:hello@baserun.ai)

@@ -1,0 +1,40 @@
+---
+title: "Authentication"
+description: "Authenticating your requests to the API"
+---
+
+## Use case
+
+You only Baserun API key if you are using the SDK.
+
+## 1. Generate a Baserun API key:
+
+Create an account at [https://baserun.ai](https://baserun.ai). Navigate to the [Settings](https://baserun.ai/settings) tab. You will see a section to create a Baserun API key. Click “New token” button, give it a name, and copy the key.
+
+![Generate API key](/images/auth.png)
+
+<CodeGroup>
+
+    ```bash python
+    pip install baserun
+    ```
+
+    ```bash typescript
+    npm install baserun
+    # or
+    yarn add baserun
+    ```
+
+</CodeGroup>
+
+## 2. Set it as an environment variable:
+
+```bash
+export BASERUN_API_KEY="your_api_key_here"
+```
+
+Or if using python, set `baserun.api_key` to its value:
+
+```python
+baserun.api_key = "br-..."
+```
