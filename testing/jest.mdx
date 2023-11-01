@@ -1,5 +1,5 @@
 ---
-title: "jest"
+title: "jest integration"
 ---
 
 When using typescript and [jest](https://jestjs.io/docs) you can simply install the `baserun` preset and start testing immediately.
@@ -27,8 +27,8 @@ If you are already using a jest preset such as ts-jest you will need to merge th
 ```js
 // jest.config.js or jest.config.baserun.js
 
-const tsPreset = require('ts-jest/jest-preset');
-const baserunPreset = require('baserun/jest-preset');
+const tsPreset = require("ts-jest/jest-preset");
+const baserunPreset = require("baserun/jest-preset");
 
 module.exports = {
   ...tsPreset,

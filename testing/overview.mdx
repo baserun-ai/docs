@@ -1,5 +1,6 @@
 ---
-title: Testing
+title: Testing overview
+sidebarTitle: Overview
 description: With Baserun, testing your LLM app is as easy as writing a unit test
 ---
 
@@ -8,14 +9,15 @@ We leverage the existing ecosystem for testing, so you don't have to learn a new
 ![Testing Dashboard](/images/testing.png)
 
 ## Aggregation
-We automatically aggregate all of your [LLM and custom logs](/logging) by test. This is helpful to get full visibility into each step of your workflow.
 
+We automatically aggregate all of your [LLM and custom logs](/logging) by test. This is helpful to get full visibility into each step of your workflow.
 
 ## Integrations
 
 We provide plugins for the most popular testing frameworks. Check out the [pytest](/pytest) and [jest](/jest) documentation to get started.
 
 ## Assertions
+
 To validate the behavior of your code you can make assertions like you normally would to cause the test to pass or fail. In the following example, the test will fail if the string "Eiffel Tower" is not present in the LLM output.
 
 <CodeGroup>
@@ -42,26 +44,29 @@ def test_paris_trip():
 import OpenAI from "openai";
 
 const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
-describe('Baserun end-to-end', () => {
-    it('should suggest the Eiffel Tower', async () => {
-        const chatCompletion = await openai.chat.completions.create({
-            model: "gpt-3.5-turbo",
-            temperature: 0.7,
-            messages: [
-                {
-                    role: "user",
-                    content: "What are three activities to do in Paris?"
-                }
-            ],
-        });
-
-        expect(chatCompletion.choices[0].message!.content!).toContain('Eiffel Tower');
+describe("Baserun end-to-end", () => {
+  it("should suggest the Eiffel Tower", async () => {
+    const chatCompletion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      temperature: 0.7,
+      messages: [
+        {
+          role: "user",
+          content: "What are three activities to do in Paris?",
+        },
+      ],
     });
+
+    expect(chatCompletion.choices[0].message!.content!).toContain(
+      "Eiffel Tower"
+    );
+  });
 });
 ```
+
 </CodeGroup>
 
 ## Evaluations
@@ -69,7 +74,6 @@ describe('Baserun end-to-end', () => {
 When working with LLMs, it is also helpful to gain more visibility into the outputs using a series of checks or evaluations. Evaluations capture information about the output but will not cause the test to fail by default. Eval results are then aggregated and displayed in your Baserun dashboard.
 
 In the following example, we add an eval to check if the output has the phrase "AI Language Model". See the [evaluation](/evaluation) documentation for more information.
-
 
 <CodeGroup>
 
@@ -96,31 +100,36 @@ def test_paris_trip():
 ```
 
 ```typescript typescript
-import {baserun} from "baserun";
+import { baserun } from "baserun";
 import OpenAI from "openai";
 
 const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
-describe('Baserun end-to-end', () => {
-    it('should suggest the Eiffel Tower', async () => {
-        const chatCompletion = await openai.chat.completions.create({
-            model: "gpt-3.5-turbo",
-            temperature: 0.7,
-            messages: [
-                {
-                    role: "user",
-                    content: "What are three activities to do in Paris?"
-                }
-            ],
-        });
-
-        const output = chatCompletion.choices[0].message!.content!;
-        const notHasLanguageModel = baserun.evals.notIncludes('AI Language Model', output, ['AI language model']);
-        // Optional: will fail the test if "AI language model" is present in the output
-        expect(notHasLanguageModel).toBeTruthy();
+describe("Baserun end-to-end", () => {
+  it("should suggest the Eiffel Tower", async () => {
+    const chatCompletion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      temperature: 0.7,
+      messages: [
+        {
+          role: "user",
+          content: "What are three activities to do in Paris?",
+        },
+      ],
     });
+
+    const output = chatCompletion.choices[0].message!.content!;
+    const notHasLanguageModel = baserun.evals.notIncludes(
+      "AI Language Model",
+      output,
+      ["AI language model"]
+    );
+    // Optional: will fail the test if "AI language model" is present in the output
+    expect(notHasLanguageModel).toBeTruthy();
+  });
 });
 ```
+
 </CodeGroup>
