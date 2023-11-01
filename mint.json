@@ -37,19 +37,30 @@
 
     {
       "group": "Getting Started",
-      "pages": ["getstartwithtest", "loggingLLMrequests"]
+      "pages": [
+        "getstarted/getstartwithtest",
+        "getstarted/loggingLLMrequests",
+        "getstarted/tracingaLLMchain"
+      ]
     },
+
     {
-      "group": "Reference",
-      "pages": ["testing", "evaluation", "tracing", "logging"]
+      "group": "Testing & Evaluation",
+      "pages": [
+        "testing/overview",
+        "testing/pytest",
+        "testing/jest",
+        "testing/evaluation"
+      ]
     },
+
     {
-      "group": "Test Integrations",
-      "pages": ["pytest", "jest"]
-    },
-    {
-      "group": "Trace Guides",
-      "pages": ["nextjs"]
+      "group": "Logging",
+      "pages": [
+        "logging/overview",
+        "logging/advancedtracing",
+        "logging/tracingwithnextjs"
+      ]
     }
   ],
   "footerSocials": {
