@@ -25,7 +25,8 @@ When the Baserun SDK is initialized explicitly or via our testing plugins, all O
 
 For an in-depth overview of how our logging data is structured, please see our Logging Overview page.
 
-## 1. Install Baserun SDK
+<Steps>
+<Step title="Install Baserun SDK">
 
 <CodeGroup>
 
@@ -40,8 +41,8 @@ For an in-depth overview of how our logging data is structured, please see our L
     ```
 
 </CodeGroup>
-
-## 2. Generate an API key
+</Step>
+<Step title="Generate an API key">
 
 Create an account at [https://baserun.ai](https://baserun.ai). Then generate an API key for your project in the [settings](https://baserun.ai/settings) tab. Set it as an environment variable:
 
@@ -55,7 +56,8 @@ Or if using python, set `baserun.api_key` to its value:
 baserun.api_key = "br-..."
 ```
 
-## 3. Initialize
+</Step>
+<Step title="Initialize Baserun">
 
 At your application’s startup:
 
@@ -77,6 +79,8 @@ if (process.env.NODE_ENV === 'production') {
 ````
 
 </CodeGroup>
+</Step>
+</Steps>
 
 Congrats, you are done! Now, you can navigate to the monitoring tab. Here is what you will see interact with your application:
 
