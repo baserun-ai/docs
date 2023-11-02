@@ -1,0 +1,69 @@
+---
+title: Prompt playground overview
+description: Test, version, and compare prompts.
+---
+
+## Use cases:
+
+- Create a source of truth for all the prompts in use
+- Iterating prompt templates
+- Collaborate on prompt templates
+- Evaluate prompt templates
+
+## Supported models:
+
+- OpenAI
+- Anthropic
+- Llama
+- Mistral
+
+## Features:
+
+- Version control
+- Chat mode
+- Cost and duration
+- Compare prompts (different models, templates, and parameter configurations)
+- Evaluation in UI (Coming soon)
+
+## Overview
+
+You can navigate to the Prompt Playground through the left sidebar.
+
+By default, you can see all the prompts created by all users in the shared workspaces, sorted by date. You can toggle between grid and list views or search for and filter prompts by name or user.
+
+## Creating a prompt template
+
+<Steps>
+<Step title="Click the New prompt button on the top right or duplicate an existing prompt.">
+</Step>
+<Step title="Enter the prompt template name">
+Then, you will be redirected to the prompt detail view.
+
+The left side is the editor panel, where you can edit the prompts. On the right side is the test panel, where you can create multiple test cases to test the prompt. Baserun will automatically save all prompt versions and tests. You can access past versions through the "Version History" button on the top right and restore any previous versions.
+
+![Prompt Playground Detail](./prompt-playground-detail-1.png)
+
+</Step>
+<Step title="Select the model you want to use">
+Currently, we support OpenAI, Anthropic, Llama, and Mistral. Please add your API keys in the Settings tab to access the OpenAI 16k and Claude 16K models.
+</Step>
+<Step title="Optional to insert dynamic input variables into your prompt template using curly brackets {{ and }}.">
+You'll use these variables to trace LLM requests, run evaluations, and create datasets for fine-tuning later.
+</Step>
+<Step title="Start testing">
+Enter the input variables in the test run panel and click the run button to test the prompt output.You can manually enter the testing data sets into the test run panels or upload testing datasets via CSV in the comparison table, which we'll cover later.
+
+</Step>
+</Steps>
+
+## Version management
+
+Baserun automatically creates a new version of the prompts as you edit the prompt template and run tests. A new version is created when you click "Run Tests."
+
+You can view a previous version by clicking on a past version inside the version history panel; all past versions are read-only. To restore an earlier version, hover over the version name, open the dropdown menu, and click the "Restore" button. This action will duplicate the past version and add it to the top.
+
+![Prompt Playground](./prompt-playground.png)
+
+## Sharing and Collaboration
+
+You can share the prompt via URL with any users in your workspace.
