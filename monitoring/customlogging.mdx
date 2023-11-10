@@ -1,0 +1,40 @@
+---
+title: Custom Logging
+sidebarTitle: Custom Logging
+description: Logging helps you track the quality of your application, identify issues, and understand the application's behavior.
+---
+
+This guide will introduce you to the concept of custom logging in Baserun, including how it works and how logs can be used to monitor, debug, and optimize the performance of your AI application.​
+
+## Why include custom logging
+
+1. **In-depth Analysis:** Custom logging provides detailed contextual information about each event in your application's lifecycle, allowing you to understand how your application is behaving.
+2. **Debugging and Optimization:** With detailed provided by custom logging, you can easily identify any errors or performance issues. This makes debugging easier and allows you to optimize your application for better LLM performance.
+3. **Monitoring:** Regularly checking custom logs can help you spot any unusual behavior or performance issues early on, allowing you to proactively address potential problems.
+
+## How does logging work in the Baserun SDK?
+
+A custom log is simply two properties: the `name` and the `payload`. The payload is a freeform data structure that you can use however best suits your application.
+
+### Example: Chat bot
+
+If you have a chat bot that, for instance, looks up product information, you may want to include information about that product lookup to provide context around the LLM calls.
+
+In this example, we log the results of a function to look up product details:
+
+<CodeGroup>
+```python
+import baserun
+
+def product_lookup(product_id: int):
+    # Perform your application's logic
+    response = get_product(product_id)
+
+    # Log the response to Baserun- any JSON-ifiable object can be passed
+    baserun.log(name="Product Lookup", payload=response)
+```
+</CodeGroup>
+
+Then, when viewed in the Baserun UI, you can have this log presented alongside the LLM calls that happened in the same trace.
+
+![Trace List](/images/logging-product.png)
