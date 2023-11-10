@@ -59,11 +59,12 @@
     },
 
     {
-      "group": "Logging",
+      "group": "Monitoring",
       "pages": [
-        "logging/overview",
-        "logging/advancedtracing",
-        "logging/tracingwithnextjs"
+        "monitoring/advancedtracing",
+        "monitoring/logging",
+        "monitoring/tracingwithnextjs",
+        "monitoring/usersandsessions"
       ]
     }
   ],
