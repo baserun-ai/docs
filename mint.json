@@ -49,13 +49,13 @@
     },
 
     {
-      "group": "Testing & Evaluation",
-      "pages": [
-        "testing/overview",
-        "testing/pytest",
-        "testing/jest",
-        "testing/evaluation"
-      ]
+      "group": "Evaluation",
+      "pages": ["evaluation/overview"]
+    },
+
+    {
+      "group": "Testing",
+      "pages": ["testing/overview", "testing/pytest", "testing/jest"]
     },
 
     {

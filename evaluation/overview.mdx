@@ -1,8 +1,36 @@
 ---
-title: Evaluation
-sidebarTitle: Evaluation
-
+title: Overview
+sidebarTitle: Overview
 ---
+
+![Trace Details](/images/test-run-report.png)
+
+## Why evaluate:
+
+- **Unpredictable outputs:** Before deploying an LLM feature, teams need to ensure that it meets certain performance benchmarks. Evaluating the LLM on various datasets and scenarios can give an idea of its accuracy and how well it's likely to perform in real-world situations.
+- **Safety and Ethical Considerations:** LLMs sometimes produce biased, inaccurate, or unsafe outputs. Rigorous evaluation helps identify potential risks and take preventive measures.
+- **Security:** It's crucial to ensure that the model outputs comply with laws and regulations, especially in regulated industries. Evaluation can help in identifying potential compliance issues.
+- **Optimize cost and speed:** Deploying and running LLMs, especially the larger variants, can be expensive regarding computational resources. Evaluation ensures that the benefits derived from the model (in terms of accuracy, user satisfaction, etc.) justify the costs.
+- **Collect feedback:** Continuous evaluation allows for the creation of a feedback loop. Collecting and analyzing data on the model's performance in production can be iteratively improved.
+- **User Experience:** By evaluating the model's responses and interaction with users, it's possible to design a better user experience
+
+Testing and evaluation help identify issues, quantify app performance, provide insights, and set benchmarks to help AI teams continuously improve the LLM features.
+
+## How to evaluate:
+
+There are two primary ways to evaluate:
+
+- **Automatic Evaluate:** Automatic evaluation involves creating structured testing datasets, which contain predefined input values and their expected outputs. Using tools like the Baserun SDK, you can programmatically compare the LLM’s outputs against these expected results. This can be done by executing specific functions or use AI to grade the outputs. For instance, in a customer service scenario, the testing dataset might include various customer queries and the ideal responses.
+
+- **Manual Evaluate:** In situations where creativity and nuanced understanding are crucial, such as drafting a marketing email, manual review becomes essential. Here, a human evaluator would read and assess the content for its creativity, tone, and alignment with brand values. Manual review serves as a vital initial step to understand which aspects of the LLM’s outputs require closer programmatic examination.
+
+The choice between automatic evaluation and manual review depends on the specific use case. In some scenarios, a combination of both methods might be most effective, creating a comprehensive diagnostic workflow. For example, in content creation, automatic checks can assess basic grammar and relevance, while manual reviews can fine-tune the content for style and engagement.
+
+## When to evaluate:
+
+Baserun SDK enables users to evaluate LLM features’ outputs at all levels, including user sessions (e.g., a message thread), traces (an LLM chain), LLM requests, or even input variables of an LLM call.
+
+## How to evaluate:
 
 Our evaluation framework is heavily inspired by the [OpenAI Evals](https://github.com/openai/evals) project and offers a number of built-in evaluations which we record and aggregate in the Baserun dashboard.
 
