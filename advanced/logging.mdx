@@ -22,6 +22,7 @@ If you have a chat bot that, for instance, looks up product information, you may
 
 In this example, we log the results of a function to look up product details:
 
+<CodeGroup>
 ```python
 import baserun
 
@@ -32,6 +33,7 @@ def product_lookup(product_id: int):
     # Log the response to Baserun- any JSON-ifiable object can be passed
     baserun.log(name="Product Lookup", payload=response)
 ```
+</CodeGroup>
 
 Then, when viewed in the Baserun UI, you can have this log presented alongside the LLM calls that happened in the same trace.
 

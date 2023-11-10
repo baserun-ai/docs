@@ -4,86 +4,49 @@ sidebarTitle: Advanced tracing features
 description: Tracing additional data such as trace name, custom log, session ID, etc
 ---
 
-## Add Trace Name
+This page goes over some advanced tracing features.
 
-If you're tracing multiple functions, you can use the start_trace context manager to distinguish them:
+## Adding a Trace Name
+
+If you're tracing multiple functions, you can use the `start_trace` context manager to distinguish between them:
 
 <CodeGroup>
-
-    ```bash python
-
+```python
 def ask_question(question="What is the capital of the US?") -> str:
-with baserun.start_trace(name="General knowledge question") as run: # Your code here
-
-        # You can set properties on the `run` object such as the `result`
-        run.result = content
-     ```
-
+    with baserun.start_trace(name="General knowledge question"):
+        # Your code here
+```
 </CodeGroup>
 
-Within a (`start_trace) context any calls to OpenAI or Anthropic will automatically be included in the trace.
+Within a `start_trace` context any calls to OpenAI or Anthropic will automatically be included in the trace.
 
-## Add Custom Log
+## Setting a trace's result
 
-In addition to LLM logs, it’s often helpful to debug and understand your workflow by capturing additional information such as other 3rd party API results or business logic relevant to your app. You can provide your own payload as any JSON-serializable dict.
-
-<ParamField path="message" type="string">
-  The name of the custom log message to be recorded.
-</ParamField>
-<ParamField path="payload" type="string | object">
-  The log's additional data, which can be either a string or an object.
-</ParamField>
+By default a trace's `result` value will be the return value of the function that is traced. If you want to be more explicit, you can set the `result` value of a trace.
 
 <CodeGroup>
-```python python
-    import baserun
+```python
+def ask_question(question="What is the capital of the US?") -> str:
+    with baserun.start_trace() as run:
+        # Your code here
 
-    def get_response(product_id, message):
-        product_data = fetch_product_data(product_id)
-        baserun.log("Product data", product_data)
-        ...
-
-````
-
-```typescript typescript
-    import {baserun} from 'baserun';
-
-    async function getResponse(productId: string, message: string) {
-        const productData = await fetchProductData(productId);
-        baserun.log("Product data", productData);
-        ...
-    }
-````
-
+        run.result = my_result
+```
 </CodeGroup>
 
-## Adding Sessions
+## Adding custom metadata
 
-If you're building a system where user interactions happen in a sequence—like a chatbot—you'll find it useful to group these interactions into a single session. The (`with_session`) context manager in Baserun allows you to do just that. By providing a username or User ID, you can create a new session. By providing a session ID you can continue an existing session. This allows you to group all related traces under either the User or Session, making it easier to debug or analyze the user's journey through your application.
-
-### Create a new session
+You can add custom metadata to a trace as well. This metadata could be whatever you like, as long as it's JSON serializable. For instance, you may want to include references to other objects or systems.
 
 <CodeGroup>
-```python python
-import baserun
-   
-with baserun.with_session(identifier=username_or_id) as session:
-    # Store session ID to be continued later
-    session_id = session.id
-    run_chatbot()
-    ```
+```python
+def ask_question(question="What is the capital of the US?") -> str:
+    with baserun.start_trace() as run:
+        # Your code here
 
+        # Add whatever metadata you like
+        run.metadata = {
+          "answer_id": answer_id
+        }
+```
 </CodeGroup>
-
-### Continuing an existing session
-
-<CodeGroup>
-```python python
-import baserun
-   
-with baserun.with_session(session_id=session_id) as session:
-    run_chatbot()
-    ```
-
-</CodeGroup>
-Providing a username or ID (the value is up to you) will allow you to group traces by user to help you with debugging.
