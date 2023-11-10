@@ -59,7 +59,7 @@ In addition to LLM logs, it’s often helpful to debug and understand your workf
 
 ## Adding Sessions
 
-If you're building a system where user interactions happen in a sequence—like a chatbot—you'll find it useful to group these interactions into a single session. The (`with_session) context manager in Baserun allows you to do just that. By providing a username or User ID, you can create a new session. By providing a session ID you can continue an existing session. This allows you to group all related traces under either the User or Session, making it easier to debug or analyze the user's journey through your application.
+If you're building a system where user interactions happen in a sequence—like a chatbot—you'll find it useful to group these interactions into a single session. The (`with_session`) context manager in Baserun allows you to do just that. By providing a username or User ID, you can create a new session. By providing a session ID you can continue an existing session. This allows you to group all related traces under either the User or Session, making it easier to debug or analyze the user's journey through your application.
 
 ### Create a new session
 
