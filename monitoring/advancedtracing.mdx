@@ -1,0 +1,52 @@
+---
+title: Advanced tracing features
+sidebarTitle: Advanced tracing features
+description: Tracing additional data such as trace name, custom log, session ID, etc
+---
+
+This page goes over some advanced tracing features.
+
+## Adding a Trace Name
+
+If you're tracing multiple functions, you can use the `start_trace` context manager to distinguish between them:
+
+<CodeGroup>
+```python
+def ask_question(question="What is the capital of the US?") -> str:
+    with baserun.start_trace(name="General knowledge question"):
+        # Your code here
+```
+</CodeGroup>
+
+Within a `start_trace` context any calls to OpenAI or Anthropic will automatically be included in the trace.
+
+## Setting a trace's result
+
+By default a trace's `result` value will be the return value of the function that is traced. If you want to be more explicit, you can set the `result` value of a trace.
+
+<CodeGroup>
+```python
+def ask_question(question="What is the capital of the US?") -> str:
+    with baserun.start_trace() as run:
+        # Your code here
+
+        run.result = my_result
+```
+</CodeGroup>
+
+## Adding custom metadata
+
+You can add custom metadata to a trace as well. This metadata could be whatever you like, as long as it's JSON serializable. For instance, you may want to include references to other objects or systems.
+
+<CodeGroup>
+```python
+def ask_question(question="What is the capital of the US?") -> str:
+    with baserun.start_trace() as run:
+        # Your code here
+
+        # Add whatever metadata you like
+        run.metadata = {
+          "answer_id": answer_id
+        }
+```
+</CodeGroup>

@@ -40,7 +40,7 @@
       "pages": [
         "getstarted/getstartwithtest",
         "getstarted/loggingLLMrequests",
-        "getstarted/tracingaLLMchain"
+        "getstarted/tracinganLLMchain"
       ]
     },
     {
@@ -59,11 +59,12 @@
     },
 
     {
-      "group": "Logging",
+      "group": "Monitoring",
       "pages": [
-        "logging/overview",
-        "logging/advancedtracing",
-        "logging/tracingwithnextjs"
+        "monitoring/customlogging",
+        "monitoring/advancedtracing",
+        "monitoring/usersandsessions",
+        "monitoring/tracingwithnextjs"
       ]
     }
   ],
