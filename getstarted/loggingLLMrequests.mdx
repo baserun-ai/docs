@@ -90,11 +90,29 @@ if __name__ == "__main__":
 ````
 
 ```typescript typescript
-import { baserun } from 'baserun';
+import {baserun} from 'baserun'; 
+import OpenAI from 'openai';
 
-if (process.env.NODE_ENV === 'production') {
-    baserun.init();
+const openai = new OpenAI({
+  apiKey: YOUR_OPEANI_API_KEY_HERE, 
+});
+
+
+async function example() {
+  const chatCompletion = await openai.chat.completions.create({
+    messages: [{ role: 'user', content: 'What are three activities to do in Paris?' }],
+    model: 'gpt-3.5-turbo',
+  });
+  return chatCompletion.choices[0].message.content;
 }
+
+
+baserun.init();
+example().then(output => {
+    console.log("Output:", output);
+  }).catch(error => {
+    console.error("Error:", error);
+  });
 ````
 
 </CodeGroup>
