@@ -45,7 +45,11 @@
     },
     {
       "group": "Prompt playground",
-      "pages": ["promptplayground/overview"]
+      "pages": [
+        "promptplayground/overview",
+        "promptplayground/compareprompt"
+
+    ]
     },
 
     {
