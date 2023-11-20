@@ -61,6 +61,7 @@
     {
       "group": "Monitoring",
       "pages": [
+        "monitoring/overview",
         "monitoring/customlogging",
         "monitoring/advancedtracing",
         "monitoring/usersandsessions",
