@@ -3,21 +3,20 @@ title: "Get Started with Tracing Multi-Step LLM Workflows"
 sidebarTitle: Tracing Multi-Step LLM Workflows
 description: "Get started with tracing your LLM Chain with Baserun within 3 minutes."
 ---
-
-![Trace a LLM chain](/images/trace_detail.png)
-
 ## Introduction:
 
 A Trace comprises a series of events executed within an LLM chain. Tracing enables Baserun to capture and display the LLM chain's entire lifecycle, whether synchronous or asynchronous.
 
 Tracing LLM chains allows you to debug your application, monitor your LLM chains' performance, and collect customer feedback.
 
+
+![Trace a LLM chain](/images/trace_detail.png)
+
 ## Use case:
 
 Please reference the [Logging Overview](/logging/overview) to learn why logging LLM chain is critical for LLM feature development.
 
 ## Features:
-
 - Support Python and Typescript
 - Automatically logs OpenAI and Anthropic LLM calls
 - UI to show sequence of events
@@ -138,6 +137,50 @@ main();
 </CodeGroup>
 </Step>
 </Steps>
+
+## Example 
+```python python
+import baserun
+import openai
+import sys
+
+
+def get_activities():
+    response = openai.chat.completions.create(
+        model="gpt-3.5-turbo",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": "What are three activities to do on the Moon?"
+            }
+        ],
+    )
+    command = " ".join(sys.argv)
+    return response.choices[0].message
+
+@baserun.trace
+def find_best_activity():
+    moon_activities = get_activities() 
+    response = openai.chat.completions.create(
+        model="gpt-3.5-turbo",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": f"Pick the best activity to do on the moon from the following, including a convincing reason to do so.\n + {moon_activities}"
+            }
+        ],
+    )
+    return response.choices[0].message
+
+
+if __name__ == "__main__":
+    baserun.api_key = YOUR_BASERUN_API_KEY_HERE
+    openai.api_key = YOUR_OPEANI_API_KEY_HERE
+    baserun.init()
+    print(find_best_activity())
+```
 
 Congrats, you are done! Now, you can navigate to the monitoring tab. Here is what you will see interact with your application:
 
