@@ -1,0 +1,33 @@
+---
+title: Overview
+sidebarTitle: Overview
+---
+
+## Why monitoring?
+
+Monitoring helps you track the performance of your application, identify issues, and understand the application’s behavior.
+
+1. **In-depth Understanding:** Monitoring through logging delivers intricate insights into every event of your AI model's lifecycle.
+2. **Efficient Debugging and Optimization:** By leveraging the detailed view offered through logging, you can quickly pinpoint errors or performance issues. This streamlined debugging process empowers you to optimize your model or workflow.
+3. **Proactive Issue Identification:** Regular monitoring of logs enables the early detection of unusual behavior or performance issues. This proactive approach allows you to promptly address potential problems before they escalate.
+4. **Enhanced Dataset Quality:** Through monitoring and logging, you can refine your evaluation and fine-tuning datasets based on user feedback and metric performance. This iterative process contributes to improving the overall quality of your AI model.
+
+## How does monitoring work in Baserun?
+
+To learn AI's behind-the-scenes action, we introduce
+
+1. **Log LLM requests:** Baserun captures input variables, prompt templates, and metadata such as cost, latency, and token usage per LLM request, giving you a play-by-play of what's happening.
+2. **Trace multi-step LLM Workflows:** Baserun gives you full visibility into your AI workflow. Choose which function(s) to trace, and Baserun will automatically trace all LLM requests, tool calls, user feedback, and checks that are performed inside of that function. Baserun also supports custom logging to trace database queries, API calls, and any other actions needed to provide context to the LLM calls.
+3. **Log Users and Users session:** Baserun captures entire user threads for a chatbot or all the actions taken by an AI agent- from the start to the completion of a session.
+4. **Collect user feedback:** Baserun provides an endpoint to collect user feedback, which can be used to improve you application performance through fine tuning.
+5. **Automatic eval:** Baserun enable users to run automatic evaluations either for an entire trace or for a specific LLM request.
+
+![Monitoring_objects](/images/monitoring_objects.png)
+
+## What’s unique about Baserun monitoring features?
+
+- **Easy to setup:** You can get insights of your LLM requests with just two lines of added code.
+- **Integrate at any stage of your project:** One import at the root of the project and everything is taken care of. No need to rewrite your existing LLM calls.
+- **Automatically logging of your LLM calls:** Baserun automatically logs all LLM calls without the need to change how you make requests to your LLM.
+- **Trace Non-LLM calls within a workflow:** so you get a holistic view over your application.
+- **Group LLM calls into user sessions:** capture the context and progression of each user interaction within those sessions.

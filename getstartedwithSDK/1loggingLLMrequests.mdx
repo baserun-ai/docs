@@ -1,8 +1,14 @@
 ---
-title: "Logging LLM requests"
+title: "Get Started with Logging LLM requests"
 sidebarTitle: "Logging LLM requests"
 description: "Get started by logging your LLM requests with Baserun within 3 mins."
 ---
+## Introduction:
+
+When the Baserun SDK is initialized explicitly or via our testing plugins, all OpenAI and Anthropic chat and completion requests are automatically logged with no additional code changes. We capture LLM prompts, configuration, and usage. We do this by injecting a very thin wrapper around the client libraries.
+
+For an in-depth overview of how our logging data is structured, please see our Logging Overview page.
+
 
 ![Logging LLM requests](/images/LLM-request-list-1.png)
 
@@ -21,11 +27,6 @@ Get insight into individual LLM requests, including prompt templates, input, out
 - Supports async functions
 - Support collecting user feedback (Coming soon)
 
-## Introduction:
-
-When the Baserun SDK is initialized explicitly or via our testing plugins, all OpenAI and Anthropic chat and completion requests are automatically logged with no additional code changes. We capture LLM prompts, configuration, and usage. We do this by injecting a very thin wrapper around the client libraries.
-
-For an in-depth overview of how our logging data is structured, please see our Logging Overview page.
 
 <Steps>
 <Step title="Install Baserun SDK">
@@ -61,7 +62,8 @@ baserun.api_key = "br-..."
 </Step>
 <Step title="Initialize Baserun">
 
-At your application’s startup:
+At your application's startup, define the environment in which you'd like to run Baserun. You can use Baserun in the development environment while iterating on your features, utilizing it for debugging and analysis, or in the production environment to monitor your application.
+
 
 <CodeGroup>
 ```python python
@@ -118,6 +120,62 @@ example().then(output => {
 </CodeGroup>
 </Step>
 </Steps>
+
+## Example 
+<CodeGroup>
+
+```python python
+import baserun
+import openai
+
+def example():
+    response = openai.chat.completions.create(
+        model="gpt-3.5-turbo",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": "What are three activities to do in Paris?"
+            }
+        ],
+    )
+    return response.choices[0].message
+
+
+if __name__ == "__main__":
+    openai.api_key = YOUR_OPEANI_API_KEY_HERE
+    baserun.init()
+    print(example())
+
+````
+
+```typescript typescript
+import {baserun} from 'baserun'; 
+import OpenAI from 'openai';
+
+const openai = new OpenAI({
+  apiKey: YOUR_OPEANI_API_KEY_HERE, 
+});
+
+
+async function example() {
+  const chatCompletion = await openai.chat.completions.create({
+    messages: [{ role: 'user', content: 'What are three activities to do in Paris?' }],
+    model: 'gpt-3.5-turbo',
+  });
+  return chatCompletion.choices[0].message.content;
+}
+
+
+baserun.init();
+example().then(output => {
+    console.log("Output:", output);
+  }).catch(error => {
+    console.error("Error:", error);
+  });
+````
+
+</CodeGroup>
 
 Congrats, you are done! Now, you can navigate to the monitoring tab. Here is what you will see interact with your application:
 

@@ -36,11 +36,11 @@
     },
 
     {
-      "group": "Getting Started",
+      "group": "Get Started with SDK",
       "pages": [
-        "getstarted/getstartwithtest",
-        "getstarted/loggingLLMrequests",
-        "getstarted/tracinganLLMchain"
+        "getstartedwithSDK/1loggingLLMrequests",
+        "getstartedwithSDK/2tracingWorkflow", 
+        "getstartedwithSDK/3getstartwithtest"
       ]
     },
     {
@@ -65,6 +65,7 @@
     {
       "group": "Monitoring",
       "pages": [
+        "monitoring/overview",
         "monitoring/customlogging",
         "monitoring/advancedtracing",
         "monitoring/usersandsessions",
