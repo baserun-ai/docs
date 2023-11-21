@@ -92,7 +92,6 @@ if (process.env.NODE_ENV === 'production') {
 ```python python
 import baserun
 import openai
-openai.api_key = YOUR_OPEANI_API_KEY_HERE
 
 def example():
     response = openai.chat.completions.create(
@@ -109,6 +108,7 @@ def example():
 
 
 if __name__ == "__main__":
+    openai.api_key = YOUR_OPEANI_API_KEY_HERE
     baserun.init()
     print(example())
 
