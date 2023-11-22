@@ -34,6 +34,10 @@
       "group": "Overview",
       "pages": ["introduction", "workspace", "authentication"]
     },
+    {
+      "group": "Prompt playground",
+      "pages": ["promptplayground/overview", "promptplayground/compareprompt"]
+    },
 
     {
       "group": "Get started with SDK",
@@ -42,10 +46,6 @@
         "getstartedwithSDK/tracingWorkflow",
         "getstartedwithSDK/getstartedwithtest"
       ]
-    },
-    {
-      "group": "Prompt playground",
-      "pages": ["promptplayground/overview", "promptplayground/compareprompt"]
     },
 
     {
