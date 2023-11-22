@@ -36,7 +36,7 @@
     },
 
     {
-      "group": "Get Started with SDK",
+      "group": "Get started with SDK",
       "pages": [
         "getstartedwithSDK/loggingLLMrequests",
         "getstartedwithSDK/tracingWorkflow",
@@ -49,6 +49,17 @@
     },
 
     {
+      "group": "Monitoring",
+      "pages": [
+        "monitoring/overview",
+        "monitoring/advancedtracing",
+        "monitoring/customlogging",
+        "monitoring/usersandsessions",
+        "monitoring/tracingwithnextjs"
+      ]
+    },
+
+    {
       "group": "Evaluation",
       "pages": ["evaluation/overview"]
     },
@@ -56,18 +67,6 @@
     {
       "group": "Testing",
       "pages": ["testing/overview", "testing/pytest", "testing/jest"]
-    },
-
-    {
-      "group": "Monitoring",
-      "pages": [
-        "monitoring/1overview",
-        "monitoring/2loggingLLMrequests",
-        "monitoring/advancedtracing",
-        "monitoring/customlogging",
-        "monitoring/usersandsessions",
-        "monitoring/tracingwithnextjs"
-      ]
     }
   ],
   "footerSocials": {
