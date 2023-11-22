@@ -38,18 +38,14 @@
     {
       "group": "Get Started with SDK",
       "pages": [
-        "getstartedwithSDK/1loggingLLMrequests",
-        "getstartedwithSDK/2tracingWorkflow", 
-        "getstartedwithSDK/3getstartwithtest"
+        "getstartedwithSDK/loggingLLMrequests",
+        "getstartedwithSDK/tracingWorkflow",
+        "getstartedwithSDK/getstartedwithtest"
       ]
     },
     {
       "group": "Prompt playground",
-      "pages": [
-        "promptplayground/overview",
-        "promptplayground/compareprompt"
-
-    ]
+      "pages": ["promptplayground/overview", "promptplayground/compareprompt"]
     },
 
     {
@@ -65,9 +61,10 @@
     {
       "group": "Monitoring",
       "pages": [
-        "monitoring/overview",
-        "monitoring/customlogging",
+        "monitoring/1overview",
+        "monitoring/2loggingLLMrequests",
         "monitoring/advancedtracing",
+        "monitoring/customlogging",
         "monitoring/usersandsessions",
         "monitoring/tracingwithnextjs"
       ]
