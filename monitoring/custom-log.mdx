@@ -1,24 +1,23 @@
 ---
-title: Custom logs
-sidebarTitle: Custom logs
-description: Logging helps you track the quality of your application, identify issues, and understand the application's behavior.
+title: Custom Logs
+sidebarTitle: Custom Logs
 ---
 
-This guide will introduce you to the concept of Custom logs in Baserun, including how it works and how logs can be used to monitor, debug, and optimize the performance of your AI application.​
+Custom logs are a way to provide additional context to your LLM traces. They can be used to log any information that you think would be useful to have alongside your LLM calls, whether it's third-party API calls or custom functions.
 
-## Why include Custom logs
+## Use cases
 
 1. **In-depth Analysis:** Custom logs provides detailed contextual information about each event in your application's lifecycle, allowing you to understand how your application is behaving.
-2. **Debugging and Optimization:** With detailed provided by Custom logs, you can easily identify any errors or performance issues. This makes debugging easier and allows you to optimize your application for better LLM performance.
+2. **Debugging and Optimization:** With detailed provided by custom logs, you can easily identify any errors or performance issues. This makes debugging easier and allows you to optimize your application for better LLM performance.
 3. **Monitoring:** Regularly checking custom logs can help you spot any unusual behavior or performance issues early on, allowing you to proactively address potential problems.
 
 ## How does logging work in the Baserun SDK?
 
 A custom log is simply two properties: the `name` and the `payload`. The payload is a freeform data structure that you can use however best suits your application.
 
-### Example: Chat bot
+## Example
 
-If you have a chat bot that, for instance, looks up product information, you may want to include information about that product lookup to provide context around the LLM calls.
+If you have a chatbot that looks up product information, you may want to include information about that product lookup to provide context for the LLM calls.
 
 In this example, we log the results of a function to look up product details:
 
