@@ -43,9 +43,9 @@
       "group": "Get started with SDK",
       "pages": [
         "authentication",
-        "getstartedwithSDK/loggingLLMrequests",
-        "getstartedwithSDK/tracingWorkflow",
-        "getstartedwithSDK/getstartedwithtest"
+        "getstartedwithSDK/logging-LLM-requests",
+        "getstartedwithSDK/tracing-workflows",
+        "getstartedwithSDK/testing-and-automatic-eval"
       ]
     },
 
