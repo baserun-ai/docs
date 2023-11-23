@@ -4,7 +4,24 @@ sidebarTitle: Tracing with Next.js
 description: Start tracing your Next.js app.
 ---
 
-## 1. Generate an API key
+<Steps>
+<Step title="Install Baserun SDK">
+
+<CodeGroup>
+
+    ```bash python
+    pip install baserun
+    ```
+
+    ```bash typescript
+    npm install baserun
+    # or
+    yarn add baserun
+    ```
+
+</CodeGroup>
+</Step>
+<Step title="Generate an API key">
 
 Create an account at [https://baserun.ai](https://baserun.ai). Then generate an API key for your project in the [settings](https://baserun.ai/settings) tab and set it as an environment variable.
 
@@ -12,7 +29,8 @@ Create an account at [https://baserun.ai](https://baserun.ai). Then generate an 
 export BASERUN_API_KEY="your_api_key_here"
 ```
 
-## 2. Initialize baserun
+</Step>
+<Step tilte="Initialize baserun">
 
 Use the [Next.js instrumentation hook](https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation) to ensure baserun is initialized exactly once during server startup.
 
@@ -32,7 +50,8 @@ export function register() {
 }
 ```
 
-## 3. Update next.config.js
+</Step>
+<Step title="Update next.config.js">
 
 Add the following to your next.config.js to ensure the instrumentation hook is used and that we can automatically log LLM calls.
 
@@ -49,7 +68,8 @@ module.exports = {
 };
 ```
 
-## 4. Add a trace
+</Step>
+<Step title="Add a trace">
 
 Add a trace to start logging to Baserun.
 
@@ -59,3 +79,7 @@ import { baserun } from "baserun";
 const traceGetResponse = baserun.trace(aiService.getResponse, { userId: 123 });
 const response = await traceGetResponse(message);
 ```
+
+</Step>
+
+</Steps>

@@ -53,10 +53,12 @@
       "group": "Monitoring",
       "pages": [
         "monitoring/overview",
-        "monitoring/advancedtracing",
-        "monitoring/customlogging",
-        "monitoring/usersandsessions",
-        "monitoring/tracingwithnextjs"
+        "monitoring/tracing",
+        "monitoring/advanced-tracing",
+        "monitoring/custom-log",
+        "monitoring/users-and-sessions",
+        "monitoring/collect-user-feedback",
+        "monitoring/tracing-with-nextjs"
       ]
     },
 
