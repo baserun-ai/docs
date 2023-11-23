@@ -11,8 +11,9 @@ This page goes over some advanced tracing features.
 If you're tracing multiple functions, you can use the `start_trace` context manager to distinguish between them:
 
 <CodeGroup>
-  ```python def ask_question(question="What is the capital of the US?") -> str:
-  with baserun.start_trace(name="General knowledge question"): # Your code here
+  ```python 
+  def ask_question(question="What is the capital of the US?") -> str:
+    with baserun.start_trace(name="General knowledge question"): # Your code here
   ```
 </CodeGroup>
 ![Trace name](./images/monitor-trace-name.png)
