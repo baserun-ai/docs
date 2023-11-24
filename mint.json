@@ -80,17 +80,6 @@
             "monitoring-python/collect-user-feedback",
             "monitoring-python/tracing-with-nextjs"
           ]
-        },
-        {
-          "group": "JS/TS",
-          "pages": [
-            "monitoring-js/tracing",
-            "monitoring-js/advanced-tracing",
-            "monitoring-js/custom-log",
-            "monitoring-js/users-and-sessions",
-            "monitoring-js/collect-user-feedback",
-            "monitoring-js/tracing-with-nextjs"
-          ]
         }
       ]
     },
@@ -102,8 +91,7 @@
         {
           "group": "Python",
           "pages": ["annotation-python/automatic-evaluation"]
-        },
-        { "group": "JS/TS", "pages": ["annotation-js/automatic-evaluation"] }
+        }
       ]
     },
 
@@ -111,8 +99,7 @@
       "group": "Testing",
       "pages": [
         "testing/overview",
-        { "group": "Python", "pages": ["testing/testing-python/pytest"] },
-        { "group": "JS/TS", "pages": ["testing/testing-js/jest"] }
+        { "group": "Python", "pages": ["testing/testing-python/pytest"] }
       ]
     }
   ],
