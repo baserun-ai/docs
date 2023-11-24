@@ -70,23 +70,50 @@
       "group": "Monitoring",
       "pages": [
         "monitoring/overview",
-        "monitoring/tracing",
-        "monitoring/advanced-tracing",
-        "monitoring/custom-log",
-        "monitoring/users-and-sessions",
-        "monitoring/collect-user-feedback",
-        "monitoring/tracing-with-nextjs"
+        {
+          "group": "Python",
+          "pages": [
+            "monitoring-python/tracing",
+            "monitoring-python/advanced-tracing",
+            "monitoring-python/custom-log",
+            "monitoring-python/users-and-sessions",
+            "monitoring-python/collect-user-feedback",
+            "monitoring-python/tracing-with-nextjs"
+          ]
+        },
+        {
+          "group": "JS/TS",
+          "pages": [
+            "monitoring-js/tracing",
+            "monitoring-js/advanced-tracing",
+            "monitoring-js/custom-log",
+            "monitoring-js/users-and-sessions",
+            "monitoring-js/collect-user-feedback",
+            "monitoring-js/tracing-with-nextjs"
+          ]
+        }
       ]
     },
 
     {
       "group": "Evaluation",
-      "pages": ["evaluation/overview"]
+      "pages": [
+        "annotation/overview",
+        {
+          "group": "Python",
+          "pages": ["annotation-python/automatic-evaluation"]
+        },
+        { "group": "JS/TS", "pages": ["annotation-js/automatic-evaluation"] }
+      ]
     },
 
     {
       "group": "Testing",
-      "pages": ["testing/overview", "testing/pytest", "testing/jest"]
+      "pages": [
+        "testing/overview",
+        { "group": "Python", "pages": ["testing/testing-python/pytest"] },
+        { "group": "JS/TS", "pages": ["testing/testing-js/jest"] }
+      ]
     }
   ],
   "footerSocials": {
