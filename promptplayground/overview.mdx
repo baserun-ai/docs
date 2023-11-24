@@ -1,49 +1,53 @@
 ---
 title: Overview
-description: iterating, versioning, and testing prompt.
+description: Iterating, evaluating, and versioning prompts as a team.
 ---
 
-![Prompt Playground](/images/prompt-playground-overview.png)
+<Frame>![Prompt Playground](/images/prompt-playground-overview.png)</Frame>
 
-## Use cases
+### Use cases
 
-- Create a source of truth for all the prompts in use
-- Iterating prompt templates
-- Collaborate on prompt templates
-- Evaluate prompt templates
+- **Management**: Create a source of truth for all the prompts in your application;
+- **Iterate prompts with version controls**: Iterating and evaluating prompt templates, never lose a good prompt.
+- **Collaboration**: Jam on prompts together with your team, share templates and good practices, and streamline your workflow.
 
-## Supported models
+<Accordion title="Supported LLM models">
+  * OpenAI * Anthropic * Llama * Mistral
+</Accordion>
 
-- OpenAI
-- Anthropic
-- Llama
-- Mistral
+### Key features
 
-## Features
-
-- Version control
+- Version controls
+- Copy prompt with inputs from Monitoring
+- OpenAI vision model (Coming soon)
+- OpenAI Tool calls
 - Chat mode
 - Cost and duration
-- Compare prompts (different models, templates, and parameter configurations)
-- Evaluation in UI (Coming soon)
+- Compare prompts side by side
+- Annotation in UI (Coming soon)
 
-## Overview
+### Instruction
 
 You can navigate to the Prompt Playground through the left sidebar.
 
 By default, you can see all the prompts created by all users in the shared workspaces, sorted by date. You can toggle between grid and list views or search for and filter prompts by name or user.
 
-## Creating a prompt template
+<Frame>
+  ![Prompt Playground](/images/prompt-playground-list-grid-toggle.gif)
+</Frame>
+
+### Creating a prompt
 
 <Steps>
-<Step title="Click the New prompt button on the top right or duplicate an existing prompt.">
+<Step title="Click the 'New Prompt' button at the top right, or duplicate an existing prompt.">
+<Frame>
+  ![New Prompt](/images/prompt-playground-new-prompt.gif)
+</Frame>
 </Step>
 <Step title="Enter the prompt template name">
 Then, you will be redirected to the prompt detail view.
 
 The left side is the editor panel, where you can edit the prompts. On the right side is the test panel, where you can create multiple test cases to test the prompt. Baserun will automatically save all prompt versions and tests. You can access past versions through the "Version History" button on the top right and restore any previous versions.
-
-![Prompt Playground Detail](/images/change-prompt-version.gif)
 
 </Step>
 <Step title="Select the model you want to use">
@@ -64,6 +68,7 @@ Baserun automatically creates a new version of the prompts as you edit the promp
 
 You can view a previous version by clicking on a past version inside the version history panel; all past versions are read-only. To restore an earlier version, hover over the version name, open the dropdown menu, and click the "Restore" button. This action will duplicate the past version and add it to the top.
 
+<Frame>![Prompt Playground Detail](/images/change-prompt-version.gif)</Frame>
 ## Sharing and collaboration
 
 You can share the prompt via URL with any users in your workspace.
