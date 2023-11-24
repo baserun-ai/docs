@@ -59,10 +59,26 @@
     {
       "group": "Get started with SDK",
       "pages": [
-        "authentication",
-        "getstartedwithSDK/logging-LLM-requests",
-        "getstartedwithSDK/tracing-workflows",
-        "getstartedwithSDK/testing-and-automatic-eval"
+        {
+          "group": "Python",
+          "pages": [
+            "getstartedwithSDK/python/installation",
+            "getstartedwithSDK/python/authentication",
+            "getstartedwithSDK/python/logging-LLM-requests",
+            "getstartedwithSDK/python/tracing-workflows",
+            "getstartedwithSDK/python/testing-and-automatic-eval"
+          ]
+        },
+        {
+          "group": "JS/TS",
+          "pages": [
+            "getstartedwithSDK/python/installation",
+            "getstartedwithSDK/python/authentication",
+            "getstartedwithSDK/python/logging-LLM-requests",
+            "getstartedwithSDK/python/tracing-workflows",
+            "getstartedwithSDK/python/testing-and-automatic-eval"
+          ]
+        }
       ]
     },
 

@@ -1,0 +1,143 @@
+---
+title: "Testing and automatic evaluation"
+sidebarTitle: "Testing and automatic evaluation"
+---
+
+![Test run report](/images/testing.png)
+
+## Introduction
+
+We leverage existing testing frameworks like pytest and Jest so you don’t have to learn a new tool and can directly integrate your existing testing logic.
+
+## Features
+
+- pytest integration
+- jest integration
+- Support evaluation
+- Provide analysis UI
+- Provide annotation workflow (coming soon)
+
+## Instruction
+
+<Steps>
+<Step title="Install Baserun SDK">
+
+<CodeGroup>
+
+    ```bash python
+    pip install baserun
+    ```
+
+    ```bash typescript
+    npm install baserun
+    # or
+    yarn add baserun
+    ```
+
+</CodeGroup>
+</Step>
+<Step title="Generate an API key">
+
+Create an account at [https://baserun.ai](https://baserun.ai). Then generate an API key for your project in the [settings](https://baserun.ai/settings) tab. Set it as an environment variable:
+
+```bash
+export BASERUN_API_KEY="your_api_key_here"
+```
+
+Or if using python, set `baserun.api_key` to its value:
+
+```python
+baserun.api_key = "br-..."
+```
+
+</Step>
+<Step title="Define the test">
+
+Use our [pytest](/pytest) or [jest](/jest) plugin and immediately start testing with Baserun. By default all OpenAI and Anthropic requests will be automatically logged.
+
+<CodeGroup>
+
+```python python
+# test_module.py
+
+import openai
+
+def test_paris_trip():
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": "What are three activities to do in Paris?"
+            }
+        ],
+    )
+
+    assert "Eiffel Tower" in response['choices'][0]['message']['content']
+```
+
+```typescript typescript
+// test_module.spec.ts
+
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+describe("Baserun end-to-end", () => {
+  it("should suggest the Eiffel Tower", async () => {
+    const chatCompletion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      temperature: 0.7,
+      messages: [
+        {
+          role: "user",
+          content: "What are three activities to do in Paris?",
+        },
+      ],
+    });
+
+    expect(chatCompletion.choices[0].message!.content!).toContain(
+      "Eiffel Tower"
+    );
+  });
+});
+```
+
+</CodeGroup>
+</Step>
+<Step title="Run test">
+
+<CodeGroup>
+
+```bash python
+pytest --baserun test_module.py
+...
+========================Baserun========================
+Test results available at: https://baserun.ai/runs/<id>
+=======================================================
+```
+
+```bash typescript
+jest --preset baserun test_module.spec.ts
+...
+========================Baserun========================
+Test results available at: https://baserun.ai/runs/<id>
+=======================================================
+```
+
+</CodeGroup>
+</Step>
+
+</Steps>
+
+click on the link to open the test run report in Baserun.
+
+## Demo projects
+
+For your reference, we have example apps using LangChain to implement an agent:
+
+- [Python](https://github.com/baserun-ai/testing-agent/)
+- [Typescript](https://github.com/baserun-ai/testing-agent-js/)

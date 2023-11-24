@@ -1,0 +1,200 @@
+---
+title: "Tracing multi-Step LLM workflows"
+sidebarTitle: Tracing multi-Step LLM workflows
+---
+
+## Introduction
+
+A Trace comprises a series of events executed within an LLM chain(workflow). Tracing enables Baserun to capture and display the LLM chain's entire lifecycle, whether synchronous or asynchronous.
+
+Tracing LLM chains allows you to debug your application, monitor your LLM chains' performance, and also collect user feedback.
+
+![Trace a LLM chain](/images/monitor-trace-details.png)
+
+## Use cases
+
+Please reference the [Monitoring Overview](/monitoring/overview) to learn why logging LLM chain is critical for LLM feature development.
+
+## Features
+
+- Support Python and Typescript
+- Automatically logs OpenAI and Anthropic LLM calls
+- UI to show sequence of events
+- Provide generative token usage, context token usage, estimated cost, duration
+- Support automatic evaluation
+- Supports async functions
+- Option to add custom trace name
+- Option to log custom metadata
+- Option to set trace result
+- Support collecting user feedback
+
+<Note>
+  If you are using Next.js, please reference [Logging > Tracing with
+  Next.js](/logging/tracingwithnextjs) .
+</Note>
+
+## Instruction
+
+The first 3 steps are the same as the [Logging LLM requests tutorial](/). So, if you have already done this before, jump to step 4.
+
+<Steps>
+<Step title="Install Baserun SDK">
+
+<CodeGroup>
+
+    ```bash python
+    pip install baserun
+    ```
+
+    ```bash typescript
+    npm install baserun
+    # or
+    yarn add baserun
+    ```
+
+</CodeGroup>
+</Step>
+<Step title="Generate an API key">
+
+Create an account at [https://baserun.ai](https://baserun.ai). Then generate an API key for your project in the [settings](https://baserun.ai/settings) tab. Set it as an environment variable:
+
+```bash
+export BASERUN_API_KEY="your_api_key_here"
+```
+
+Or if using python, set `baserun.api_key` to its value:
+
+```python
+baserun.api_key = "br-..."
+```
+
+</Step>
+<Step title=" Initialize Baserun">
+
+At your application's startup, define the environment in which you'd like to run Baserun. You can use Baserun in the development environment while iterating on your features, utilizing it for debugging and analysis, or in the production environment to monitor your application.
+
+<CodeGroup>
+```python python
+import baserun
+
+if env == 'production':
+baserun.init()
+
+````
+
+```typescript typescript
+import { baserun } from 'baserun';
+
+if (process.env.NODE_ENV === 'production') {
+    baserun.init();
+}
+````
+
+</CodeGroup>
+</Step>
+<Step title="Decide what to trace">
+
+The function(s) to trace are ultimately dependent on your app. It could be a main() function, or it could be a handler for an API call. If you plan to trace different functions, remember to give each trace a name so you can easily filter them later.
+
+<CodeGroup>
+```python python
+# Decorate the function that you would like to trace:
+import baserun
+
+@baserun.trace
+def get_response(message):
+...
+
+````
+
+```typescript typescript
+import OpenAI from 'openai';
+import { baserun } from 'baserun';
+
+baserun.init();
+
+const openai = new OpenAI();
+
+const getCompletion = baserun.trace(async () => {
+  const chatCompletion = await openai.chat.completions.create({
+    messages: [
+      {
+        role: 'user',
+        content: `Say "this is a test ${(Math.random() * 100) | 0}"`,
+      },
+    ],
+    model: 'gpt-3.5-turbo',
+  });
+
+  return chatCompletion;
+});
+
+async function main() {
+  const completion = await getCompletion();
+  console.log('completion', completion);
+}
+
+main();
+````
+
+</CodeGroup>
+</Step>
+</Steps>
+
+## Example
+
+```python python
+import baserun
+import openai
+import sys
+
+
+def get_activities():
+    response = openai.chat.completions.create(
+        model="gpt-3.5-turbo",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": "What are three activities to do on the Moon?"
+            }
+        ],
+    )
+    command = " ".join(sys.argv)
+    return response.choices[0].message
+
+@baserun.trace
+def find_best_activity():
+    moon_activities = get_activities()
+    response = openai.chat.completions.create(
+        model="gpt-3.5-turbo",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": f"Pick the best activity to do on the moon from the following, including a convincing reason to do so.\n + {moon_activities}"
+            }
+        ],
+    )
+    return response.choices[0].message
+
+
+if __name__ == "__main__":
+    baserun.api_key = YOUR_BASERUN_API_KEY_HERE
+    openai.api_key = YOUR_OPEANI_API_KEY_HERE
+    baserun.init()
+    print(find_best_activity())
+```
+
+Congrats, you are done! Now, you can navigate to the monitoring tab. Here is what you will see interact with your application:
+
+![Trace list](/images/monitor_trace_list.png)
+
+Optionally, you can add metadata like trace name, user ID, and session ID to aid in debugging. Read [Logging > Advanced tracing features](/monitoring/advancedtracing) for more details.
+
+## Demo projects
+
+[Python example repo](https://github.com/baserun-ai/testing-agent/), <br />
+[Typescript example repo](https://github.com/baserun-ai/testing-agent-js)
+
+If you have any questions or feature requests, join our [Discord channel](https://discord.com/invite/xEPFsvSmkb) or send us an email at [hello@baserun.ai](mailto:hello@baserun.ai)
