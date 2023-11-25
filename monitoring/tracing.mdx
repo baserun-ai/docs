@@ -5,7 +5,7 @@ sidebarTitle: Tracing
 
 Tracing is useful for debugging and monitoring chained LLM calls (workflow) or a single LLM call.
 
-## Features
+### Features
 
 - Support Python and Typescript
 - Automatically logs OpenAI and Anthropic LLM calls
@@ -27,7 +27,9 @@ LLM request monitoring is used to track the execution of your AI model. These ca
 - API-level metrics like request latency, rate limit errors, etc.
 - OpenAI tool calls in JSON format
 
+<Frame>
 ![Monitoring_requests](/images/monitor-logging-requests.png)
+</Frame>
 
 ### Use cases
 
@@ -52,24 +54,24 @@ import baserun
 import openai
 
 def example():
-response = openai.chat.completions.create(
-model="gpt-3.5-turbo",
-temperature=0.7,
-messages=[
-{
-"role": "user",
-"content": "What are three activities to do in Paris?"
-}
-],
-)
-return response.choices[0].message
+    response = openai.chat.completions.create(
+        model="gpt-3.5-turbo",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": "What are three activities to do in Paris?"
+            }
+        ],
+    )
+    return response.choices[0].message
 
-if **name** == "**main**":
-baserun.api_key = YOUR_BASERUN_API_KEY_HERE
-openai.api_key = YOUR_OPEANI_API_KEY_HERE
-baserun.init()
-print(example())
+if __name__ == "__main__":
+    baserun.api_key = YOUR_BASERUN_API_KEY_HERE
+    openai.api_key = YOUR_OPEANI_API_KEY_HERE
 
+    baserun.init()
+    print(example())
 ````
 
 ```typescript typescript
@@ -111,7 +113,9 @@ A Trace comprises a series of events executed within a LLM chain (workflow). Tra
 
 For example, consider the case of an AI bot used to automate phone calls. The process begins with the bot initiating a call to the user. While the call is in progress, the conversation is transcribed into text. Subsequently, the bot analyzes the transcribed text to produce a response or message. Once the response is crafted, it is converted into audio. Finally, the AI system transmits the audio message.
 
+<Frame> 
 ![Trace a LLM chain](/images/monitor-trace-details.png)
+</Frame>
 
 <Note>
   If you are using Next.js, please reference [Logging > Tracing with
@@ -133,40 +137,42 @@ import baserun
 import openai
 import sys
 
+
 def get_activities():
-response = openai.chat.completions.create(
-model="gpt-3.5-turbo",
-temperature=0.7,
-messages=[
-{
-"role": "user",
-"content": "What are three activities to do on the Moon?"
-}
-],
-)
-command = " ".join(sys.argv)
-return response.choices[0].message
+    response = openai.chat.completions.create(
+        model="gpt-3.5-turbo",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": "What are three activities to do on the Moon?"
+            }
+        ],
+    )
+    command = " ".join(sys.argv)
+    return response.choices[0].message
 
 @baserun.trace
 def find_best_activity():
-moon_activities = get_activities()
-response = openai.chat.completions.create(
-model="gpt-3.5-turbo",
-temperature=0.7,
-messages=[
-{
-"role": "user",
-"content": f"Pick the best activity to do on the moon from the following, including a convincing reason to do so.\n + {moon_activities}"
-}
-],
-)
-return response.choices[0].message
+    moon_activities = get_activities() 
+    response = openai.chat.completions.create(
+        model="gpt-3.5-turbo",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": f"Pick the best activity to do on the moon from the following, including a convincing reason to do so.\n + {moon_activities}"
+            }
+        ],
+    )
+    return response.choices[0].message
 
-if **name** == "**main**":
-baserun.api_key = YOUR_BASERUN_API_KEY_HERE
-openai.api_key = YOUR_OPEANI_API_KEY_HERE
-baserun.init()
-print(find_best_activity())
+
+if __name__ == "__main__":
+    baserun.api_key = YOUR_BASERUN_API_KEY_HERE
+    openai.api_key = YOUR_OPEANI_API_KEY_HERE
+    baserun.init()
+    print(find_best_activity())
 
 ````
 

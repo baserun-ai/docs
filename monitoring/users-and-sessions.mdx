@@ -4,7 +4,7 @@ sidebarTitle: Users and User Sessions
 description: Tracing additional user-specific data and end-to-end user journeys
 ---
 
-# Sessions
+## Sessions
 
 A Session is a collection of LLM calls that are related to a long-term user interaction. A session can be started, resumed, and ended at any time and may contain many traces.
 
@@ -12,7 +12,7 @@ User Sessions are used to group traces together in the [Users](https://baserun.a
 
 For the Use cases of a chat bot, a Session may be the entire conversation. For an agent, a Session may encompass a single task execution. The scope of the session is specific to your application and what is most useful for you.
 
-## Adding Sessions
+### Adding Sessions
 
 If you're building a system where user interactions happen in a sequence—like a chat bot—you'll find it useful to group these interactions into a single session. The (`with_session`) context manager in Baserun allows you to do just that. By providing a username or User ID, you can create a new session. By providing a session ID you can continue an existing session. This allows you to group all related traces under either the User or Session, making it easier to debug or analyze the user's journey through your application.
 

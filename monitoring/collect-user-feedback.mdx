@@ -5,13 +5,13 @@ sidebarTitle: 'Collect user feedback'
 
 In addition to automatic evaluations and human evaluations, user feedback is an excellent source for assessing the quality of an LLM application. In Baserun, feedback is collected either as a 0-1 score or in the form of comments and is attached to a trace or an individual LLM request.
 
-## Use case
+### Use case
 
-- Evaluate chatbot response: You might want to ask user rate the chatbot response with a ”👍” / ”👎” or on a numeric scale (eg: “1-5”) as a way to evaluate customer experience.
-- Create fine-tuning datasets: You might want to collecting positive responses use for fine-tuning your model.
-- Create benchmark testing datasets: Consider collecting negative responses to identify use cases that were not covered in previous development cycles. These user requests can then be added to regression testing suites to evaluate the performance of your next release.
+- **Evaluate chatbot response**: You might want to ask user rate the chatbot response with a ”👍” / ”👎” or on a numeric scale (eg: “1-5”) as a way to evaluate customer experience.
+- **Create fine-tuning datasets**: You might want to collecting positive responses use for fine-tuning your model.
+- **Create benchmark testing datasets**: Consider collecting negative responses to identify use cases that were not covered in previous development cycles. These user requests can then be added to regression testing suites to evaluate the performance of your next release.
 
-## Features
+### Features
 
 - Collect score rating
 - Collect comments
@@ -19,7 +19,7 @@ In addition to automatic evaluations and human evaluations, user feedback is an 
 
 User feedback is attached to an LLM request or a trace. Please start by following 'Get Started with Logging LLM Requests' or 'Get Started with Tracing a Workflow' first. Once you have successfully logged LLM requests or traces in Baserun, continue with the following instructions.
 
-## Instructions
+### Instructions
 
 You can customize your UI in different ways to collect user feedback. Whether it's through a '👍'/'👎' or on a numeric scale (e.g., '1-5'), the customer's score will be displayed as a 0-1 score on the Baserun dashboard. The end user also has the option to add a comment.
 
@@ -79,4 +79,6 @@ def ask_question(question="What is the capital of the US?") -> str:
 </CodeGroup>
 
 Here is how the user feedback will look like in Baserun dashboard:
+<Frame>
 ![User feedback](/images/eval_user_feedback.png)
+</Frame>

@@ -3,21 +3,22 @@ title: 'Tracing multi-Step LLM workflows'
 sidebarTitle: Tracing multi-Step LLM workflows
 ---
 
-## Introduction
+### Introduction
 
 A Trace comprises a series of events executed within an LLM chain(workflow). Tracing enables Baserun to capture and display the LLM chain's entire lifecycle, whether synchronous or asynchronous.
 
 Tracing LLM chains allows you to debug your application, monitor your LLM chains' performance, and also collect user feedback.
 
+<Frame>
 ![Trace a LLM chain](/images/monitor-trace-details.png)
+</Frame>
 
-## Use cases
+### Use cases
 
 Please reference the [Monitoring Overview](/monitoring/overview) to learn why logging LLM chain is critical for LLM feature development.
 
-## Features
+### Features
 
-- Support Python and Typescript
 - Automatically logs OpenAI and Anthropic LLM calls
 - UI to show sequence of events
 - Provide generative token usage, context token usage, estimated cost, duration
@@ -33,7 +34,7 @@ Please reference the [Monitoring Overview](/monitoring/overview) to learn why lo
   Next.js](/logging/tracingwithnextjs) .
 </Note>
 
-## Instruction
+### Instruction
 
 The first 3 steps are the same as the [Logging LLM requests tutorial](/). So, if you have already done this before, jump to step 4.
 
@@ -143,7 +144,7 @@ main();
 </Step>
 </Steps>
 
-## Example
+### Example
 
 <CodeGroup>
 ```python python
@@ -151,40 +152,42 @@ import baserun
 import openai
 import sys
 
+
 def get_activities():
-response = openai.chat.completions.create(
-model="gpt-3.5-turbo",
-temperature=0.7,
-messages=[
-{
-"role": "user",
-"content": "What are three activities to do on the Moon?"
-}
-],
-)
-command = " ".join(sys.argv)
-return response.choices[0].message
+    response = openai.chat.completions.create(
+        model="gpt-3.5-turbo",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": "What are three activities to do on the Moon?"
+            }
+        ],
+    )
+    command = " ".join(sys.argv)
+    return response.choices[0].message
 
 @baserun.trace
 def find_best_activity():
-moon_activities = get_activities()
-response = openai.chat.completions.create(
-model="gpt-3.5-turbo",
-temperature=0.7,
-messages=[
-{
-"role": "user",
-"content": f"Pick the best activity to do on the moon from the following, including a convincing reason to do so.\n + {moon_activities}"
-}
-],
-)
-return response.choices[0].message
+    moon_activities = get_activities() 
+    response = openai.chat.completions.create(
+        model="gpt-3.5-turbo",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": f"Pick the best activity to do on the moon from the following, including a convincing reason to do so.\n + {moon_activities}"
+            }
+        ],
+    )
+    return response.choices[0].message
 
-if **name** == "**main**":
-baserun.api_key = YOUR_BASERUN_API_KEY_HERE
-openai.api_key = YOUR_OPEANI_API_KEY_HERE
-baserun.init()
-print(find_best_activity())
+
+if __name__ == "__main__":
+    baserun.api_key = YOUR_BASERUN_API_KEY_HERE
+    openai.api_key = YOUR_OPEANI_API_KEY_HERE
+    baserun.init()
+    print(find_best_activity())
 
 ````
 
@@ -219,8 +222,9 @@ main()
 </CodeGroup>
 
 Congrats, you are done! Now, you can navigate to the monitoring tab. Here is what you will see interact with your application:
-
+<Frame> 
 ![Trace list](/images/monitor_trace_list.png)
+</Frame>
 
 Optionally, you can add metadata like trace name, user ID, and session ID to aid in debugging. Read [Logging > Advanced tracing features](/monitoring/advancedtracing) for more details.
 
