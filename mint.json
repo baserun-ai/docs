@@ -114,7 +114,7 @@
     {
       "group": "Evaluation",
       "pages": [
-        "annotation/overview",
+        "evaluation/overview",
         {
           "group": "Python",
           "pages": ["annotation/python/automatic-evaluation"]
@@ -131,7 +131,7 @@
       "pages": [
         "testing/overview",
         { "group": "Python", "pages": ["testing/python/pytest"] },
-        { "group": "JS/TS", "pages": ["testing/js/jest"] }
+        { "group": "JS/TS", "pages": ["testing/js/jest", "testing/js/vitest"] }
       ]
     }
   ],

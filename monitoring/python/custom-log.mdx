@@ -22,7 +22,7 @@ If you have a chatbot that looks up product information, you may want to include
 In this example, we log the results of a function to look up product details:
 
 <CodeGroup>
-```python
+```python python
 import baserun
 
 def product_lookup(product_id: int): # Perform your application's logic
@@ -31,10 +31,33 @@ response = get_product(product_id)
     # Log the response to Baserun- any JSON-ifiable object can be passed
     baserun.log(name="Product Lookup", payload=response)
 
-```
+````
+```typescript typescript
+import { baserun } from 'baserun'
+
+const workflow = baserun.trace(async () => {
+  // some llm calls or other logic here
+  baserun.log('log-name', {
+    key: 'value'
+  })
+
+  baserun.log('log-name 2', 'a string')
+
+  return 'my result'
+})
+
+async function main() {
+  await baserun.init()
+  await workflow()
+}
+````
+
 </CodeGroup>
 
 Then, when viewed in the Baserun UI, you can have this log presented alongside the LLM calls that happened in the same trace.
 
 ![Trace List](/images/logging-product.png)
+
+```
+
 ```

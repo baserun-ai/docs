@@ -1,5 +1,5 @@
 ---
-title: "Tracing multi-Step LLM workflows"
+title: 'Tracing multi-Step LLM workflows'
 sidebarTitle: Tracing multi-Step LLM workflows
 ---
 
@@ -111,7 +111,6 @@ def get_response(message):
 import OpenAI from 'openai';
 import { baserun } from 'baserun';
 
-baserun.init();
 
 const openai = new OpenAI();
 
@@ -120,7 +119,7 @@ const getCompletion = baserun.trace(async () => {
     messages: [
       {
         role: 'user',
-        content: `Say "this is a test ${(Math.random() * 100) | 0}"`,
+        content: `Say "this is a test"`,
       },
     ],
     model: 'gpt-3.5-turbo',
@@ -130,6 +129,7 @@ const getCompletion = baserun.trace(async () => {
 });
 
 async function main() {
+  await baserun.init();
   const completion = await getCompletion();
   console.log('completion', completion);
 }

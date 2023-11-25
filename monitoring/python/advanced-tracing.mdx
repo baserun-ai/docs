@@ -11,9 +11,8 @@ This page goes over some advanced tracing features.
 If you're tracing multiple functions, you can use the `start_trace` context manager to distinguish between them:
 
 <CodeGroup>
-  ```python 
-  def ask_question(question="What is the capital of the US?") -> str:
-    with baserun.start_trace(name="General knowledge question"): # Your code here
+  ```python def ask_question(question="What is the capital of the US?") -> str:
+  with baserun.start_trace(name="General knowledge question"): # Your code here
   ```
 </CodeGroup>
 ![Trace name](./images/monitor-trace-name.png)
@@ -25,7 +24,7 @@ Within a `start_trace` context any calls to OpenAI or Anthropic will automatical
 By default a trace's `result` value will be the return value of the function that is traced. If you want to be more explicit, you can set the `result` value of a trace.
 
 <CodeGroup>
-```python
+```python python
 def ask_question(question="What is the capital of the US?") -> str:
     with baserun.start_trace() as trace:
         # Your code here
@@ -33,6 +32,22 @@ def ask_question(question="What is the capital of the US?") -> str:
         trace.result = my_result
 
 ````
+```typescript typescript
+import { baserun } from 'baserun'
+
+const workflow = baserun.trace(async () => {
+  // some llm calls or other logic here
+
+  return 'my result'
+}, 'trace name')
+
+async function main() {
+  await baserun.init()
+  await workflow()
+}
+
+````
+
 </CodeGroup>
 ![Trace result](./images/monitor-trace-result.png)
 
@@ -41,7 +56,7 @@ def ask_question(question="What is the capital of the US?") -> str:
 You can also add custom metadata. This metadata could be whatever you like, provided that it is JSON serializable. For instance, you may want to include references to other objects or systems.
 
 <CodeGroup>
-```python
+```python python
 def ask_question(question="What is the capital of the US?") -> str:
     with baserun.start_trace() as trace:
         # Your code here
@@ -50,7 +65,28 @@ def ask_question(question="What is the capital of the US?") -> str:
         trace.metadata = {
           "answer_id": answer_id
         }
+
+````
+```typescript typescript
+import { baserun } from 'baserun'
+
+const workflow = baserun.trace(async () => {
+  // some llm calls or other logic here
+
+  return 'my result'
+}, {
+  name: 'trace name',
+  metadata: {
+    requestId: '1234'
+  }
+})
+
+async function main() {
+  await baserun.init()
+  await workflow()
+}
 ````
 
 </CodeGroup>
 ![Custom metadata](./images/monitor-custom-metadata.png)
+```

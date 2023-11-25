@@ -26,7 +26,37 @@ with baserun.with_session(identifier=username_or_id) as session:
     # Store session ID to be continued later
     session_id = session.id
     run_chatbot()
-    ```
+```
+
+```typescript typescript
+import { baserun } from '../../../src/index.js'
+import OpenAI from 'openai'
+
+const openai = new OpenAI()
+
+async function main() {
+  await baserun.init()
+  const { data, sessionId } = await baserun.session({
+    async session() {
+      // add business logic including traces in here
+      return openai.chat.completions.create({
+        messages: [
+          {
+            role: 'user',
+            content: `Say "this is a test"`,
+          },
+        ],
+        model: 'gpt-3.5-turbo',
+      })
+    },
+    user: 'user@example.com',
+  })
+
+  console.log({ data, sessionId })
+}
+
+main()
+```
 
 </CodeGroup>
 
@@ -37,11 +67,47 @@ Using the Session ID that was collected when the session was started you can the
 <CodeGroup>
 ```python python
 import baserun
-   
+
 with baserun.with_session(session_id=session_id) as session:
-    run_chatbot()
-    ```
+run_chatbot()
+
+````
+
+
+```typescript typescript
+import { baserun } from '../../../src/index.js'
+import OpenAI from 'openai'
+
+const openai = new OpenAI()
+
+async function main() {
+  await baserun.init()
+  const { data, sessionId } = await baserun.session({
+    async session() {
+      return openai.chat.completions.create({
+        messages: [
+          {
+            role: 'user',
+            content: `Say "this is a test"`,
+          },
+        ],
+        model: 'gpt-3.5-turbo',
+      })
+    },
+    sessionId: 'e2792182-c0cc-4a7b-86cb-93d990a74dae' // pass in existing session id
+    user: 'exampel@user.com',
+  })
+
+  console.log({ data, sessionId })
+}
+
+main()
+````
 
 </CodeGroup>
 
 Providing a username or ID (the value is up to you) will allow you to group traces in the [Users](https://baserun.ai/monitoring/users) and [Sessions](https://baserun.ai/monitoring/user-sessions) monitoring pages.
+
+```
+
+```
