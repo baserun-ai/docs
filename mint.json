@@ -33,7 +33,7 @@
     {
       "name": "Documentation",
       "icon": "Book",
-      "url": "/welcome-to-baserun"
+      "url": "welcome-to-baserun"
     },
     {
       "name": "Let's talk",
@@ -53,7 +53,10 @@
     },
     {
       "group": "Prompt playground",
-      "pages": ["promptplayground/overview", "promptplayground/compareprompt"]
+      "pages": [
+        "prompt-playground/overview",
+        "prompt-playground/compare-prompts"
+      ]
     },
 
     {
@@ -85,14 +88,8 @@
     },
 
     {
-      "group": "Evaluation",
-      "pages": [
-        "annotation/overview",
-        {
-          "group": "Python",
-          "pages": ["annotation/python/automatic-evaluation"]
-        }
-      ]
+      "group": "Annotating",
+      "pages": ["Annotating/automatic-evaluation"]
     },
 
     {

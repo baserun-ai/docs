@@ -1,0 +1,53 @@
+---
+title: Compare prompts
+---
+
+When crafting writing prompts, small changes in wording or configuration can lead to major differences in results. Managing and sharing different versions of these prompts, especially among team members, can be challenging. The Baserun Compare feature enables the entire team to compare prompt templates, models, and configurations side by side, facilitating easier iteration and performance evaluation.
+
+<Frame>
+<video
+  controls
+  className="w-full aspect-video"
+  src="/videos/promptcompareintro.mp4"
+></video>
+
+ </Frame>
+
+### Use cases
+
+- **Deciding which models or configurations:** Pick the best option by comparing their results side by side.
+- **Decide which prompt version performs better:** Determine the most effective way of phrasing prompts by evaluating different versions.
+- **Regression Tests/Backtesting:** Check if new results match what's expected to spot any regressions or deviations.
+
+### Features
+
+- Version cotrols for each prompt variation
+- Side-by-side comparisons
+- Import testing dataset
+- Bulk testing
+- Share reports
+- Export reports
+
+### Instruction
+
+<Steps>
+  <Step
+    title="Click the `Compare` button at top right corner of the prompt
+    details in your playground."
+  ></Step>
+  <Step title="Select the prompt and the versions you would like to compare.">
+    By default, Baserun pre-selects the previous version. Remove the second
+    prompt row if you wish to perform bulk testing with a single prompt.
+    <Frame>
+      <img src="/images/prompt-compare-create.png" />
+    </Frame>
+    Alternatively, you can use the parameterized settings, where you can enter a
+    range of parameters to generate different variations accordingly.
+    <Frame>
+      <img src="/images/prompt-compare-parameters.png" />
+    </Frame>
+  </Step>
+  <Step title="Click Run all to generate outputs. ">
+    You can also edit the test inputs at any time and rerun the test.
+  </Step>
+</Steps>
