@@ -1,5 +1,5 @@
 ---
-title: "Tracing multi-Step LLM workflows"
+title: 'Tracing multi-Step LLM workflows'
 sidebarTitle: Tracing multi-Step LLM workflows
 ---
 
@@ -85,8 +85,9 @@ baserun.init()
 ```typescript typescript
 import { baserun } from 'baserun';
 
+// in your main function
 if (process.env.NODE_ENV === 'production') {
-    baserun.init();
+    await baserun.init();
 }
 ````
 
@@ -111,8 +112,6 @@ def get_response(message):
 import OpenAI from 'openai';
 import { baserun } from 'baserun';
 
-baserun.init();
-
 const openai = new OpenAI();
 
 const getCompletion = baserun.trace(async () => {
@@ -127,9 +126,10 @@ const getCompletion = baserun.trace(async () => {
   });
 
   return chatCompletion;
-});
+}, 'getCompletion');
 
 async function main() {
+  await baserun.init();
   const completion = await getCompletion();
   console.log('completion', completion);
 }
@@ -143,48 +143,79 @@ main();
 
 ## Example
 
+<CodeGroup>
 ```python python
 import baserun
 import openai
 import sys
 
-
 def get_activities():
-    response = openai.chat.completions.create(
-        model="gpt-3.5-turbo",
-        temperature=0.7,
-        messages=[
-            {
-                "role": "user",
-                "content": "What are three activities to do on the Moon?"
-            }
-        ],
-    )
-    command = " ".join(sys.argv)
-    return response.choices[0].message
+response = openai.chat.completions.create(
+model="gpt-3.5-turbo",
+temperature=0.7,
+messages=[
+{
+"role": "user",
+"content": "What are three activities to do on the Moon?"
+}
+],
+)
+command = " ".join(sys.argv)
+return response.choices[0].message
 
 @baserun.trace
 def find_best_activity():
-    moon_activities = get_activities()
-    response = openai.chat.completions.create(
-        model="gpt-3.5-turbo",
-        temperature=0.7,
-        messages=[
-            {
-                "role": "user",
-                "content": f"Pick the best activity to do on the moon from the following, including a convincing reason to do so.\n + {moon_activities}"
-            }
-        ],
-    )
-    return response.choices[0].message
+moon_activities = get_activities()
+response = openai.chat.completions.create(
+model="gpt-3.5-turbo",
+temperature=0.7,
+messages=[
+{
+"role": "user",
+"content": f"Pick the best activity to do on the moon from the following, including a convincing reason to do so.\n + {moon_activities}"
+}
+],
+)
+return response.choices[0].message
 
+if **name** == "**main**":
+baserun.api_key = YOUR_BASERUN_API_KEY_HERE
+openai.api_key = YOUR_OPEANI_API_KEY_HERE
+baserun.init()
+print(find_best_activity())
 
-if __name__ == "__main__":
-    baserun.api_key = YOUR_BASERUN_API_KEY_HERE
-    openai.api_key = YOUR_OPEANI_API_KEY_HERE
-    baserun.init()
-    print(find_best_activity())
-```
+````
+
+```typescript typescript
+import OpenAI from 'openai';
+import { baserun } from 'baserun';
+
+const openai = new OpenAI();
+
+async function main() {
+  await baserun.init()
+
+  await baserun.trace(async () => {
+    baserun.log('lets go', 'We are invoking OpenAI now');
+    const res = await openai.completions.create({
+      model: 'gpt-3.5-turbo-instruct',
+      prompt: '2+2=',
+      temperature: 0,
+    });
+
+    baserun.log('TestEvent', 'whatever');
+
+    baserun.evals.includes('model name', res.model, 'gpt-3.5-turbo-instruct');
+  }, {
+    name: 'the name of the trace' // this will show up in the Baserun UI
+  });
+}
+
+main()
+
+````
+
+</CodeGroup>
 
 Congrats, you are done! Now, you can navigate to the monitoring tab. Here is what you will see interact with your application:
 

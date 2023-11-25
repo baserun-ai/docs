@@ -72,11 +72,11 @@
         {
           "group": "JS/TS",
           "pages": [
-            "getstartedwithSDK/python/installation",
-            "getstartedwithSDK/python/authentication",
-            "getstartedwithSDK/python/logging-LLM-requests",
-            "getstartedwithSDK/python/tracing-workflows",
-            "getstartedwithSDK/python/testing-and-automatic-eval"
+            "getstartedwithSDK/js/installation",
+            "getstartedwithSDK/js/authentication",
+            "getstartedwithSDK/js/logging-LLM-requests",
+            "getstartedwithSDK/js/tracing-workflows",
+            "getstartedwithSDK/js/testing-and-automatic-eval"
           ]
         }
       ]
@@ -96,6 +96,17 @@
             "monitoring/python/collect-user-feedback",
             "monitoring/python/tracing-with-nextjs"
           ]
+        },
+        {
+          "group": "JS/TS",
+          "pages": [
+            "monitoring/js/tracing",
+            "monitoring/js/advanced-tracing",
+            "monitoring/js/custom-log",
+            "monitoring/js/users-and-sessions",
+            "monitoring/js/collect-user-feedback",
+            "monitoring/js/tracing-with-nextjs"
+          ]
         }
       ]
     },
@@ -107,6 +118,10 @@
         {
           "group": "Python",
           "pages": ["annotation/python/automatic-evaluation"]
+        },
+        {
+          "group": "JS/TS",
+          "pages": ["annotation/js/automatic-evaluation"]
         }
       ]
     },
@@ -115,7 +130,8 @@
       "group": "Testing",
       "pages": [
         "testing/overview",
-        { "group": "Python", "pages": ["testing/python/pytest"] }
+        { "group": "Python", "pages": ["testing/python/pytest"] },
+        { "group": "JS/TS", "pages": ["testing/js/jest"] }
       ]
     }
   ],

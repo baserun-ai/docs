@@ -1,7 +1,7 @@
 ---
-title: "Logging LLM requests"
-sidebarTitle: "Logging LLM requests"
-description: "Start logging your LLM requests with 2 lines of code changes."
+title: 'Logging LLM requests'
+sidebarTitle: 'Logging LLM requests'
+description: 'Start logging your LLM requests with 2 lines of code changes.'
 ---
 
 ## Introduction
@@ -91,15 +91,16 @@ print(example())
 ````
 
 ```typescript typescript
-import {baserun} from 'baserun';
+import { baserun } from 'baserun';
 import OpenAI from 'openai';
 
 const openai = new OpenAI({
   apiKey: YOUR_OPEANI_API_KEY_HERE,
 });
 
-
 async function example() {
+  await openai.init()
+
   const chatCompletion = await openai.chat.completions.create({
     messages: [{ role: 'user', content: 'What are three activities to do in Paris?' }],
     model: 'gpt-3.5-turbo',
@@ -107,14 +108,12 @@ async function example() {
   return chatCompletion.choices[0].message.content;
 }
 
-
-baserun.init();
 example().then(output => {
-    console.log("Output:", output);
-  }).catch(error => {
-    console.error("Error:", error);
-  });
-````
+  console.log("Output:", output);
+}).catch(error => {
+  console.error("Error:", error);
+});
+```
 
 </CodeGroup>
 </Step>
@@ -187,3 +186,4 @@ Congrats, you are done! Now, you can navigate to the monitoring tab. You should 
 [Typescript example repo](https://github.com/baserun-ai/testing-agent-js)
 
 If you have any questions or feature requests, join our [Discord channel](https://discord.com/invite/xEPFsvSmkb) or send us an email at [hello@baserun.ai](mailto:hello@baserun.ai)
+````
