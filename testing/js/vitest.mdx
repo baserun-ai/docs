@@ -1,8 +1,8 @@
 ---
-title: 'jest integration'
+title: 'vitest integration'
 ---
 
-When using typescript and [jest](https://jestjs.io/docs), the only thing you need to add is `beforeAll` in your test file.
+When using typescript and [vitest](https://vitest.dev/), the only thing you need to add is `beforeAll` in your test file.
 
 ## Setup
 
@@ -24,6 +24,7 @@ It's often helpful to exercise the same test over multiple examples. To do this,
 
 ```typescript typescript
 import { baserun } from 'baserun'
+import { describe, beforeAll, it, expect } from 'vitest'
 
 const examples = [
   { place: 'Paris', expected: 'Eiffel Tower' },

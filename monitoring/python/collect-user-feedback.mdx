@@ -1,6 +1,6 @@
 ---
-title: "Collect user feedback"
-sidebarTitle: "Collect user feedback"
+title: 'Collect user feedback'
+sidebarTitle: 'Collect user feedback'
 ---
 
 In addition to automatic evaluations and human evaluations, user feedback is an excellent source for assessing the quality of an LLM application. In Baserun, feedback is collected either as a 0-1 score or in the form of comments and is attached to a trace or an individual LLM request.
@@ -27,7 +27,7 @@ User feedback is a type of annotation, together with checks, automatic evaluatio
 In order to create an Annotation, you use the `baserun.annotate` function:
 
 <CodeGroup>
-```python
+```python python
 @baserun.trace
 def ask_question(question="What is the capital of the US?") -> str:
     completion = client.chat.completions.create(
@@ -54,7 +54,7 @@ def ask_question(question="What is the capital of the US?") -> str:
 To associate these annotations a particular LLM request, you simply need to pass the completion ID from your LLM request. To do so using OpenAI's SDK, you can do the following:
 
 <CodeGroup>
-```python
+```python python
 @baserun.trace
 def ask_question(question="What is the capital of the US?") -> str:
     completion = client.chat.completions.create(
