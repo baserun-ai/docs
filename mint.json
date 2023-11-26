@@ -81,8 +81,12 @@
       ]
     },
     {
-      "group": "Annotating",
-      "pages": ["Annotating/automatic-evaluation", "Annotating/user-feedback"]
+      "group": "Annotation",
+      "pages": [
+        "annotation/overview",
+        "annotation/automatic-evaluation",
+        "annotation/user-feedback"
+      ]
     },
 
     {
