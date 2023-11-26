@@ -1,6 +1,6 @@
 ---
-title: Users and Sessions
-sidebarTitle: Users and User Sessions
+title: Users and sessions
+sidebarTitle: Users and sessions
 description: Tracing additional user-specific data and end-to-end user journeys
 ---
 
@@ -29,33 +29,33 @@ with baserun.with_session(identifier=username_or_id) as session:
 ```
 
 ```typescript typescript
-import { baserun } from '../../../src/index.js'
-import OpenAI from 'openai'
+import { baserun } from "../../../src/index.js";
+import OpenAI from "openai";
 
-const openai = new OpenAI()
+const openai = new OpenAI();
 
 async function main() {
-  await baserun.init()
+  await baserun.init();
   const { data, sessionId } = await baserun.session({
     async session() {
       // add business logic including traces in here
       return openai.chat.completions.create({
         messages: [
           {
-            role: 'user',
+            role: "user",
             content: `Say "this is a test"`,
           },
         ],
-        model: 'gpt-3.5-turbo',
-      })
+        model: "gpt-3.5-turbo",
+      });
     },
-    user: 'user@example.com',
-  })
+    user: "user@example.com",
+  });
 
-  console.log({ data, sessionId })
+  console.log({ data, sessionId });
 }
 
-main()
+main();
 ```
 
 </CodeGroup>

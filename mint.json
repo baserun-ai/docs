@@ -82,10 +82,7 @@
     },
     {
       "group": "Annotating",
-      "pages": [
-        "Annotating/automatic-evaluation",
-        "Annotating/human-evaluation"
-      ]
+      "pages": ["Annotating/automatic-evaluation", "Annotating/user-feedback"]
     },
 
     {
