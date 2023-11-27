@@ -11,26 +11,20 @@ This page goes over some advanced tracing features.
 If you're tracing multiple functions, you can use the `start_trace` context manager to distinguish between them:
 
 <CodeGroup>
+
 ```python python
   def ask_question(question="What is the capital of the US?") -> str:
-  with baserun.start_trace(name="General knowledge question"): # Your code here
+    with baserun.start_trace(name="General knowledge question"): # Your code here
 ```
-  
+
 ```typescript typescript
-import { baserun } from 'baserun'
-
-const workflow = baserun.trace(async () => {
-  // some llm calls or other logic here
-
-  return 'my result'
-}, 'trace name')
-
-async function main() {
-  await baserun.init()
-  await workflow()
-}
-
-````
+const askQuestion = baserun.trace(
+  async (question = 'What is the capital of the US?') => {
+    // Your code here
+  },
+  'General knowledge question' // Trace name
+)
+```
 
 </CodeGroup>
 <Frame>
@@ -52,6 +46,7 @@ def ask_question(question="What is the capital of the US?") -> str:
         trace.result = my_result
 
 ````
+
 ```typescript typescript
 import { baserun } from 'baserun'
 
@@ -65,8 +60,7 @@ async function main() {
   await baserun.init()
   await workflow()
 }
-
-````
+```
 
 </CodeGroup>
 <Frame>
@@ -89,27 +83,30 @@ def ask_question(question="What is the capital of the US?") -> str:
         }
 
 ````
+
 ```typescript typescript
 import { baserun } from 'baserun'
 
-const workflow = baserun.trace(async () => {
-  // some llm calls or other logic here
+const workflow = baserun.trace(
+  async () => {
+    // some llm calls or other logic here
 
-  return 'my result'
-}, {
-  name: 'trace name',
-  metadata: {
-    requestId: '1234'
+    return 'my result'
+  },
+  {
+    name: 'trace name',
+    metadata: {
+      requestId: '1234',
+    },
   }
-})
+)
 
 async function main() {
   await baserun.init()
   await workflow()
 }
-````
+```
+
 </CodeGroup>
 
-<Frame>
-![Custom metadata](/images/monitor-custom-metadata.png)
-</Frame>
+<Frame>![Custom metadata](/images/monitor-custom-metadata.png)</Frame>

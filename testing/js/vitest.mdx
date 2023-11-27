@@ -10,12 +10,24 @@ When using typescript and [vitest](https://vitest.dev/), the only thing you need
 npm install baserun
 # or
 yarn add baserun
+```
 
-jest test_module.spec.ts
-...
-========================Baserun========================
-Test results available at: https://baserun.ai/runs/<id>
-=======================================================
+```typescript test_module.spec.ts
+import { baserun } from 'baserun'
+import { describe, beforeAll } from 'vitest'
+
+describe('My Test Suite', () => {
+  beforeAll(async () => {
+    // the only thing needed to make baserun work
+    await baserun.init()
+  })
+
+  // ... the tests
+})
+```
+
+```bash
+npm run vitest test_module.spec.ts
 ```
 
 ## Running multiple tests
@@ -33,6 +45,7 @@ const examples = [
 
 describe('Baserun end-to-end', () => {
   beforeAll(async () => {
+    // the only thing needed to make baserun work
     await baserun.init()
   })
 

@@ -35,28 +35,16 @@ response = get_product(product_id)
 ```typescript typescript
 import { baserun } from 'baserun'
 
-const workflow = baserun.trace(async () => {
-  // some llm calls or other logic here
-  baserun.log('log-name', {
-    key: 'value'
-  })
+const productLookup = baserun.trace(async (product_id: number) => {
+  const response = await getProduct(product_id)
 
-  baserun.log('log-name 2', 'a string')
-
-  return 'my result'
+  // Log the response to Baserun- any JSON-ifiable object can be passed
+  baserun.log('Product Lookup', response)
 })
-
-async function main() {
-  await baserun.init()
-  await workflow()
-}
 ````
 
 </CodeGroup>
 
 Then, when viewed in the Baserun UI, you can have this log presented alongside the LLM calls that happened in the same trace.
 
-<Frame>
-![Trace List](/images/logging-product.png)
-</Frame>
-
+<Frame>![Trace List](/images/logging-product.png)</Frame>

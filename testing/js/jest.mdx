@@ -10,19 +10,30 @@ When using typescript and [jest](https://jestjs.io/docs), the only thing you nee
 npm install baserun
 # or
 yarn add baserun
+```
 
-jest test_module.spec.ts
-...
-========================Baserun========================
-Test results available at: https://baserun.ai/runs/<id>
-=======================================================
+```typescript test_module.spec.ts
+import { baserun } from 'baserun'
+
+describe('My Test Suite', () => {
+  beforeAll(async () => {
+    // the only thing needed to make baserun work
+    await baserun.init()
+  })
+
+  // ... the tests
+})
+```
+
+```bash
+npm run jest test_module.spec.ts
 ```
 
 ## Running multiple tests
 
 It's often helpful to exercise the same test over multiple examples. To do this, we suggest doing a simple for loop to autogenerate your tests and for larger numbers of examples you can read from a file or other data structure.
 
-```typescript typescript
+```typescript my-test.test.ts
 import { baserun } from 'baserun'
 
 const examples = [
@@ -32,6 +43,7 @@ const examples = [
 
 describe('Baserun end-to-end', () => {
   beforeAll(async () => {
+    // the only thing needed to make baserun work
     await baserun.init()
   })
 

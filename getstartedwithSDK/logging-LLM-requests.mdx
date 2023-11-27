@@ -1,7 +1,7 @@
 ---
-title: "Logging LLM requests"
-sidebarTitle: "Logging LLM requests"
-description: "Start logging your LLM requests with 2 lines of code changes."
+title: 'Logging LLM requests'
+sidebarTitle: 'Logging LLM requests'
+description: 'Start logging your LLM requests with 2 lines of code changes.'
 ---
 
 ### Introduction
@@ -65,22 +65,23 @@ baserun.api_key = "br-..."
 At your application's startup, define the environment in which you'd like to run Baserun. You can use Baserun in the development environment while iterating on your features, utilizing it for debugging and analysis, or in the production environment to monitor your application.
 
 <CodeGroup>
+
 ```python python
 import baserun
 
 if env == 'production':
-baserun.init()
+  baserun.init()
 
-````
+```
 
 ```typescript typescript
-import { baserun } from 'baserun';
+import { baserun } from 'baserun'
 
 // in your main function
 if (process.env.NODE_ENV === 'production') {
-    await baserun.init();
+  await baserun.init()
 }
-````
+```
 
 </CodeGroup>
 </Step>
@@ -119,30 +120,26 @@ if __name__ == "__main__":
 ```
 
 ```typescript typescript
-import { baserun } from "baserun";
-import OpenAI from "openai";
+import { baserun } from 'baserun'
+import OpenAI from 'openai'
 
-const openai = new OpenAI();
+async function main() {
+  await baserun.init()
 
-async function example() {
-  await openai.init();
+  const openai = new OpenAI()
 
   const chatCompletion = await openai.chat.completions.create({
     messages: [
-      { role: "user", content: "What are three activities to do in Paris?" },
+      { role: 'user', content: 'What are three activities to do in Paris?' },
     ],
-    model: "gpt-3.5-turbo",
-  });
-  return chatCompletion.choices[0].message.content;
+    model: 'gpt-3.5-turbo',
+  })
+
+  // response
+  console.log(chatCompletion.choices[0].message.content)
 }
 
-example()
-  .then((output) => {
-    console.log({ output });
-  })
-  .catch((error) => {
-    console.error(error);
-  });
+main()
 ```
 
 </CodeGroup>

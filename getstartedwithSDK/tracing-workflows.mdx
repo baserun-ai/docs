@@ -9,9 +9,7 @@ A Trace comprises a series of events executed within an LLM chain(workflow). Tra
 
 Tracing LLM chains allows you to debug your application, monitor your LLM chains' performance, and also collect user feedback.
 
-<Frame>
-![Trace a LLM chain](/images/monitor-trace-details.png)
-</Frame>
+<Frame>![Trace a LLM chain](/images/monitor-trace-details.png)</Frame>
 
 ### Use cases
 
@@ -112,32 +110,12 @@ def get_response(message):
 ````
 
 ```typescript typescript
-import OpenAI from 'openai';
-import { baserun } from 'baserun';
+import { baserun } from 'baserun'
 
-const openai = new OpenAI();
+const getResponse = baserun.trace((message: string) => {
+  ...
+}, 'getResponse')
 
-const getCompletion = baserun.trace(async () => {
-  const chatCompletion = await openai.chat.completions.create({
-    messages: [
-      {
-        role: 'user',
-        content: `Say "this is a test ${(Math.random() * 100) | 0}"`,
-      },
-    ],
-    model: 'gpt-3.5-turbo',
-  });
-
-  return chatCompletion;
-}, 'getCompletion');
-
-async function main() {
-  await baserun.init();
-  const completion = await getCompletion();
-  console.log('completion', completion);
-}
-
-main();
 ````
 
 </CodeGroup>
@@ -147,84 +125,85 @@ main();
 ### Example
 
 <CodeGroup>
+
 ```python python
 import baserun
 import openai
 import sys
 
-
 def get_activities():
-    response = openai.chat.completions.create(
-        model="gpt-3.5-turbo",
-        temperature=0.7,
-        messages=[
-            {
-                "role": "user",
-                "content": "What are three activities to do on the Moon?"
-            }
-        ],
-    )
-    command = " ".join(sys.argv)
-    return response.choices[0].message
+response = openai.chat.completions.create(
+model="gpt-3.5-turbo",
+temperature=0.7,
+messages=[
+{
+"role": "user",
+"content": "What are three activities to do on the Moon?"
+}
+],
+)
+command = " ".join(sys.argv)
+return response.choices[0].message
 
 @baserun.trace
 def find_best_activity():
-    moon_activities = get_activities() 
-    response = openai.chat.completions.create(
-        model="gpt-3.5-turbo",
-        temperature=0.7,
-        messages=[
-            {
-                "role": "user",
-                "content": f"Pick the best activity to do on the moon from the following, including a convincing reason to do so.\n + {moon_activities}"
-            }
-        ],
-    )
-    return response.choices[0].message
+moon_activities = get_activities()
+response = openai.chat.completions.create(
+model="gpt-3.5-turbo",
+temperature=0.7,
+messages=[
+{
+"role": "user",
+"content": f"Pick the best activity to do on the moon from the following, including a convincing reason to do so.\n + {moon_activities}"
+}
+],
+)
+return response.choices[0].message
 
+if **name** == "**main**":
+baserun.api_key = YOUR_BASERUN_API_KEY_HERE
+openai.api_key = YOUR_OPEANI_API_KEY_HERE
+baserun.init()
+print(find_best_activity())
 
-if __name__ == "__main__":
-    baserun.api_key = YOUR_BASERUN_API_KEY_HERE
-    openai.api_key = YOUR_OPEANI_API_KEY_HERE
-    baserun.init()
-    print(find_best_activity())
-
-````
+```
 
 ```typescript typescript
-import OpenAI from 'openai';
-import { baserun } from 'baserun';
+import OpenAI from 'openai'
+import { baserun } from 'baserun'
 
-const openai = new OpenAI();
+const openai = new OpenAI()
 
 async function main() {
   await baserun.init()
 
-  await baserun.trace(async () => {
-    baserun.log('lets go', 'We are invoking OpenAI now');
-    const res = await openai.completions.create({
-      model: 'gpt-3.5-turbo-instruct',
-      prompt: '2+2=',
-      temperature: 0,
-    });
+  await baserun.trace(
+    async () => {
+      baserun.log('lets go', 'We are invoking OpenAI now')
+      const res = await openai.completions.create({
+        model: 'gpt-3.5-turbo-instruct',
+        prompt: '2+2=',
+        temperature: 0.7,
+      })
 
-    baserun.log('TestEvent', 'whatever');
+      baserun.log('TestEvent', 'whatever')
 
-    baserun.evals.includes('model name', res.model, 'gpt-3.5-turbo-instruct');
-  }, {
-    name: 'the name of the trace' // this will show up in the Baserun UI
-  });
+      baserun.evals.includes('model name', res.model, 'gpt-3.5-turbo-instruct')
+    },
+    {
+      name: 'the name of the trace', // this will show up in the Baserun UI
+    }
+  )
 }
 
 main()
-````
+```
 
 </CodeGroup>
 
 Congrats, you are done! Now, you can navigate to the monitoring tab. Here is what you will see interact with your application:
-<Frame> 
-![Trace list](/images/monitor_trace_list.png)
-</Frame>
+
+<Frame>![Trace list](/images/monitor_trace_list.png)</Frame>
 
 Optionally, you can add metadata like trace name, user ID, and session ID to aid in debugging. Read [Logging > Advanced tracing features](/monitoring/advancedtracing) for more details.
 
