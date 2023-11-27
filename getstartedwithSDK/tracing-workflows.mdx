@@ -1,5 +1,5 @@
 ---
-title: 'Tracing multi-Step LLM workflows'
+title: "Tracing multi-Step LLM workflows"
 sidebarTitle: Tracing multi-Step LLM workflows
 ---
 
@@ -61,11 +61,30 @@ Create an account at [https://baserun.ai](https://baserun.ai). Then generate an 
 export BASERUN_API_KEY="your_api_key_here"
 ```
 
-Or if using python, set `baserun.api_key` to its value:
+Alternatively set the Baserun API key when initializing the SDK
 
-```python
+<CodeGroup>
+
+```python python
+
+import baserun
+
 baserun.api_key = "br-..."
+
+baserun.init()
 ```
+
+```typescript typescript
+import { baserun } from "baserun";
+
+// init needs to be awaited. If top-level await is not available, wrap it in an async function,
+// but make sure it is called before instantiating OpenAI, Anthropic or Replicate
+await baserun.init({
+  apiKey: "br-...",
+});
+```
+
+</CodeGroup>
 
 </Step>
 <Step title=" Initialize Baserun">
@@ -73,22 +92,25 @@ baserun.api_key = "br-..."
 At your application's startup, define the environment in which you'd like to run Baserun. You can use Baserun in the development environment while iterating on your features, utilizing it for debugging and analysis, or in the production environment to monitor your application.
 
 <CodeGroup>
+
 ```python python
 import baserun
 
 if env == 'production':
-baserun.init()
+  baserun.init()
 
-````
+```
 
 ```typescript typescript
-import { baserun } from 'baserun';
+import { baserun } from "baserun";
 
 // in your main function
-if (process.env.NODE_ENV === 'production') {
-    await baserun.init();
+if (process.env.NODE_ENV === "production") {
+  // init needs to be awaited. If top-level await is not available, wrap it in an async function,
+  // but make sure it is called before instantiating OpenAI, Anthropic or Replicate
+  await baserun.init();
 }
-````
+```
 
 </CodeGroup>
 </Step>
@@ -132,71 +154,71 @@ import openai
 import sys
 
 def get_activities():
-response = openai.chat.completions.create(
-model="gpt-3.5-turbo",
-temperature=0.7,
-messages=[
-{
-"role": "user",
-"content": "What are three activities to do on the Moon?"
-}
-],
-)
-command = " ".join(sys.argv)
-return response.choices[0].message
+    response = openai.chat.completions.create(
+        model="gpt-3.5-turbo",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": "What are three activities to do on the Moon?"
+            }
+        ],
+    )
+    command = " ".join(sys.argv)
+    return response.choices[0].message
 
 @baserun.trace
 def find_best_activity():
-moon_activities = get_activities()
-response = openai.chat.completions.create(
-model="gpt-3.5-turbo",
-temperature=0.7,
-messages=[
-{
-"role": "user",
-"content": f"Pick the best activity to do on the moon from the following, including a convincing reason to do so.\n + {moon_activities}"
-}
-],
-)
-return response.choices[0].message
+    moon_activities = get_activities()
+    response = openai.chat.completions.create(
+        model="gpt-3.5-turbo",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": "Pick the best activity to do on the moon from the following, including a convincing reason to do so.\n + {moon_activities}"
+            }
+        ],
+    )
+    return response.choices[0].message
 
-if **name** == "**main**":
-baserun.api_key = YOUR_BASERUN_API_KEY_HERE
-openai.api_key = YOUR_OPEANI_API_KEY_HERE
-baserun.init()
-print(find_best_activity())
+if __name__ == "__main__":
+    baserun.api_key = 'YOUR_BASERUN_API_KEY_HERE'
+    openai.api_key = 'YOUR_OPENAI_API_KEY_HERE'
+    baserun.init()
+    print(find_best_activity())
 
 ```
 
 ```typescript typescript
-import OpenAI from 'openai'
-import { baserun } from 'baserun'
+import OpenAI from "openai";
+import { baserun } from "baserun";
 
-const openai = new OpenAI()
+const openai = new OpenAI();
 
 async function main() {
-  await baserun.init()
+  await baserun.init();
 
   await baserun.trace(
     async () => {
-      baserun.log('lets go', 'We are invoking OpenAI now')
+      baserun.log("lets go", "We are invoking OpenAI now");
       const res = await openai.completions.create({
-        model: 'gpt-3.5-turbo-instruct',
-        prompt: '2+2=',
+        model: "gpt-3.5-turbo-instruct",
+        prompt: "2+2=",
         temperature: 0.7,
-      })
+      });
 
-      baserun.log('TestEvent', 'whatever')
+      baserun.log("TestEvent", "whatever");
 
-      baserun.evals.includes('model name', res.model, 'gpt-3.5-turbo-instruct')
+      baserun.evals.includes("model name", res.model, "gpt-3.5-turbo-instruct");
     },
     {
-      name: 'the name of the trace', // this will show up in the Baserun UI
+      name: "the name of the trace", // this will show up in the Baserun UI
     }
-  )
+  );
 }
 
-main()
+main();
 ```
 
 </CodeGroup>

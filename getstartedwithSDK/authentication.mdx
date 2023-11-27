@@ -1,5 +1,5 @@
 ---
-title: 'Authentication'
+title: "Authentication"
 ---
 
 ### Use cases
@@ -38,9 +38,7 @@ In this tab, you will find a section for creating a Baserun API key. Click the '
 export BASERUN_API_KEY="your_api_key_here"
 ```
 
-</Step>
-
-<Step title="Alternatively set the Baserun API key when initializing the SDK">
+Alternatively set the Baserun API key when initializing the SDK
 
 <CodeGroup>
 
@@ -48,19 +46,22 @@ export BASERUN_API_KEY="your_api_key_here"
 import baserun
 
 baserun.api_key = "br-..."
+
+baserun.init()
 ```
 
 ```typescript typescript
-import { baserun } from 'baserun'
+import { baserun } from "baserun";
 
 // init needs to be awaited. If top-level await is not available, wrap it in an async function,
 // but make sure it is called before instantiating OpenAI, Anthropic or Replicate
 await baserun.init({
-  apiKey: 'br-...',
-})
+  apiKey: "br-...",
+});
 ```
 
 </CodeGroup>
 
 </Step>
+
 </Steps>

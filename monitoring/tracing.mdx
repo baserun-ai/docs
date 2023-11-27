@@ -74,35 +74,27 @@ if __name__ == "__main__":
 ````
 
 ```typescript typescript
-import OpenAI from 'openai';
-import { baserun } from 'baserun';
-
-baserun.init();
-
-const openai = new OpenAI();
-
-const getCompletion = baserun.trace(async () => {
-  const chatCompletion = await openai.chat.completions.create({
-    messages: [
-      {
-        role: 'user',
-        content: `Say "this is a test"`,
-      },
-    ],
-    model: 'gpt-3.5-turbo',
-  });
-
-  return chatCompletion;
-});
+import { baserun } from "baserun";
+import OpenAI from "openai";
 
 async function main() {
   await baserun.init();
-  const completion = await getCompletion();
-  console.log('completion', completion);
+
+  const openai = new OpenAI();
+
+  const chatCompletion = await openai.chat.completions.create({
+    messages: [
+      { role: "user", content: "What are three activities to do in Paris?" },
+    ],
+    model: "gpt-3.5-turbo",
+  });
+
+  // response
+  console.log(chatCompletion.choices[0].message.content);
 }
 
 main();
-````
+```
 
 </CodeGroup>
 
@@ -160,7 +152,7 @@ def find_best_activity():
         messages=[
             {
                 "role": "user",
-                "content": f"Pick the best activity to do on the moon from the following, including a convincing reason to do so.\n + {moon_activities}"
+                "content": "Pick the best activity to do on the moon from the following, including a convincing reason to do so.\n + {moon_activities}"
             }
         ],
     )

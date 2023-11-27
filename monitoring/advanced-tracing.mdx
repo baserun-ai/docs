@@ -55,11 +55,6 @@ const workflow = baserun.trace(async () => {
 
   return 'my result'
 }, 'trace name')
-
-async function main() {
-  await baserun.init()
-  await workflow()
-}
 ```
 
 </CodeGroup>
@@ -101,10 +96,6 @@ const workflow = baserun.trace(
   }
 )
 
-async function main() {
-  await baserun.init()
-  await workflow()
-}
 ```
 
 </CodeGroup>

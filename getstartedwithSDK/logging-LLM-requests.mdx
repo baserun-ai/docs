@@ -1,7 +1,7 @@
 ---
-title: 'Logging LLM requests'
-sidebarTitle: 'Logging LLM requests'
-description: 'Start logging your LLM requests with 2 lines of code changes.'
+title: "Logging LLM requests"
+sidebarTitle: "Logging LLM requests"
+description: "Start logging your LLM requests with 2 lines of code changes."
 ---
 
 ### Introduction
@@ -53,11 +53,29 @@ Create an account at [https://baserun.ai](https://baserun.ai). Then generate an 
 export BASERUN_API_KEY="your_api_key_here"
 ```
 
-Or if using python, set `baserun.api_key` to its value:
+Alternatively set the Baserun API key when initializing the SDK
 
-```python
+<CodeGroup>
+
+```python python
+import baserun
+
 baserun.api_key = "br-..."
+
+baserun.init()
 ```
+
+```typescript typescript
+import { baserun } from "baserun";
+
+// init needs to be awaited. If top-level await is not available, wrap it in an async function,
+// but make sure it is called before instantiating OpenAI, Anthropic or Replicate
+await baserun.init({
+  apiKey: "br-...",
+});
+```
+
+</CodeGroup>
 
 </Step>
 <Step title=" Initialize Baserun">
@@ -75,11 +93,13 @@ if env == 'production':
 ```
 
 ```typescript typescript
-import { baserun } from 'baserun'
+import { baserun } from "baserun";
 
 // in your main function
-if (process.env.NODE_ENV === 'production') {
-  await baserun.init()
+if (process.env.NODE_ENV === "production") {
+  // init needs to be awaited. If top-level await is not available, wrap it in an async function,
+  // but make sure it is called before instantiating OpenAI, Anthropic or Replicate
+  await baserun.init();
 }
 ```
 
@@ -120,26 +140,26 @@ if __name__ == "__main__":
 ```
 
 ```typescript typescript
-import { baserun } from 'baserun'
-import OpenAI from 'openai'
+import { baserun } from "baserun";
+import OpenAI from "openai";
 
 async function main() {
-  await baserun.init()
+  await baserun.init();
 
-  const openai = new OpenAI()
+  const openai = new OpenAI();
 
   const chatCompletion = await openai.chat.completions.create({
     messages: [
-      { role: 'user', content: 'What are three activities to do in Paris?' },
+      { role: "user", content: "What are three activities to do in Paris?" },
     ],
-    model: 'gpt-3.5-turbo',
-  })
+    model: "gpt-3.5-turbo",
+  });
 
   // response
-  console.log(chatCompletion.choices[0].message.content)
+  console.log(chatCompletion.choices[0].message.content);
 }
 
-main()
+main();
 ```
 
 </CodeGroup>
