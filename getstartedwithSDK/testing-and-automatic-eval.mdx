@@ -51,9 +51,9 @@ baserun.api_key = "br-..."
 </Step>
 <Step title="Define the test">
 
-Use our [pytest](/pytest) plugin and immediately start testing with Baserun. By default all OpenAI and Anthropic requests will be automatically logged.
+Use our [pytest](/testing/python/pytest) plugin and immediately start testing with Baserun. By default all OpenAI and Anthropic requests will be automatically logged. <br/>
 In TS/JS you don't need to use a plugin, just add `await baserun.init()` to the `beforeAll` hook.
-In TS/JS we support both Jest and Vitest.
+In TS/JS we support both [Jest](/testing/js/jest) and [Vitest](/testing/js/vitest).
 
 <CodeGroup>
 
@@ -85,7 +85,7 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-describe("Baserun end-to-end", () => {
+describe("end-to-end tests", () => {
   beforeAll(async () => {
     await baserun.init();
   });
