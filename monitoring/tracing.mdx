@@ -59,7 +59,7 @@ def example():
         messages=[
             {
                 "role": "user",
-                "content": "What are three activities to do in Paris?"
+                "content": "What is the capital of the US?"
             }
         ],
     )
@@ -84,7 +84,7 @@ async function main() {
 
   const chatCompletion = await openai.chat.completions.create({
     messages: [
-      { role: "user", content: "What are three activities to do in Paris?" },
+      { role: "user", content: "What is the capital of the US?" },
     ],
     model: "gpt-3.5-turbo",
   });
