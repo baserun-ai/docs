@@ -87,8 +87,7 @@ At your application's startup, define the environment in which you'd like to run
 ```python python
 import baserun
 
-if env == 'production':
-  baserun.init()
+baserun.init()
 
 ```
 
@@ -96,11 +95,10 @@ if env == 'production':
 import { baserun } from "baserun";
 
 // in your main function
-if (process.env.NODE_ENV === "production") {
-  // init needs to be awaited. If top-level await is not available, wrap it in an async function,
-  // but make sure it is called before instantiating OpenAI, Anthropic or Replicate
-  await baserun.init();
-}
+
+// init needs to be awaited. If top-level await is not available, wrap it in an async function,
+// but make sure it is called before instantiating OpenAI, Anthropic or Replicate
+await baserun.init();
 ```
 
 </CodeGroup>

@@ -13,7 +13,7 @@ If you're tracing multiple functions, you can use the `start_trace` context mana
 <CodeGroup>
 
 ```python python
-  def ask_question(question="What is the capital of the US?") -> str:
+def ask_question(question="What is the capital of the US?") -> str:
     with baserun.start_trace(name="General knowledge question"): # Your code here
 ```
 
@@ -35,16 +35,16 @@ Within a `start_trace` context any calls to OpenAI or Anthropic will automatical
 
 ## Setting a trace's result
 
-By default a trace's `result` value will be the return value of the function that is traced. If you want to be more explicit, you can set the `result` value of a trace.
+By default a trace's `result` value will be the return value of the function or context that is traced. If you want to be more explicit, you can set the `result` value of a trace.
 
 <CodeGroup>
 ```python python
 def ask_question(question="What is the capital of the US?") -> str:
     with baserun.start_trace() as trace:
-        # Your code here
+        # Your code here, for example:
+        answer_id = answer_question(question)
 
         trace.result = my_result
-
 ````
 
 ```typescript typescript
@@ -69,27 +69,42 @@ You can also add custom metadata. This metadata could be whatever you like, prov
 <CodeGroup>
 ```python python
 def ask_question(question="What is the capital of the US?") -> str:
-    with baserun.start_trace() as trace:
-        # Your code here
+    with baserun.start_trace(name="Answer question") as trace:
+        # Make a completion
+        completion = client.chat.completions.create(
+            model="gpt-4-1106-preview",
+            messages=[{"role": "user", "content": question}],
+        )
+
+        # Your code here, for example:
+        answer_id = persist_answer(question, completion)
 
         # Add whatever metadata you like
         trace.metadata = {
           "answer_id": answer_id
         }
 
-````
+```
 
 ```typescript typescript
 import { baserun } from 'baserun'
 
 const workflow = baserun.trace(
   async () => {
-    // some llm calls or other logic here
+    
+    const openai = new OpenAI();
 
-    return 'my result'
+    const chatCompletion = await openai.chat.completions.create({
+      messages: [
+        { role: "user", content: "What are is the capital of the US?" },
+      ],
+      model: "gpt-3.5-turbo",
+    });
+
+    return chatCompletion.choices[0].message.content
   },
   {
-    name: 'trace name',
+    name: 'Answer question',
     metadata: {
       requestId: '1234',
     },
@@ -101,3 +116,36 @@ const workflow = baserun.trace(
 </CodeGroup>
 
 <Frame>![Custom metadata](/images/monitor-custom-metadata.png)</Frame>
+
+## Associating with an LLM request
+
+By default, annotations such as logs and checks are associated with a trace as a whole. To associate a with particular LLM request, you simply need to pass the completion ID from your LLM request. To do so using OpenAI's SDK, you can do the following:
+
+<CodeGroup>
+```python python
+@baserun.trace
+def ask_question(question="What is the capital of the US?") -> str:
+    completion = client.chat.completions.create(
+        model="gpt-4-1106-preview",
+        messages=[{"role": "user", "content": question}],
+    )
+    # Your code here, for example:
+    answer = persist_answer(question, completion)
+
+    # Create the annotation
+    annotation = baserun.annotate(completion.id)
+
+    # Capture whatever annotations you need
+    annotation.check("answer.answer_id", type(answer.id), 
+    annotation.log("Answer", metadata={"answer_id": answer.id})
+
+    # Make sure to submit the annotation
+    annotation.submit()
+````
+
+</CodeGroup>
+
+Here is how the user feedback will look like in Baserun dashboard:
+<Frame>
+![User feedback](/images/eval_user_feedback.png)
+</Frame>

@@ -26,7 +26,7 @@ In this example, we log the results of a function to look up product details:
 import baserun
 
 def product_lookup(product_id: int): # Perform your application's logic
-response = get_product(product_id)
+    response = get_product(product_id)
 
     # Log the response to Baserun- any JSON-ifiable object can be passed
     baserun.log(name="Product Lookup", payload=response)
