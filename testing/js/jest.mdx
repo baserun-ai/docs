@@ -2,7 +2,8 @@
 title: 'jest integration'
 ---
 
-When using typescript and [jest](https://jestjs.io/docs), the only thing you need to add is `beforeAll` in your test file.
+Baserun offers a [jest](https://jestjs.io/docs) preset, which will automatically add the `beforeAll` to your
+test file and turn all `it` and `test` calls into `baserun.trace` calls.
 
 ## Setup
 
@@ -12,21 +13,18 @@ npm install baserun
 yarn add baserun
 ```
 
+There is no particular change needed in your actual tests, just add the `--preset baserun` flag to your jest command.
+
 ```typescript test_module.spec.ts
 import { baserun } from 'baserun'
 
 describe('My Test Suite', () => {
-  beforeAll(async () => {
-    // the only thing needed to make baserun work
-    await baserun.init()
-  })
-
   // ... the tests
 })
 ```
 
 ```bash
-npm run jest test_module.spec.ts
+npm run jest --preset baserun test_module.spec.ts
 ```
 
 ## Running multiple tests
@@ -64,6 +62,23 @@ describe('Baserun end-to-end', () => {
     })
   }
 })
+```
+
+## Existing presets
+
+If you are already using a Jest preset such as ts-jest you will need to merge the presets in a Jest config
+
+```js
+// jest.config.js or jest.config.baserun.js
+
+const tsPreset = require('ts-jest/jest-preset')
+const baserunPreset = require('baserun/jest-preset')
+
+module.exports = {
+  ...tsPreset,
+  ...baserunPreset,
+  testTimeout: 10000,
+}
 ```
 
 ## Naming
