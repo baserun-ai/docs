@@ -120,21 +120,13 @@ Note for TS/JS: Make sure to always call `await baserun.init()` before you insta
 
 <CodeGroup>
 ```python python
+# Decorate the function that you would like to trace:
 import baserun
 
 @baserun.trace
-def run_chatbot():
-    client = OpenAI()
-    user_input = None
+def get_response(message):
+...
 
-    while user_input != "exit":
-        user_input = get_user_input()
-        conversation.append({"role": "user", "content": user_input})
-
-        completion = client.chat.completions.create(
-            model="gpt-4-1106-preview",
-            messages=conversation,
-        )
 ````
 
 ```typescript typescript
