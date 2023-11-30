@@ -187,31 +187,52 @@ if __name__ == "__main__":
 ```
 
 ```typescript typescript
-import OpenAI from "openai";
-import { baserun } from "baserun";
+import OpenAI from 'openai';
+import { baserun } from 'baserun';
 
 const openai = new OpenAI();
 
+async function get_activities() {
+	const response = await openai.chat.completions.create({
+		model: 'gpt-3.5-turbo',
+		temperature: 0.7,
+		messages: [
+			{
+				role: 'user',
+				content: 'What are three activities to do on the Moon?',
+			},
+		],
+	});
+	return response.choices[0].message;
+}
+
+async function find_best_activity() {
+	const moon_activities = await get_activities();
+
+	const response = await openai.chat.completions.create({
+		model: 'gpt-3.5-turbo',
+		temperature: 0.7,
+		messages: [
+			{
+				role: 'user',
+				content: `Pick the best activity to do on the moon from the following, including a convincing reason to do so.
+				${moon_activities.content}`,
+			},
+		],
+	});
+	return response.choices[0].message;
+}
+
 async function main() {
-  await baserun.init();
-
-  await baserun.trace(
-    async () => {
-      baserun.log("lets go", "We are invoking OpenAI now");
-      const res = await openai.completions.create({
-        model: "gpt-3.5-turbo-instruct",
-        prompt: "2+2=",
-        temperature: 0.7,
-      });
-
-      baserun.log("TestEvent", "whatever");
-
-      baserun.evals.includes("model name", res.model, "gpt-3.5-turbo-instruct");
-    },
-    {
-      name: "the name of the trace", // this will show up in the Baserun UI
-    }
-  );
+	await baserun.init({
+		apiKey: YOUR_BASERUN_API_KEY_HERE,
+	});
+	const workflow = baserun.trace(async () => {
+		const best_activity = await find_best_activity();
+		console.log(best_activity);
+		return best_activity;
+	}, 'Tracing multi-Step');
+	await workflow();
 }
 
 main();
