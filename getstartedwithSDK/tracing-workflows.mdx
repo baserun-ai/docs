@@ -155,57 +155,43 @@ const getResponse = baserun.trace((message: string) => {
 <CodeGroup>
 
 ```python python
-from uuid import uuid4
-from openai import OpenAI
-
 import baserun
+import openai
 
-PROMPT = """As a customer service representative for an online pet product retailer, your main goal is to
-provide a positive and informative chat experience for customers..."""
+def get_activities():
+    response = openai.chat.completions.create(
+        model="gpt-3.5-turbo",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": "What are three activities to do on the Moon?"
+            }
+        ],
+    )
+    return response.choices[0].message
 
-
-def run_chatbot():
-    client = OpenAI()
-    conversation = [{"role": "system", "content": PROMPT}]
-    conversation_id = str(uuid4())
-
-    print(f"Start your conversation. Type `exit` to end the conversation.\n> ", end="")
-    user_input = input()
-    conversation.append({"role": "user", "content": user_input})
-
-    # Start a trace before your first OpenAI call, giving it a name
-    with baserun.start_trace(name="Chatbot CLI loop") as trace:
-        # Tracing allows each iteration's LLM calls to be grouped together
-        while user_input != "exit":
-            completion = client.chat.completions.create(
-                model="gpt-4-1106-preview",
-                messages=conversation,
-            )
-            content = completion.choices[0].message.content
-            conversation.append({"role": "assistant", "content": content})
-
-            print(f"{content}\n> ", end="")
-            user_input = input()
-            conversation.append({"role": "user", "content": user_input})
-
-        # Set the trace result for display in the Baserun UI (here it is set to the last user input)
-        trace.result = user_input
-
-        print("How would you rate this conversation on a scale of 1 to 10?\n> ", end="")
-        user_feedback = input()
-
-        # Annotate the trace with additional information, such as user feedback
-        annotation = baserun.annotate(trace=trace)
-        annotation.log("Conversation ID", {"conversation_id": conversation_id})
-        annotation.feedback("Chatbot conversation rating", score=int(user_feedback))
-        annotation.submit()
+@baserun.trace
+def find_best_activity():
+    moon_activities = get_activities() 
+    response = openai.chat.completions.create(
+        model="gpt-3.5-turbo",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": "Pick the best activity to do on the moon from the following, including a convincing reason to do so.\n + {moon_activities}"
+            }
+        ],
+    )
+    return response.choices[0].message
 
 
 if __name__ == "__main__":
     baserun.api_key = YOUR_BASERUN_API_KEY_HERE
     openai.api_key = YOUR_OPEANI_API_KEY_HERE
     baserun.init()
-    run_chatbot()
+    print(find_best_activity())
 ```
 
 ```typescript typescript

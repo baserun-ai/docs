@@ -126,8 +126,6 @@ Add @baserun.trace to the function you want to trace. In the following example, 
 ```python python
 import baserun
 import openai
-import sys
-
 
 def get_activities():
     response = openai.chat.completions.create(
@@ -140,7 +138,6 @@ def get_activities():
             }
         ],
     )
-    command = " ".join(sys.argv)
     return response.choices[0].message
 
 @baserun.trace
@@ -164,7 +161,6 @@ if __name__ == "__main__":
     openai.api_key = YOUR_OPEANI_API_KEY_HERE
     baserun.init()
     print(find_best_activity())
-
 ````
 
 ```typescript typescript
