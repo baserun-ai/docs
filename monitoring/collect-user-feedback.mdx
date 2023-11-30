@@ -23,8 +23,7 @@ User feedback is attached to an LLM request or a trace. Please start by followin
 
 You can customize your UI in different ways to collect user feedback. Whether it's through a '👍'/'👎' or on a numeric scale (e.g., '1-5'), the customer's score will be displayed as a 0-1 score on the Baserun dashboard. The end user also has the option to add a comment.
 
-User feedback is a type of annotation, together with checks, automatic evaluations and human evaluations.
-In order to create an Annotation, you use the `baserun.annotate` function:
+User feedback is a type of annotation, alongside checks, automatic evaluations, and human evaluations. To collect customer feedback, you can use the `baserun.annotate` function.
 
 <CodeGroup>
 ```python python
@@ -38,12 +37,10 @@ def ask_question(question="What is the capital of the US?") -> str:
     # Create the annotation
     annotation = baserun.annotate()
 
-    # Capture whatever annotations you need
+    # Capture the user feedback as an annotation
     annotation.feedback(
         name="annotate_feedback", score=0.8, metadata={"comment": "This is correct but not concise enough"}
     )
-    annotation.check_includes("openai_chat.content", "Washington", content)
-    annotation.log("OpenAI Chat Results", metadata={"result": content, "input": question})
 
     # Make sure to submit the annotation
     annotation.submit()
@@ -51,7 +48,7 @@ def ask_question(question="What is the capital of the US?") -> str:
 ````
 </CodeGroup>
 
-To associate these annotations a particular LLM request, you simply need to pass the completion ID from your LLM request. To do so using OpenAI's SDK, you can do the following:
+To associate these feedback a particular LLM request, you simply need to pass the completion ID from your LLM request. To do so using OpenAI's SDK, you can do the following:
 
 <CodeGroup>
 ```python python
@@ -64,13 +61,12 @@ def ask_question(question="What is the capital of the US?") -> str:
 
     # Create the annotation
     annotation = baserun.annotate(completion.id)
+    # Pass in the completion ID
 
-    # Capture whatever annotations you need
+    # Capture the user feedback as an annotation
     annotation.feedback(
         name="annotate_feedback", score=0.8, metadata={"comment": "This is correct but not concise enough"}
     )
-    annotation.check_includes("openai_chat.content", "Washington", content)
-    annotation.log("OpenAI Chat Results", metadata={"result": content, "input": question})
 
     # Make sure to submit the annotation
     annotation.submit()
