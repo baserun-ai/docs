@@ -30,18 +30,16 @@ export BASERUN_API_KEY="your_api_key_here"
 
 Use the [Next.js instrumentation hook](https://nextjs.org/docs/app/building-your-application/optimizing/instrumentation) to ensure baserun is initialized exactly once during server startup.
 
-```typescript typescript
-// instrumentation.ts or src/instrumentation.ts
-
+```typescript your-project/instrumentation.ts
 import { baserun } from 'baserun'
 
-export function register() {
+export async function register() {
   // Baserun is not yet supported in the edge runtime
   if (
     process.env.NODE_ENV === 'production' &&
     process.env.NEXT_RUNTIME === 'nodejs'
   ) {
-    baserun.init()
+    await baserun.init()
   }
 }
 ```
@@ -86,20 +84,20 @@ In this example, we're using Vercel's [ai](https://www.npmjs.com/package/ai) npm
 Note, that Baserun doesn't support `export const runtime = 'edge';`, we we're keeping this in an ordinary Lambda function deployed by Vercel.
 
 ```javascript ./app/api/chat/route.js
-import OpenAI from 'openai';
-import { OpenAIStream, StreamingTextResponse } from 'ai';
-import { baserun } from 'baserun';
+import OpenAI from 'openai'
+import { OpenAIStream, StreamingTextResponse } from 'ai'
+import { baserun } from 'baserun'
 
-const openai = new OpenAI();
+const openai = new OpenAI()
 
-export const POST = baserun.trace((req) => {
-  const { messages } = await req.json();
+export const POST = baserun.trace(async (req) => {
+  const { messages } = await req.json()
   const response = await openai.chat.completions.create({
     model: 'gpt-4',
     stream: true,
     messages,
-  });
-  const stream = OpenAIStream(response);
-  return new StreamingTextResponse(stream);
+  })
+  const stream = OpenAIStream(response)
+  return new StreamingTextResponse(stream)
 }, 'chat route')
 ```
