@@ -1,6 +1,6 @@
 ---
-title: "Tracing multi-Step LLM workflows"
-sidebarTitle: Tracing multi-Step LLM workflows
+title: "Tracing with Lambda"
+sidebarTitle: Tracing with Lambda
 ---
 
 ### Introduction
@@ -27,15 +27,6 @@ Please reference the [Monitoring Overview](/monitoring/overview) to learn why lo
 - Option to set trace result
 - Support collecting user feedback
 
-<Note>
-  If you are using Next.js, please reference [Monitoring > Tracing with
-  Next.js](/monitoring/tracing-with-nextjs).
-</Note>
-
-<Note>
-  If you are using Lambda, please reference [Monitoring > Tracing with
-  Lambda](/monitoring/tracing-with-lambda).
-</Note>
 
 ### Instruction
 
@@ -45,11 +36,6 @@ The first 3 steps are the same as the [Logging LLM requests tutorial](/). So, if
 <Step title="Install Baserun SDK">
 
 <CodeGroup>
-
-    ```bash python
-    pip install baserun
-    ```
-
     ```bash typescript
     npm install baserun
     # or
@@ -70,15 +56,6 @@ Alternatively set the Baserun API key when initializing the SDK
 
 <CodeGroup>
 
-```python python
-
-import baserun
-
-baserun.api_key = "br-..."
-
-baserun.init()
-```
-
 ```typescript typescript
 import { baserun } from "baserun";
 
@@ -97,13 +74,6 @@ await baserun.init({
 At your application's startup, define the environment in which you'd like to run Baserun. You can use Baserun in the development environment while iterating on your features, utilizing it for debugging and analysis, or in the production environment to monitor your application.
 
 <CodeGroup>
-
-```python python
-import baserun
-
-baserun.init()
-
-```
 
 ```typescript typescript
 import { baserun } from "baserun";
@@ -124,15 +94,6 @@ The function(s) to trace are ultimately dependent on your app. It could be a mai
 Note for TS/JS: Make sure to always call `await baserun.init()` before you instantiate OpenAI, Anthropic or Replicate.
 
 <CodeGroup>
-```python python
-# Decorate the function that you would like to trace:
-import baserun
-
-@baserun.trace
-def get_response(message):
-...
-
-````
 
 ```typescript typescript
 import { baserun } from 'baserun'
@@ -148,99 +109,27 @@ const getResponse = baserun.trace((message: string) => {
 </Steps>
 
 ### Full Example
-
+Follow the example below to trace a Lambda function.
 <CodeGroup>
 
-```python python
-import baserun
-import openai
-
-def get_activities():
-    response = openai.chat.completions.create(
-        model="gpt-3.5-turbo",
-        temperature=0.7,
-        messages=[
-            {
-                "role": "user",
-                "content": "What are three activities to do on the Moon?"
-            }
-        ],
-    )
-    return response.choices[0].message
-
-@baserun.trace
-def find_best_activity():
-    moon_activities = get_activities() 
-    response = openai.chat.completions.create(
-        model="gpt-3.5-turbo",
-        temperature=0.7,
-        messages=[
-            {
-                "role": "user",
-                "content": "Pick the best activity to do on the moon from the following, including a convincing reason to do so.\n + {moon_activities}"
-            }
-        ],
-    )
-    return response.choices[0].message
-
-
-if __name__ == "__main__":
-    baserun.api_key = YOUR_BASERUN_API_KEY_HERE
-    openai.api_key = YOUR_OPEANI_API_KEY_HERE
-    baserun.init()
-    print(find_best_activity())
-```
-
 ```typescript typescript
-import OpenAI from 'openai';
-import { baserun } from 'baserun';
 
-const openai = new OpenAI();
+const { baserun } = require("baserun");
+const { streamifyResponse } = require('lambda-stream')
+...
+const handler = baserun.trace(async (event, responseStream, context) => {
+    // lambda function logic, with streaming responses, OpenAI calls, etc
+}, "Lambda-ai-chat");
 
-async function get_activities() {
-	const response = await openai.chat.completions.create({
-		model: 'gpt-3.5-turbo',
-		temperature: 0.7,
-		messages: [
-			{
-				role: 'user',
-				content: 'What are three activities to do on the Moon?',
-			},
-		],
-	});
-	return response.choices[0].message;
+const wrapper = async (event, responseStream, context) => {
+  await baserun.init({
+    apiKey: YOUR_BASERUN_API_KEY_HERE,
+  });
+  await handler(event, responseStream, context);
 }
 
-async function find_best_activity() {
-	const moon_activities = await get_activities();
+exports.handler = streamifyResponse(wrapper);
 
-	const response = await openai.chat.completions.create({
-		model: 'gpt-3.5-turbo',
-		temperature: 0.7,
-		messages: [
-			{
-				role: 'user',
-				content: `Pick the best activity to do on the moon from the following, including a convincing reason to do so.
-				${moon_activities.content}`,
-			},
-		],
-	});
-	return response.choices[0].message;
-}
-
-async function main() {
-	await baserun.init({
-		apiKey: YOUR_BASERUN_API_KEY_HERE,
-	});
-	const workflow = baserun.trace(async () => {
-		const best_activity = await find_best_activity();
-		console.log(best_activity);
-		return best_activity;
-	}, 'Tracing multi-Step');
-	await workflow();
-}
-
-main();
 ```
 
 </CodeGroup>

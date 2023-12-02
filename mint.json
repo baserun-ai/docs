@@ -78,6 +78,7 @@
         "monitoring/custom-log",
         "monitoring/users-and-sessions",
         "monitoring/collect-user-feedback",
+        "monitoring/tracing-with-lambda",
         "monitoring/tracing-with-nextjs"
       ]
     },
