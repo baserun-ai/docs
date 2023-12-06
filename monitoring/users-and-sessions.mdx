@@ -66,10 +66,45 @@ Using the Session ID that was collected when the session was started you can the
 
 <CodeGroup>
 ```python python
+from uuid import uuid4
+from openai import OpenAI
+
 import baserun
 
-with baserun.with_session(session_id=session_id) as session:
-    run_chatbot()
+PROMPT = """As a customer service representative for an online pet product retailer, your main goal is to
+provide a positive and informative chat experience for customers..."""
+
+@baserun.trace
+def run_chatbot():
+    """An extremely basic chatbot that is executed inside of a single Baserun user session"""
+    client = OpenAI()
+    conversation = [{"role": "system", "content": PROMPT}]
+    conversation_id = str(uuid4())
+
+    print(f"Start your conversation. Type `exit` to end the conversation.\n> ", end="")
+    user_input = input()
+    conversation.append({"role": "user", "content": user_input})
+
+    while user_input != "exit":
+        completion = client.chat.completions.create(
+            model="gpt-4-1106-preview",
+            messages=conversation,
+        )
+        content = completion.choices[0].message.content
+        conversation.append({"role": "assistant", "content": content})
+
+        print(f"{content}\n> ", end="")
+        user_input = input()
+        conversation.append({"role": "user", "content": user_input})
+
+
+if __name__ == "__main__":
+    baserun.api_key = YOUR_BASERUN_API_KEY_HERE
+    openai.api_key = YOUR_OPEANI_API_KEY_HERE
+    baserun.init()
+
+    with baserun.with_session(identifier="user@example.com"):
+        run_chatbot()
 
 ````
 
