@@ -163,6 +163,7 @@ provide a positive and informative chat experience for customers..."""
 
 
 def run_chatbot():
+    """An basic chatbot that is executed inside of a single Baserun user session"""
     client = OpenAI()
     conversation = [{"role": "system", "content": PROMPT}]
     conversation_id = str(uuid4())
@@ -196,7 +197,7 @@ if __name__ == "__main__":
 
     with baserun.with_session(identifier="user@example.com"):
         run_chatbot()
-````
+```
 ```typescript typescript
 import OpenAI from 'openai';
 import { baserun } from 'baserun';
