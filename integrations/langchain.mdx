@@ -1,0 +1,78 @@
+---
+title: LangChain
+sidebarTitle: Integrating with Langchain
+description: Integrating with Langchain
+---
+
+## LangChain
+
+To integrate our tracing features with LangChain, you simply need to use a callback handler, `BaserunCallbackHandler`, which you can pass when creating a client object or a chain.
+
+Currently, only our Python SDK supports integration with LangChain.
+
+### Tracing a client
+
+If you use the `BaserunCallbackHandler` you do not need to use `@baserun.trace`- the handler does it for you.
+
+```python python
+from baserun.instrumentation.langchain import BaserunCallbackHandler
+from langchain.chat_models import ChatOpenAI
+from langchain_core.messages import HumanMessage
+
+def use_langchain(question="What is the capital of the US?") -> str:
+    chat = ChatOpenAI(callbacks=[BaserunCallbackHandler()])
+    messages = [HumanMessage(content=question)]
+    response = chat.invoke(messages)
+    return response.content
+```
+
+### Tracing a chain
+
+To trace a chain, pass in the `BaserunCallbackHandler` to the `callbacks` parameter of `LLMChain`.
+
+```python python
+from langchain.chat_models import ChatOpenAI
+from langchain_core.prompts import PromptTemplate
+from langchain.chains import LLMChain
+from baserun.instrumentation.langchain import BaserunCallbackHandler
+
+def use_langchain_chain(question="What is the capital of {location}?") -> str:
+    chat = ChatOpenAI()
+
+    chain = LLMChain(
+        llm=chat,
+        prompt=PromptTemplate(template=question, input_variables=["location"]),
+        callbacks=[BaserunCallbackHandler()],
+    )
+    response = chain.run(location="California")
+    return response
+```
+
+### Tracing an agent
+
+To trace an agent, pass in the `BaserunCallbackHandler` to the `callback_manager` parameter of `initialize_agent`.
+
+```python python
+from langchain.chat_models import ChatOpenAI
+from langchain_core.prompts import PromptTemplate
+from langchain.agents import initialize_agent
+from langchain.agents import AgentType
+from langchain.agents import load_tools
+from langchain_core.callbacks import BaseCallbackManager
+from baserun.instrumentation.langchain import BaserunCallbackHandler
+
+def use_langchain_agent_tools(question="Using Wikipedia, look up the population of {location} as of 2023.") -> str:
+    # Note: To run this, you must `pip install wikipedia langchain`
+    chat = ChatOpenAI()
+    tools = load_tools(["wikipedia"])
+    prompt_template = PromptTemplate(template=question, input_variables=["location"])
+
+    agent = initialize_agent(
+        tools,
+        chat,
+        agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+        callback_manager=BaseCallbackManager(handlers=[BaserunCallbackHandler()]),
+    )
+    response = agent.run(prompt_template.format_prompt(location="California"))
+    return response
+```
