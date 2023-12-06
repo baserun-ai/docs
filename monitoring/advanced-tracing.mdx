@@ -193,7 +193,9 @@ if __name__ == "__main__":
     baserun.api_key = YOUR_BASERUN_API_KEY_HERE
     openai.api_key = YOUR_OPEANI_API_KEY_HERE
     baserun.init()
-    run_chatbot()
+
+    with baserun.with_session(identifier="user@example.com"):
+        run_chatbot()
 ````
 ```typescript typescript
 import OpenAI from 'openai';
