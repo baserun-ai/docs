@@ -84,7 +84,7 @@
     },
     {
       "group": "Integrations",
-      "pages": ["integration/langchain"]
+      "pages": ["integrations/langchain"]
     },
     {
       "group": "Annotation",
