@@ -4,6 +4,40 @@ sidebarTitle: Users and sessions
 description: Tracing additional user-specific data and end-to-end user journeys
 ---
 
+## Automatically Tracking Users
+
+If your LLM provider supports passing [End User IDs](https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids), Baserun will automatically collect the user ID and track user activity.
+
+<CodeGroup>
+```python python
+from openai import OpenAI
+
+def ask_question(question) -> str:
+    client = OpenAI()
+    completion = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": question}],
+        user="test@example.com"
+    )
+    content = completion.choices[0].message.content
+    return content
+```
+
+```typescript typescript
+import OpenAI from 'openai'
+
+const openai = new OpenAI()
+
+async function ask_question(question: string) {
+  return openai.chat.completions.create({
+    messages: [{ role: "user", content: question }],
+    user: "test@example.com",
+    model: "gpt-3.5-turbo",
+  })
+}
+```
+</CodeGroup>
+
 ## Sessions
 
 A Session is a collection of LLM calls that are related to a long-term user interaction. A session can be started, resumed, and ended at any time and may contain many traces.
