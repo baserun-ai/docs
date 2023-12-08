@@ -87,11 +87,12 @@
       "pages": ["integrations/langchain"]
     },
     {
-      "group": "Annotation",
+      "group": "Evaluation",
       "pages": [
-        "annotation/overview",
-        "annotation/automatic-evaluation",
-        "annotation/user-feedback"
+        "evaluation/overview",
+        "evaluation/automatic-evaluation",
+        "evaluation/human-evaluation",
+        "evaluation/user-feedback"
       ]
     },
 
