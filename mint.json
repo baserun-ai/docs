@@ -22,11 +22,8 @@
     {
       "name": "Community",
       "url": "https://discord.com/invite/xEPFsvSmkb"
-    },
-    {
-      "name": "Changelog",
-      "url": "https://www.baserun.ai/changelog"
     }
+ 
   ],
   "topbarCtaButton": {
     "name": "Get started",
@@ -38,6 +35,11 @@
       "name": "Documentation",
       "icon": "Book",
       "url": "welcome-to-baserun"
+    },
+    {
+      "name": "Changelog",
+      "icon": "Flag",
+      "url": "https://www.baserun.ai/changelog"
     },
     {
       "name": "Let's talk",
