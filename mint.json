@@ -23,7 +23,6 @@
       "name": "Community",
       "url": "https://discord.com/invite/xEPFsvSmkb"
     }
- 
   ],
   "topbarCtaButton": {
     "name": "Get started",
@@ -61,6 +60,7 @@
       "group": "Prompt playground",
       "pages": [
         "prompt-playground/overview",
+        "prompt-playground/custom-models",
         "prompt-playground/compare-prompts"
       ]
     },
