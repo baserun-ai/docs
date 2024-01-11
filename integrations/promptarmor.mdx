@@ -3,12 +3,12 @@ title: PromptArmor
 sidebarTitle: Integrating with PromptArmor
 description: Integrating with PromptArmor
 ---
-##PromptArmor
+## PromptArmor
 
-PromptArmor is an API to check inputs for adversarial content before you send them to LLMs. PromptArmor return in realtime faster than LLMs, block 99% of known threat vectors, and take less than 15 minutes to integrate.
+[PromptArmor](https://promptarmor.com/) is a service which checks LLM inputs for adversarial content _before_ a completion is made. PromptArmor returns in realtime faster than LLMs, blocks 99% of known threat vectors, and takes less than 15 minutes to integrate.
 
-PromptArmor is included in the Baserun python SDK Automatic Evaluation feature. 
+PromptArmor integration is included in Baserun's Python SDK as an Automatic Evaluation. 
 
-To use PromptArmor, first set the PROMPTARMOR_API_KEY environment variable to your API key. Similar to other automatic evaluation features, you can then use the `baserun.evals.check_injection()` to enable PromptArmor. 
+To use PromptArmor, first set the `PROMPTARMOR_API_KEY` environment variable to your PromptArmor API key. Similar to other automatic evaluation features, you can then use the `baserun.evals.check_injection()` to evaluate a prompt using PromptArmor. 
 
-checkout [Automatic Evaluation](/evaluation/automatic-evaluation) for more details.
+For more details on how our evaluations work, see the [Automatic Evaluation](/evaluation/automatic-evaluation) documentation for more details.
