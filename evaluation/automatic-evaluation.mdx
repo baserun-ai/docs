@@ -180,6 +180,18 @@ describe("Baserun end-to-end", () => {
                     The input string.
                 </ParamField>
             </Accordion>
+            <Accordion title="check_injection(name: str, submission: str) -> bool">
+                Checks if the `submission` includes injection.
+
+                Returns `true` if the `submission` includes injection, otherwise `false`.
+
+                <ParamField path="name" type="str">
+                    Name of the evaluation.
+                </ParamField>
+                <ParamField path="submission" type="str">
+                    The input string.
+                </ParamField>
+            </Accordion>
             <Accordion title="custom(name: str, submission: str, fn: Callable[[str], bool]) -> bool">
                 Checks the `submission` using a custom function.
 
