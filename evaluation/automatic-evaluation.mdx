@@ -27,8 +27,8 @@ def test_paris_trip():
         ],
     )
 
-    output = response['choices'][0]['message']['content']
-    not_has_ai_language_model = baserun.evals.not_includes('AI Language Model', output, ['AI language model'])
+    output = response["choices"][0]["message"]["content"]
+    not_has_ai_language_model = baserun.evals.not_includes("AI Language Model", output, ["AI language model"])
     # Optional: will fail the test if "AI language model" is present in the output
     assert not_has_ai_language_model
 ```

@@ -34,10 +34,10 @@ Use the [Next.js instrumentation hook](https://nextjs.org/docs/app/building-your
 export async function register() {
   // Baserun is not yet supported in the edge runtime
   if (
-    process.env.NODE_ENV === 'production' &&
-    process.env.NEXT_RUNTIME === 'nodejs'
+    process.env.NODE_ENV === "production" &&
+    process.env.NEXT_RUNTIME === "nodejs"
   ) {
-    const { baserun } = await import('baserun')
+    const { baserun } = await import("baserun")
     await baserun.init()
   }
 }
@@ -49,14 +49,14 @@ export async function register() {
 Add the following to your next.config.js to ensure the instrumentation hook is used and that we can automatically log LLM calls.
 
 ```javascript javascript
-/** @type {import('next').NextConfig} */
+/** @type {import("next").NextConfig} */
 
 module.exports = {
   experimental: {
     instrumentationHook: true,
     // Libraries you want to automatically log
-    // Options are: 'openai', 'openai-edge', and '@anthropic-ai/sdk'
-    serverComponentsExternalPackages: ['openai'],
+    // Options are: "openai", "openai-edge", and "@anthropic-ai/sdk"
+    serverComponentsExternalPackages: ["openai"],
   },
 }
 ```
@@ -67,7 +67,7 @@ module.exports = {
 Add a trace to start logging to Baserun.
 
 ```typescript typescript
-import { baserun } from 'baserun'
+import { baserun } from "baserun"
 
 const traceGetResponse = baserun.trace(aiService.getResponse, { userId: 123 })
 const response = await traceGetResponse(message)
@@ -80,25 +80,25 @@ const response = await traceGetResponse(message)
 ## Example
 
 In this example, we're using Vercel's [ai](https://www.npmjs.com/package/ai) npm package to stream the result of an OpenAI chat completion to the client.
-Note, that Baserun doesn't support `export const runtime = 'edge';`, we we're keeping this in an ordinary Lambda function deployed by Vercel.
+Note, that Baserun doesn't support `export const runtime = "edge";`, we we're keeping this in an ordinary Lambda function deployed by Vercel.
 
 ```javascript ./app/api/chat/route.js
-import OpenAI from 'openai'
-import { OpenAIStream, StreamingTextResponse } from 'ai'
-import { baserun } from 'baserun'
+import OpenAI from "openai"
+import { OpenAIStream, StreamingTextResponse } from "ai"
+import { baserun } from "baserun"
 
 const openai = new OpenAI()
 
 export const POST = baserun.trace(async (req) => {
   const { messages } = await req.json()
   const response = await openai.chat.completions.create({
-    model: 'gpt-4',
+    model: "gpt-4",
     stream: true,
     messages,
   })
   const stream = OpenAIStream(response)
   return new StreamingTextResponse(stream)
-}, 'chat route')
+}, "chat route")
 ```
 
 ## Full example

@@ -8,30 +8,36 @@ description: Tracing additional user-specific data and end-to-end user journeys
 
 If your LLM provider supports passing [End User IDs](https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids), Baserun will automatically collect the user ID and track user activity.
 
+<Note>
+Please note that sending identifying information about your users, such as username or email address, to 3rd party services is not recommended. Instead, you can e.g. use hash function to avoid that, which we reflect in code examples below.
+</Note>
+
 <CodeGroup>
 ```python python
+from hashlib import sha256
 from openai import OpenAI
 
-def ask_question(question) -> str:
+def ask_question(question: str) -> str:
     client = OpenAI()
     completion = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": question}],
-        user="test@example.com"
+        user=sha256(b"user@example.com").hexdigest(),
     )
     content = completion.choices[0].message.content
     return content
 ```
 
 ```typescript typescript
-import OpenAI from 'openai'
+import OpenAI from "openai"
+import { createHash } from "crypto"
 
 const openai = new OpenAI()
 
 async function ask_question(question: string) {
   return openai.chat.completions.create({
     messages: [{ role: "user", content: question }],
-    user: "test@example.com",
+    user: createHash("sha256").update("user@example.com").digest("hex"),
     model: "gpt-3.5-turbo",
   })
 }
@@ -48,137 +54,139 @@ For the Use cases of a chat bot, a Session may be the entire conversation. For a
 
 ### Adding Sessions
 
-If you're building a system where user interactions happen in a sequence—like a chat bot—you'll find it useful to group these interactions into a single session. The (`with_session`) context manager in Baserun allows you to do just that. By providing a username or User ID, you can create a new session. By providing a session ID you can continue an existing session. This allows you to group all related traces under either the User or Session, making it easier to debug or analyze the user's journey through your application.
+If you're building a system where user interactions happen in a sequence (e.g. a chat bot) you'll find it useful to group these interactions into a single session. The (`with_session`) context manager in Baserun allows you to do just that. By providing a user identifier, you can create a new session. By providing a session ID you can continue an existing session. This allows you to group all related traces under either the User or Session, making it easier to debug or analyze the user's journey through your application.
 
 ### Create a new session
 
 <CodeGroup>
 ```python python
+from hashlib import sha256
+
 import baserun
    
-with baserun.with_session(identifier=username_or_id) as session:
+with baserun.with_session(user_identifier=sha256(b"user@example.com").hexdigest(),) as session:
+    # Add business logic including traces in here
+    ...
     # Store session ID to be continued later
     session_id = session.id
     run_chatbot()
 ```
 
 ```typescript typescript
-import { baserun } from 'baserun'
-import OpenAI from 'openai'
-
-const openai = new OpenAI()
+import { baserun } from "baserun";
+import { createHash } from "crypto";
 
 async function main() {
-  await baserun.init()
-  const { data, sessionId } = await baserun.session({
-    async session() {
-      // add business logic including traces in here
-      return openai.chat.completions.create({
-        messages: [
-          {
-            role: 'user',
-            content: `Say "this is a test"`,
-          },
-        ],
-        model: 'gpt-3.5-turbo',
-      })
+  await baserun.init();
+  const { data, sessionId } = await baserun.session(
+    async function () {
+      // Add business logic including traces in here
     },
-    user: 'user@example.com',
-  })
+    {
+      user: createHash("sha256").update("user@example.com").digest("hex"),
+    },
+  );
 
-  console.log({ data, sessionId })
+  // Store session ID to be continued later
+  console.log({ data, sessionId });
 }
 
-main()
+main();
+
 ```
 
 </CodeGroup>
 
 ### Continuing an existing session
 
-Using the Session ID that was collected when the session was started you can then resume that session by providing the session ID to the `with_session` context manager.
+Using the Session ID that was collected when the session was started you can then resume that session by providing the session ID.
 
 ### Full example
 
 <CodeGroup>
+{/* TODO: python code does more complex things than ts code. should it be simplified to match? */}
 ```python python
-from uuid import uuid4
-from openai import OpenAI
+from hashlib import sha256
 
 import baserun
+import openai
 
 PROMPT = """As a customer service representative for an online pet product retailer, your main goal is to
 provide a positive and informative chat experience for customers..."""
 
-@baserun.trace
-def run_chatbot():
-    """An extremely basic chatbot that is executed inside of a single Baserun user session"""
-    client = OpenAI()
-    conversation = [{"role": "system", "content": PROMPT}]
-    conversation_id = str(uuid4())
 
-    print(f"Start your conversation. Type `exit` to end the conversation.\n> ", end="")
-    user_input = input()
+def run_chatbot():
+    """An extremely basic chatbot that is executed inside a single Baserun user session"""
+    client = openai.OpenAI()
+    conversation = [{"role": "system", "content": PROMPT}]
+
+    print(f"Start your conversation. Type `exit` to end the conversation.")
+    user_input = input(">")
     conversation.append({"role": "user", "content": user_input})
 
-    while user_input != "exit":
-        completion = client.chat.completions.create(
-            model="gpt-4-1106-preview",
-            messages=conversation,
-        )
-        content = completion.choices[0].message.content
-        conversation.append({"role": "assistant", "content": content})
+    # Start a trace before your first OpenAI call, giving it a name
+    with baserun.start_trace(name="Chatbot CLI loop") as trace:
+        # Tracing allows each iteration's LLM calls to be grouped together
+        while user_input != "exit":
+            completion = client.chat.completions.create(
+                model="gpt-4-1106-preview",
+                messages=conversation,
+            )
+            content = completion.choices[0].message.content
+            conversation.append({"role": "assistant", "content": content})
 
-        print(f"{content}\n> ", end="")
-        user_input = input()
-        conversation.append({"role": "user", "content": user_input})
+            print(content)
+            user_input = input(">")
+            conversation.append({"role": "user", "content": user_input})
+
+        # Set the trace result for display in the Baserun UI (here it is set to the last content of the conversation)
+        trace.result = conversation[-1]["content"]
 
 
 if __name__ == "__main__":
     baserun.api_key = YOUR_BASERUN_API_KEY_HERE
-    openai.api_key = YOUR_OPEANI_API_KEY_HERE
+    openai.api_key = YOUR_OPENAI_API_KEY_HERE
+    session_id = YOUR_PREVIOUSLY_SAVED_SESSION_ID
     baserun.init()
 
-    with baserun.with_session(identifier="user@example.com"):
+    with baserun.with_session(user_identifier=sha256(b"user@example.com").hexdigest(), session_identifier=session_id):
         run_chatbot()
-
 ````
 
 
 ```typescript typescript
-import { baserun } from 'baserun'
-import OpenAI from 'openai'
+import { baserun } from "baserun";
+import { createHash } from "crypto";
+import OpenAI from "openai";
 
-const openai = new OpenAI()
+const openai = new OpenAI();
 
 async function main() {
-  await baserun.init()
-  const { data, sessionId } = await baserun.session({
-    async session() {
+  await baserun.init();
+  const { data, sessionId } = await baserun.session(
+    async function () {
       return openai.chat.completions.create({
         messages: [
           {
-            role: 'user',
+            role: "user",
             content: `Say "this is a test"`,
           },
         ],
-        model: 'gpt-3.5-turbo',
-      })
+        model: "gpt-3.5-turbo",
+      });
     },
-    sessionId: 'e2792182-c0cc-4a7b-86cb-93d990a74dae' // pass in existing session id
-    user: 'exampel@user.com',
-  })
+    {
+      sessionId: YOUR_PREVIOUSLY_SAVED_SESSION_ID,
+      user: createHash("sha256").update("user@example.com").digest("hex"),
+    },
+  );
 
-  console.log({ data, sessionId })
+  console.log({ data, sessionId });
 }
 
-main()
+main();
 ````
 
 </CodeGroup>
 
-Providing a username or ID (the value is up to you) will allow you to group traces in the [Users](https://baserun.ai/monitoring/users) and [Sessions](https://baserun.ai/monitoring/user-sessions) monitoring pages.
-
-```
-
-```
+Providing a user identifier (the value is up to you) will allow you to group traces in the [Users](https://baserun.ai/monitoring/users) and [Sessions](https://baserun.ai/monitoring/user-sessions) monitoring pages.
