@@ -111,36 +111,18 @@ from hashlib import sha256
 import baserun
 import openai
 
-PROMPT = """As a customer service representative for an online pet product retailer, your main goal is to
-provide a positive and informative chat experience for customers..."""
 
-
-def run_chatbot():
-    """An extremely basic chatbot that is executed inside a single Baserun user session"""
-    client = openai.OpenAI()
-    conversation = [{"role": "system", "content": PROMPT}]
-
-    print(f"Start your conversation. Type `exit` to end the conversation.")
-    user_input = input(">")
-    conversation.append({"role": "user", "content": user_input})
-
-    # Start a trace before your first OpenAI call, giving it a name
-    with baserun.start_trace(name="Chatbot CLI loop") as trace:
-        # Tracing allows each iteration's LLM calls to be grouped together
-        while user_input != "exit":
-            completion = client.chat.completions.create(
-                model="gpt-4-1106-preview",
-                messages=conversation,
-            )
-            content = completion.choices[0].message.content
-            conversation.append({"role": "assistant", "content": content})
-
-            print(content)
-            user_input = input(">")
-            conversation.append({"role": "user", "content": user_input})
-
-        # Set the trace result for display in the Baserun UI (here it is set to the last content of the conversation)
-        trace.result = conversation[-1]["content"]
+def example():
+    response = openai.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {
+                "role": "user",
+                "content": 'Say "this is a test"',
+            }
+        ],
+    )
+    return response.choices[0].message
 
 
 if __name__ == "__main__":
@@ -150,7 +132,7 @@ if __name__ == "__main__":
     baserun.init()
 
     with baserun.with_session(user_identifier=sha256(b"user@example.com").hexdigest(), session_identifier=session_id):
-        run_chatbot()
+        print(example())
 ```
 
 
