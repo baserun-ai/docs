@@ -19,11 +19,13 @@ In addition to automatic evaluations and human evaluations, user feedback is an 
 
 User feedback is attached to an LLM request or a trace. Please start by following 'Get Started with Logging LLM Requests' or 'Get Started with Tracing a Workflow' first. Once you have successfully logged LLM requests or traces in Baserun, continue with the following instructions.
 
-### Instructions
+### Capturing Annotations
 
-You can customize your UI in different ways to collect user feedback. Whether it's through a "👍" / "👎" or on a numeric scale (e.g. "1-5"), the customer's score will be displayed as a 0-1 score on the Baserun dashboard. The end user also has the option to add a comment.
+Annotations are a term we use to refer to events and metadata that can be attached to a trace or an individual LLM request. Examples are logs, user feedback, evals, and checks.
 
 User feedback is a type of annotation, alongside checks, automatic evaluations, and human evaluations. To collect customer feedback, you can use the `baserun.annotate` function.
+
+You can customize your UI in different ways to collect user feedback. Whether it's through a "👍" / "👎" or on a numeric scale (e.g. "1-5"), the customer's score will be displayed as a 0-1 score on the Baserun dashboard. The end user also has the option to add a comment.
 
 <CodeGroup>
 ```python python
@@ -33,6 +35,7 @@ def ask_question(question="What is the capital of the US?") -> str:
         model="gpt-4-1106-preview",
         messages=[{"role": "user", "content": question}],
     )
+    content = completion.choices[0].message.content
 
     # Create the annotation
     annotation = baserun.annotate()
@@ -41,36 +44,45 @@ def ask_question(question="What is the capital of the US?") -> str:
     annotation.feedback(
         name="annotate_feedback", score=0.8, metadata={"comment": "This is correct but not concise enough"}
     )
+    annotation.check_includes("openai_chat.content", "Washington", content)
+    annotation.log("OpenAI Chat Results", metadata={"result": content, "input": question})
 
     # Make sure to submit the annotation
     annotation.submit()
-
 ````
 
 ```typescript typescript
-const workflow = baserun.trace(async () => {
-  const completion = await openai.chat.completions.create({
-    model: "gpt-4-1106-preview",
-    messages: [
-      {
-        role: "user",
-        content: "What is the capital of the US?",
-      },
-    ],
-  });
+const workflow = baserun.trace(
+  async (question = "What is the capital of the US?") => {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4-1106-preview",
+      messages: [
+        {
+          role: "user",
+          content: question,
+        },
+      ],
+    });
+    const content = completion.choices[0].message.content ?? "";
 
-  // Create the annotation
-  const annotation = baserun.annotate();
+    // Create the annotation
+    const annotation = baserun.annotate();
 
-  // Capture the user feedback as an annotation
-  annotation.feedback("annotate_feedback", {
-    score: 0.8,
-    metadata: { comment: "This is correct but not concise enough" },
-  });
+    // Capture the user feedback as an annotation
+    annotation.feedback("annotate_feedback", {
+      score: 0.8,
+      metadata: { comment: "This is correct but not concise enough" },
+    });
+    annotation.checkIncludes("openai_chat.content", "Washington", content);
+    annotation.log("OpenAI Chat Results", {
+      result: content,
+      input: question,
+    });
 
-  // Make sure to submit the annotation
-  await annotation.submit();
-});
+    // Make sure to submit the annotation
+    await annotation.submit();
+  },
+);
 
 await workflow();
 ````
@@ -86,6 +98,7 @@ def ask_question(question="What is the capital of the US?") -> str:
         model="gpt-4-1106-preview",
         messages=[{"role": "user", "content": question}],
     )
+    content = completion.choices[0].message.content
 
     # Create the annotation
     annotation = baserun.annotate(completion.id)
@@ -95,35 +108,45 @@ def ask_question(question="What is the capital of the US?") -> str:
     annotation.feedback(
         name="annotate_feedback", score=0.8, metadata={"comment": "This is correct but not concise enough"}
     )
+    annotation.check_includes("openai_chat.content", "Washington", content)
+    annotation.log("OpenAI Chat Results", metadata={"result": content, "input": question})
 
     # Make sure to submit the annotation
     annotation.submit()
 ````
 
 ```typescript typescript
-const workflow = baserun.trace(async () => {
-  const completion = await openai.chat.completions.create({
-    model: "gpt-4-1106-preview",
-    messages: [
-      {
-        role: "user",
-        content: "What is the capital of the US?",
-      },
-    ],
-  });
+const workflow = baserun.trace(
+  async (question = "What is the capital of the US?") => {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4-1106-preview",
+      messages: [
+        {
+          role: "user",
+          content: question,
+        },
+      ],
+    });
+    const content = completion.choices[0].message.content ?? "";
 
-  // Create the annotation
-  const annotation = baserun.annotate(completion.id);
+    // Create the annotation
+    const annotation = baserun.annotate(completion.id);
 
-  // Capture the user feedback as an annotation
-  annotation.feedback("annotate_feedback", {
-    score: 0.8,
-    metadata: { comment: "This is correct but not concise enough" },
-  });
+    // Capture the user feedback as an annotation
+    annotation.feedback("annotate_feedback", {
+      score: 0.8,
+      metadata: { comment: "This is correct but not concise enough" },
+    });
+    annotation.checkIncludes("openai_chat.content", "Washington", content);
+    annotation.log("OpenAI Chat Results", {
+      result: content,
+      input: question,
+    });
 
-  // Make sure to submit the annotation
-  await annotation.submit();
-});
+    // Make sure to submit the annotation
+    await annotation.submit();
+  },
+);
 
 await workflow();
 ````
