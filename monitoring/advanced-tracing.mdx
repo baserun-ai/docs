@@ -7,8 +7,8 @@ description: Tracing additional data such as trace name, custom log, session ID,
 This page goes over some advanced tracing features.
 
 ## Adding a trace name
-{/* TODO: this section baad. I don't know how to fix it as I don't know what intention is here, what we actually want to show or explain */}
-If you're tracing multiple functions, you can use the `start_trace` context manager to distinguish between them:
+
+If you're tracing multiple functions, you can use the `name` parameter to distinguish between them:
 
 <CodeGroup>
 
@@ -32,7 +32,9 @@ const askQuestion = baserun.trace(
 ![Trace name](/images/monitor-trace-name.png)
 </Frame>
 
-Within a `start_trace` context any calls to OpenAI or Anthropic will automatically be included in the trace.
+<Note>
+Currently, when using python sdk, you can name a trace only when using `baserun.start_trace` context manager and it's not possible to do so when using `@baserun.trace` decorator.
+</Note>
 
 ## Setting a trace's result
 
