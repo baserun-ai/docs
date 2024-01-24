@@ -31,7 +31,7 @@ def product_lookup(product_id: int):  # Perform your application's logic
     # Log the response to Baserun - any JSON-ifiable object can be passed
     baserun.log(name="Product Lookup", payload=response)
 
-````
+```
 ```typescript typescript
 import { baserun } from 'baserun'
 
@@ -41,7 +41,7 @@ const productLookup = baserun.trace(async (product_id: number) => {
   // Log the response to Baserun - any JSON-ifiable object can be passed
   baserun.log('Product Lookup', response)
 })
-````
+```
 
 </CodeGroup>
 

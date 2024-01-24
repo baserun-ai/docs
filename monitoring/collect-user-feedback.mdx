@@ -49,7 +49,7 @@ def ask_question(question="What is the capital of the US?") -> str:
 
     # Make sure to submit the annotation
     annotation.submit()
-````
+```
 
 ```typescript typescript
 const workflow = baserun.trace(
@@ -85,7 +85,7 @@ const workflow = baserun.trace(
 );
 
 await workflow();
-````
+```
 </CodeGroup>
 
 To associate these feedback a particular LLM request, you simply need to pass the completion ID from your LLM request. To do so using OpenAI's SDK, you can do the following:
@@ -113,7 +113,7 @@ def ask_question(question="What is the capital of the US?") -> str:
 
     # Make sure to submit the annotation
     annotation.submit()
-````
+```
 
 ```typescript typescript
 const workflow = baserun.trace(
@@ -149,7 +149,7 @@ const workflow = baserun.trace(
 );
 
 await workflow();
-````
+```
 </CodeGroup>
 
 Here is how the user feedback will look like in Baserun dashboard:

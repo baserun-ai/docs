@@ -46,7 +46,7 @@ def ask_question(question="What is the capital of the US?") -> str:
         answer_id = answer_question(question)
 
         trace.result = my_result
-````
+```
 
 ```typescript typescript
 const workflow = baserun.trace(async () => {
@@ -140,7 +140,7 @@ def ask_question(question="What is the capital of the US?") -> str:
 
     # Make sure to submit the annotation
     annotation.submit()
-````
+```
 
 ```typescript typescript
 const workflow = baserun.trace(async (question="What is the capital of the US?") => {
@@ -168,7 +168,7 @@ const workflow = baserun.trace(async (question="What is the capital of the US?")
 });
 
 await workflow();
-````
+```
 
 </CodeGroup>
 
@@ -221,6 +221,7 @@ if __name__ == "__main__":
     baserun.init()
     run_chatbot()
 ```
+
 ```typescript typescript
 import OpenAI from "openai";
 import { baserun } from "baserun";
@@ -260,8 +261,7 @@ async function main() {
 }
 
 main();
-
-````
+```
 
 
 </CodeGroup>
