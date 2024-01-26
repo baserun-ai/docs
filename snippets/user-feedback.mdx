@@ -1,0 +1,153 @@
+In addition to automatic evaluations and human evaluations, user feedback is an excellent source for assessing the quality of an LLM application. In Baserun, feedback is collected either as a 0-1 score or in the form of comments and is attached to a trace or an individual LLM request.
+
+### Use case
+
+- **Evaluate chatbot response**: You might want to ask user rate the chatbot response with a "👍" / "👎" or on a numeric scale (e.g. "1-5") as a way to evaluate customer experience.
+- **Create fine-tuning datasets**: You might want to collecting positive responses use for fine-tuning your model.
+- **Create benchmark testing datasets**: Consider collecting negative responses to identify use cases that were not covered in previous development cycles. These user requests can then be added to regression testing suites to evaluate the performance of your next release.
+
+### Features
+
+- Collect score rating
+- Collect comments
+- Support user feedback on traces and LLM requests
+
+User feedback is attached to an LLM request or a trace. Please start by following 'Get Started with Logging LLM Requests' or 'Get Started with Tracing a Workflow' first. Once you have successfully logged LLM requests or traces in Baserun, continue with the following instructions.
+
+### Capturing Annotations
+
+Annotations are a term we use to refer to events and metadata that can be attached to a trace or an individual LLM request. Examples are logs, user feedback, evals, and checks.
+
+User feedback is a type of annotation, alongside checks, automatic evaluations, and human evaluations. To collect customer feedback, you can use the `baserun.annotate` function.
+
+You can customize your UI in different ways to collect user feedback. Whether it's through a "👍" / "👎" or on a numeric scale (e.g. "1-5"), the customer's score will be displayed as a 0-1 score on the Baserun dashboard. The end user also has the option to add a comment.
+
+<CodeGroup>
+```python python
+@baserun.trace
+def ask_question(question="What is the capital of the US?") -> str:
+    completion = client.chat.completions.create(
+        model="gpt-4-1106-preview",
+        messages=[{"role": "user", "content": question}],
+    )
+    content = completion.choices[0].message.content
+
+    # Create the annotation
+    annotation = baserun.annotate()
+
+    # Capture the user feedback as an annotation
+    annotation.feedback(
+        name="annotate_feedback", score=0.8, metadata={"comment": "This is correct but not concise enough"}
+    )
+    annotation.check_includes("openai_chat.content", "Washington", content)
+    annotation.log("OpenAI Chat Results", metadata={"result": content, "input": question})
+
+    # Make sure to submit the annotation
+    annotation.submit()
+```
+
+```typescript typescript
+const workflow = baserun.trace(
+  async (question = "What is the capital of the US?") => {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4-1106-preview",
+      messages: [
+        {
+          role: "user",
+          content: question,
+        },
+      ],
+    });
+    const content = completion.choices[0].message.content ?? "";
+
+    // Create the annotation
+    const annotation = baserun.annotate();
+
+    // Capture the user feedback as an annotation
+    annotation.feedback("annotate_feedback", {
+      score: 0.8,
+      metadata: { comment: "This is correct but not concise enough" },
+    });
+    annotation.checkIncludes("openai_chat.content", "Washington", content);
+    annotation.log("OpenAI Chat Results", {
+      result: content,
+      input: question,
+    });
+
+    // Make sure to submit the annotation
+    await annotation.submit();
+  },
+);
+
+await workflow();
+```
+</CodeGroup>
+
+To associate these feedback a particular LLM request, you simply need to pass the completion ID from your LLM request. To do so using OpenAI's SDK, you can do the following:
+
+<CodeGroup>
+```python python
+@baserun.trace
+def ask_question(question="What is the capital of the US?") -> str:
+    completion = client.chat.completions.create(
+        model="gpt-4-1106-preview",
+        messages=[{"role": "user", "content": question}],
+    )
+    content = completion.choices[0].message.content
+
+    # Create the annotation
+    annotation = baserun.annotate(completion.id)
+    # Pass in the completion ID
+
+    # Capture the user feedback as an annotation
+    annotation.feedback(
+        name="annotate_feedback", score=0.8, metadata={"comment": "This is correct but not concise enough"}
+    )
+    annotation.check_includes("openai_chat.content", "Washington", content)
+    annotation.log("OpenAI Chat Results", metadata={"result": content, "input": question})
+
+    # Make sure to submit the annotation
+    annotation.submit()
+```
+
+```typescript typescript
+const workflow = baserun.trace(
+  async (question = "What is the capital of the US?") => {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4-1106-preview",
+      messages: [
+        {
+          role: "user",
+          content: question,
+        },
+      ],
+    });
+    const content = completion.choices[0].message.content ?? "";
+
+    // Create the annotation
+    const annotation = baserun.annotate(completion.id);
+
+    // Capture the user feedback as an annotation
+    annotation.feedback("annotate_feedback", {
+      score: 0.8,
+      metadata: { comment: "This is correct but not concise enough" },
+    });
+    annotation.checkIncludes("openai_chat.content", "Washington", content);
+    annotation.log("OpenAI Chat Results", {
+      result: content,
+      input: question,
+    });
+
+    // Make sure to submit the annotation
+    await annotation.submit();
+  },
+);
+
+await workflow();
+```
+</CodeGroup>
+
+Here is how the user feedback will look like in Baserun dashboard:
+<Frame>
+![User feedback](/images/eval_user_feedback.png)
+</Frame>

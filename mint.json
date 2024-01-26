@@ -100,7 +100,8 @@
       "pages": [
         "evaluation/overview",
         "evaluation/automatic-evaluation",
-        "evaluation/human-evaluation"
+        "evaluation/human-evaluation",
+        "evaluation/user-feedback"
       ]
     },
 
