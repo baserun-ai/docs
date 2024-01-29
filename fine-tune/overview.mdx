@@ -1,0 +1,35 @@
+---
+title: Fine-tune overview
+sidebarTitle: Overview
+---
+
+ou can fine-tune GPT models through OpenAI, and Baserun also offers services for fine-tuning open source models through our partner, OpenPipe. Please read our [blog post](https://blog.baserun.ai/choose-your-words-carefully-the-need-for-fine-tuning-large-language-models/) to learn more about when to fine-tune open source models.
+
+### Curating Your Dataset from Logs:
+
+Navigate to the Monitoring > LLM Request tab or Traces tab.
+
+Filter the LLM requests or traces by the trace name or add filters. You can also use the evaluation feature and appropriate labels as identifiers to curate the relevant datasets.
+
+Then click the export button. You will see the 'Export Training Data' option. This option will generate a JSON-formatted data table that can be uploaded into OpenAI or our fine-tuning partner, OpenPipe.
+
+<Frame>![export fine-tuning dataset](/images/fine-tune_export.png)</Frame>
+
+### Fine-Tuning Models:
+
+- OpenAI [fine-tuning guide](https://platform.openai.com/docs/guides/fine-tuning)
+
+- OpenPipe [upload data](https://docs.openpipe.ai/features/importing-data), [fine-tuning](https://docs.openpipe.ai/features/fine-tuning) guide
+
+### Monitoring Custom Models:
+
+Once you have finished fine-tuning, you can use OpenAI or OpenPipe’s endpoint to call your custom model. No changes are needed to monitor your custom models in production.
+
+<Frame>![export fine-tuning dataset](/images/fine-tune_monitor.png)</Frame>
+
+### Use Custom Models in the Baserun Playground:
+
+You must add the custom model in the settings to use your fine-tuned model in the Baserun playground. Follow the 'Add Custom Model' guide to add your fine-tuned model.
+
+<Frame>![Add custom model](/images/fine-tune_add_custom_model.png)</Frame>
+<Frame>![playground](/images/fine-tune_playground.png)</Frame>

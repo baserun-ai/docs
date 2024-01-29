@@ -90,10 +90,7 @@
     },
     {
       "group": "Integrations",
-      "pages": [
-        "integrations/langchain",
-        "integrations/promptarmor"
-      ]
+      "pages": ["integrations/langchain", "integrations/promptarmor"]
     },
     {
       "group": "Evaluation",
@@ -112,6 +109,10 @@
         { "group": "Python", "pages": ["testing/python/pytest"] },
         { "group": "JS/TS", "pages": ["testing/js/jest", "testing/js/vitest"] }
       ]
+    },
+    {
+      "group": "Fine-tune",
+      "pages": ["fine-tune/overview"]
     }
   ],
   "footerSocials": {
