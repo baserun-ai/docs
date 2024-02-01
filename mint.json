@@ -95,6 +95,7 @@
     {
       "group": "Evaluation",
       "pages": [
+        "datasets/overview",
         "evaluation/overview",
         "evaluation/automatic-evaluation",
         "evaluation/human-evaluation",
