@@ -89,14 +89,18 @@
       ]
     },
     {
+      "group": "Templates",
+      "pages": ["templates/overview", "templates/deploy", "templates/register"]
+    },
+    {
       "group": "Integrations",
       "pages": ["integrations/langchain", "integrations/promptarmor"]
     },
     {
       "group": "Evaluation",
       "pages": [
-        "datasets/overview",
         "evaluation/overview",
+        "datasets/overview",
         "evaluation/automatic-evaluation",
         "evaluation/human-evaluation",
         "evaluation/user-feedback"

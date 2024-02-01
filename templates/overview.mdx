@@ -1,0 +1,34 @@
+---
+title: Templates
+sidebarTitle: Overview
+---
+
+In Baserun, a Chat Template (referred to simply as "Template") is a series of one or more messages which may have dynamic content (e.g. variable substitution). Each message in a Chat Template is a string of text, and may contain zero or more variables. A variable is a string of text that is replaced with a value when the template is formatted for a specific completion.
+
+Chat Templates are a _prefix_ of the entire set of prompt messages sent in a completion, as you may have additional conversation or messages that are different for each completion and are therefore untemplated.
+
+## Prompt Registry
+
+The Prompt Registry is a list of all the Chat Templates you have created. You can view and manage your Chat Templates in the Prompt Registry, available on the left-hand sidebar. 
+
+## Creating a Chat Template
+
+To create a new Chat Template, click the "New Prompt Template" button in the Prompt Registry. You will be asked to enter a name and one or more messages for your new Chat Template.
+
+## Viewing a Template
+
+From The Prompt Registry, click on a Chat Template to view it. You will see overview statistics of the template's usage in production, as well as a list of completions that have used the template.
+
+## Editing a Template
+
+To edit a Chat Template, click on the "New Version" button in the Chat Template details screen. This will prompt you to update the messages for the template. When you click "Save Template" a new version is created and is assigned a sequential version number.
+
+## Configuring Environments
+
+Chat Templates may be deployed to one or more environments (e.g. Production, Staging, Development). You can configure your environments in the Settings page, available on the left sidebar.
+
+## Deploying a Template
+
+In the "All Versions" tab of the Chat Template details screen, you can deploy a specific version of the template to any environment that you have configured. You can do this by selecting the version in the dropdown underneath the environment you want to deploy to.
+
+After changing the version for an environment, the update will propagage to SDKs within 10 minutes. See the [deploying templates](/templates/deploy) documentation for more information on how to use Chat Templates in your code.
