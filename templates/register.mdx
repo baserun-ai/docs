@@ -1,0 +1,44 @@
+---
+title: Templates
+sidebarTitle: Registering
+---
+
+If you haven't already, please refer to the [Template Overview](/templates/overview) page for an overview of Chat Templates.
+
+## Registering Templates using the SDK
+
+To register a template, you can use the `register_template` or `aregister_template` method from the `baserun` module. This method takes two arguments:
+
+- `template`: A list of messages in the template
+- `template_name`: The name of the template
+
+
+<CodeGroup>
+```python python
+import baserun
+import openai
+
+
+async def answer_question(question: str) -> str:
+    # Register a template with your template string (`TEMPLATES` constant in this codebase)
+    await baserun.aregister_template(TEMPLATES.get(template_name), template_name)
+    # Use the template to format the prompt, then send it to OpenAI
+    prompt = await baserun.format_prompt(
+        template_name=template_name,
+        template_messages=TEMPLATES.get(template_name),
+        parameters={"question": question},
+    )
+
+    client = AsyncOpenAI()
+    completion = await client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=prompt,
+    )
+    return completion.choices[0].message.content
+```
+
+```typescript typescript
+// Support for templates in the Javascript SDK is coming soon
+````
+
+</CodeGroup>

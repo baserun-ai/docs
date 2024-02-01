@@ -1,0 +1,42 @@
+---
+title: Templates
+sidebarTitle: Deploying
+---
+
+If you haven't already, please refer to the [Template Overview](/templates/overview) page for an overview of Chat Templates.
+
+## Pulling a template using the SDK
+
+Using the Baserun SDK, you can retrieve a template stored in Baserun's Prompt Registry. This way, your templates don't need to be committed in your code, and can be updated almost instantly.
+
+Each template can be deployed to different environments, and the SDK will automatically pull the correct version based on the `ENVIRONMENT` environment variable.
+
+<CodeGroup>
+```python python
+import baserun
+import openai
+
+
+async def answer_question(question: str):
+    # Download the template from Baserun based on the name and environment (`ENVIRONMENT` environment variable)
+    template = baserun.get_template("Question and Answer")
+    # Format the prompt, then send it to OpenAI
+    prompt = await baserun.format_prompt(
+        template_name=template.name,
+        template_messages=template.active_version.template_messages,
+        parameters={"question": question},
+    )
+
+    client = AsyncOpenAI()
+    completion = await client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=prompt,
+    )
+    return completion.choices[0].message.content
+```
+
+```typescript typescript
+// Support for templates in the Javascript SDK is coming soon
+````
+
+</CodeGroup>
