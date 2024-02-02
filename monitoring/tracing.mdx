@@ -9,17 +9,17 @@ Tracing is useful for debugging and monitoring chained LLM calls (workflow) or a
 
 - Automatically logs OpenAI and Anthropic LLM calls
 - UI to show sequence of events
-- Provide generative token usage, context token usage, estimated cost, duration
-- Support automatic evaluation
+- Provides generative token usage, context token usage, estimated cost, duration
+- Automatic evaluation
 - Supports async functions
 - Option to add custom trace name
 - Option to log custom metadata
 - Option to set trace result
-- Support collecting user feedback
+- Support for collecting user feedback
 
 ## Logging LLM requests
 
-LLM request monitoring is used to track the execution of your AI model. These can be used to capture
+LLM request monitoring is used to track the execution of your AI model. These can be used to capture:
 
 - Model configuration like model name, model configurations, prompt templates, etc.
 - Execution details such as prompt tokens, completion tokens, cost, etc.
@@ -40,10 +40,7 @@ For example, you are creating a AI travel agent to assist with booking trips. Th
 
 ### Instruction
 
-If you haven't authorize Baserun, please refer to the [getting started with SDK > Authentication](/uthentication) section for setup instructions.
-
-At your application’s startup, define the environment in which you’d like to run Baserun.
-You can use Baserun in the development environment while iterating on your features, utilizing it for debugging and analysis, or in the production environment to monitor your application.
+If you haven't authorize Baserun, please refer to the [getting started with SDK > Authentication](/getstartedwithSDK/authentication) section for setup instructions.
 
 ### Example
 
@@ -71,7 +68,7 @@ if __name__ == "__main__":
 
     baserun.init()
     print(example())
-````
+```
 
 ```typescript typescript
 import { baserun } from "baserun";
@@ -98,6 +95,12 @@ main();
 
 </CodeGroup>
 
+<Note>
+You can use Baserun with tests while iterating on your features, utilizing it for debugging and analysis, or in the production environment to monitor your application.
+
+For more information refer to [Testing](/testing/overview).
+</Note>
+
 ## Tracing multi-step LLM workflows
 
 A Trace comprises a series of events executed within a LLM chain (workflow). Tracing enables Baserun to capture and display the workflow's entire lifecycle, whether synchronous or asynchronous.
@@ -120,7 +123,7 @@ For example, consider the case of an AI bot used to automate phone calls. The pr
 
 ### Instruction
 
-Add @baserun.trace to the function you want to trace. In the following example, our workflow constitutes two LLM calls.
+To trace a function, wrap it with `baserun.trace`. In the following example, our workflow constitutes two LLM calls.
 
 1. List out three activities to do on the moon
 2. Choose the best activity among the three
@@ -166,22 +169,22 @@ if __name__ == "__main__":
     openai.api_key = YOUR_OPEANI_API_KEY_HERE
     baserun.init()
     print(find_best_activity())
-````
+```
 
 ```typescript typescript
-import OpenAI from 'openai';
-import { baserun } from 'baserun';
+import OpenAI from "openai";
+import { baserun } from "baserun";
 
 const openai = new OpenAI();
 
 async function get_activities() {
 	const response = await openai.chat.completions.create({
-		model: 'gpt-3.5-turbo',
+		model: "gpt-3.5-turbo",
 		temperature: 0.7,
 		messages: [
 			{
-				role: 'user',
-				content: 'What are three activities to do on the Moon?',
+				role: "user",
+				content: "What are three activities to do on the Moon?",
 			},
 		],
 	});
@@ -192,11 +195,11 @@ async function find_best_activity() {
 	const moon_activities = await get_activities();
 
 	const response = await openai.chat.completions.create({
-		model: 'gpt-3.5-turbo',
+		model: "gpt-3.5-turbo",
 		temperature: 0.7,
 		messages: [
 			{
-				role: 'user',
+				role: "user",
 				content: `Pick the best activity to do on the moon from the following, including a convincing reason to do so.
 				${moon_activities.content}`,
 			},
@@ -213,12 +216,12 @@ async function main() {
 		const best_activity = await find_best_activity();
 		console.log(best_activity);
 		return best_activity;
-	}, 'Tracing multi-Step');
+	}, "Tracing multi-Step");
 	await workflow();
 }
 
 main();
-````
+```
 
 </CodeGroup>
 

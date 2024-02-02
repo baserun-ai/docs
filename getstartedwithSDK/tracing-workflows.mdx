@@ -39,7 +39,7 @@ Please reference the [Monitoring Overview](/monitoring/overview) to learn why lo
 
 ### Instruction
 
-The first 3 steps are the same as the [Logging LLM requests tutorial](/). So, if you have already done this before, jump to step 4.
+The first 3 steps are the same as the [Logging LLM requests tutorial](/getstartedwithSDK/logging-LLM-requests). So, if you have already done this before, jump to step 4.
 
 <Steps>
 <Step title="Install Baserun SDK">
@@ -132,7 +132,7 @@ import baserun
 def get_response(message):
 ...
 
-````
+```
 
 ```typescript typescript
 import { baserun } from 'baserun'
@@ -141,7 +141,7 @@ const getResponse = baserun.trace((message: string) => {
   ...
 }, 'getResponse')
 
-````
+```
 
 </CodeGroup>
 </Step>
@@ -249,7 +249,7 @@ Congrats, you are done! Now, you can navigate to the monitoring tab. Here is wha
 
 <Frame>![Trace list](/images/monitor_trace_list.png)</Frame>
 
-Optionally, you can add metadata like trace name, user ID, and session ID to aid in debugging. Read [Logging > Advanced tracing features](/monitoring/advancedtracing) for more details.
+Optionally, you can add metadata like trace name, user ID, and session ID to aid in debugging. Read [Logging > Advanced tracing features](/monitoring/advanced-tracing) for more details.
 
 ## Demo projects
 

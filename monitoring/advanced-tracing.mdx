@@ -1,28 +1,29 @@
 ---
 title: Advanced tracing features
 sidebarTitle: Advanced tracing features
-description: Tracing additional data such as trace name, custom log, session ID, etc
+description: Tracing additional data such as trace name, custom log, session ID, etc.
 ---
 
 This page goes over some advanced tracing features.
 
 ## Adding a trace name
 
-If you're tracing multiple functions, you can use the `start_trace` context manager to distinguish between them:
+If you're tracing multiple functions, you can use the `name` parameter to distinguish between them:
 
 <CodeGroup>
 
 ```python python
 def ask_question(question="What is the capital of the US?") -> str:
-    with baserun.start_trace(name="General knowledge question"): # Your code here
+    with baserun.start_trace(name="General knowledge question"):
+        # Your code here
 ```
 
 ```typescript typescript
 const askQuestion = baserun.trace(
-  async (question = 'What is the capital of the US?') => {
+  async (question = "What is the capital of the US?") => {
     // Your code here
   },
-  'General knowledge question' // Trace name
+  "General knowledge question" // Trace name
 )
 ```
 
@@ -31,7 +32,9 @@ const askQuestion = baserun.trace(
 ![Trace name](/images/monitor-trace-name.png)
 </Frame>
 
-Within a `start_trace` context any calls to OpenAI or Anthropic will automatically be included in the trace.
+<Note>
+Currently, when using python sdk, you can name a trace only when using `baserun.start_trace` context manager and it's not possible to do so when using `@baserun.trace` decorator.
+</Note>
 
 ## Setting a trace's result
 
@@ -45,16 +48,14 @@ def ask_question(question="What is the capital of the US?") -> str:
         answer_id = answer_question(question)
 
         trace.result = my_result
-````
+```
 
 ```typescript typescript
-import { baserun } from 'baserun'
-
 const workflow = baserun.trace(async () => {
   // some llm calls or other logic here
 
-  return 'my result'
-}, 'trace name')
+  return "my result"
+}, "trace name")
 ```
 
 </CodeGroup>
@@ -86,8 +87,9 @@ def ask_question(question="What is the capital of the US?") -> str:
 
 ```
 
+{/* TODO: change this example to make it do the same thing as python code, where you put some result in the metadata, once it's possible to do so with ts sdk */}
 ```typescript typescript
-import { baserun } from 'baserun'
+import { baserun } from "baserun"
 
 const workflow = baserun.trace(
   async () => {
@@ -104,9 +106,9 @@ const workflow = baserun.trace(
     return chatCompletion.choices[0].message.content
   },
   {
-    name: 'Answer question',
+    name: "Answer question",
     metadata: {
-      requestId: '1234',
+      requestId: "1234",
     },
   }
 )
@@ -136,12 +138,39 @@ def ask_question(question="What is the capital of the US?") -> str:
     annotation = baserun.annotate(completion.id)
 
     # Capture whatever annotations you need
-    annotation.check("answer.answer_id", type(answer.id), 
     annotation.log("Answer", metadata={"answer_id": answer.id})
 
     # Make sure to submit the annotation
     annotation.submit()
-````
+```
+
+```typescript typescript
+const workflow = baserun.trace(async (question="What is the capital of the US?") => {
+  const completion = await openai.chat.completions.create({
+    model: "gpt-4-1106-preview",
+    messages: [
+      {
+        role: "user",
+        content: question,
+      },
+    ],
+  });
+
+  // Your code here, for example:
+  const answer = await persist_answer(question, completion)
+
+  // Create the annotation
+  const annotation = baserun.annotate(completion.id);
+
+  // Capture whatever annotations you need
+  annotation.log("Answer", {answer_id: answer.id})
+
+  // Make sure to submit the annotation
+  await annotation.submit();
+});
+
+await workflow();
+```
 
 </CodeGroup>
 
@@ -153,23 +182,20 @@ Here is how the user feedback will look like in Baserun dashboard:
 ## Example
 <CodeGroup>
 ```python python
-from uuid import uuid4
-from openai import OpenAI
-
 import baserun
+import openai
 
 PROMPT = """As a customer service representative for an online pet product retailer, your main goal is to
 provide a positive and informative chat experience for customers..."""
 
 
 def run_chatbot():
-    """An basic chatbot that is executed inside of a single Baserun user session"""
-    client = OpenAI()
+    """A basic chatbot"""
+    client = openai.OpenAI()
     conversation = [{"role": "system", "content": PROMPT}]
-    conversation_id = str(uuid4())
 
-    print(f"Start your conversation. Type `exit` to end the conversation.\n> ", end="")
-    user_input = input()
+    print(f"Start your conversation. Type `exit` to end the conversation.")
+    user_input = input(">")
     conversation.append({"role": "user", "content": user_input})
 
     # Start a trace before your first OpenAI call, giving it a name
@@ -183,67 +209,61 @@ def run_chatbot():
             content = completion.choices[0].message.content
             conversation.append({"role": "assistant", "content": content})
 
-            print(f"{content}\n> ", end="")
-            user_input = input()
+            print(content)
+            user_input = input(">")
             conversation.append({"role": "user", "content": user_input})
 
-        # Set the trace result for display in the Baserun UI (here it is set to the last user input)
-        trace.result = user_input
+        # Set the trace result for display in the Baserun UI (here it is set to the last content of the conversation)
+        trace.result = conversation[-1]["content"]
+
 
 if __name__ == "__main__":
     baserun.api_key = YOUR_BASERUN_API_KEY_HERE
-    openai.api_key = YOUR_OPEANI_API_KEY_HERE
+    openai.api_key = YOUR_OPENAI_API_KEY_HERE
     baserun.init()
-
-    with baserun.with_session(identifier="user@example.com"):
-        run_chatbot()
+    run_chatbot()
 ```
-```typescript typescript
-import OpenAI from 'openai';
-import { baserun } from 'baserun';
-import readlineSync from 'readline-sync';
 
-const client = new OpenAI();
+```typescript typescript
+import OpenAI from "openai";
+import { baserun } from "baserun";
+import readlineSync from "readline-sync";
+import { ChatCompletionMessageParam } from "openai/src/resources/chat/completions";
+
+const client = new OpenAI({ apiKey: YOUR_OPENAI_API_KEY_HERE });
 
 const PROMPT =
-	'As a customer service representative for an online pet product retailer, your main goal is to provide a positive and informative chat experience for customers...';
-
-async function run_chatbot() {
-	const conversation = [{ role: 'system', content: PROMPT }];
-
-	async function loop_prompt(question: string) {
-		const user_input = readlineSync.question(question);
-		if (user_input === 'exit') {
-			return user_input;
-		} else {
-			conversation.push({ role: 'user', content: user_input });
-			const completion = await client.chat.completions.create({
-				model: 'gpt-4-1106-preview',
-				messages: conversation,
-			});
-			const content = completion.choices[0].message.content;
-			conversation.push({ role: 'assistant', content: content });
-			return loop_prompt(`${content}\n> `);
-		}
-	}
-	return loop_prompt(
-		'Start your conversation. Type `exit` to end the conversation.\n> '
-	);
-}
+  "As a customer service representative for an online pet product retailer, your main goal is to provide a positive and informative chat experience for customers...";
 
 async function main() {
-	await baserun.init({
-		apiKey:YOUR_BASERUN_API_KEY_HERE,
-	});
-	const workflow = baserun.trace(async () => {
-		const res = await run_chatbot();
-		return res;
-	}, 'Chatbot CLI loop');
-	await workflow();
+  await baserun.init({
+    apiKey: YOUR_BASERUN_API_KEY_HERE,
+  });
+  const workflow = baserun.trace(async () => {
+    const conversation: ChatCompletionMessageParam[] = [
+      { role: "system", content: PROMPT },
+    ];
+    let user_input = readlineSync.question(
+      "Start your conversation. Type `exit` to end the conversation.\n> ",
+    );
+    while (user_input !== "exit") {
+      conversation.push({ role: "user", content: user_input });
+      const completion = await client.chat.completions.create({
+        model: "gpt-4-1106-preview",
+        messages: conversation,
+      });
+      const content = completion.choices[0].message.content!;
+      conversation.push({ role: "assistant", content: content });
+      user_input = readlineSync.question(`${content}\n> `);
+    }
+    // return for display in the Baserun UI (here we're returning the last content of the conversation)
+    return conversation[conversation.length - 1].content;
+  }, "Chatbot CLI loop");
+  await workflow();
 }
 
 main();
-````
+```
 
 
 </CodeGroup>

@@ -96,13 +96,13 @@ Note for TS/JS: Make sure to always call `await baserun.init()` before you insta
 <CodeGroup>
 
 ```typescript typescript
-import { baserun } from 'baserun'
+import { baserun } from "baserun"
 
 const getResponse = baserun.trace((message: string) => {
   ...
-}, 'getResponse')
+}, "getResponse")
 
-````
+```
 
 </CodeGroup>
 </Step>
@@ -115,7 +115,7 @@ Follow the example below to trace a Lambda function.
 ```typescript typescript
 
 const { baserun } = require("baserun");
-const { streamifyResponse } = require('lambda-stream')
+const { streamifyResponse } = require("lambda-stream")
 ...
 const handler = baserun.trace(async (event, responseStream, context) => {
     // lambda function logic, with streaming responses, OpenAI calls, etc
@@ -138,7 +138,7 @@ Congrats, you are done! Now, you can navigate to the monitoring tab. Here is wha
 
 <Frame>![Trace list](/images/monitor_trace_list.png)</Frame>
 
-Optionally, you can add metadata like trace name, user ID, and session ID to aid in debugging. Read [Logging > Advanced tracing features](/monitoring/advancedtracing) for more details.
+Optionally, you can add metadata like trace name, user ID, and session ID to aid in debugging. Read [Logging > Advanced tracing features](/monitoring/advanced-tracing) for more details.
 
 ## Demo projects
 

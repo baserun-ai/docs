@@ -16,9 +16,9 @@ yarn add baserun
 There is no particular change needed in your actual tests, just add the `--preset baserun` flag to your jest command.
 
 ```typescript test_module.spec.ts
-import { baserun } from 'baserun'
+import { baserun } from "baserun"
 
-describe('My Test Suite', () => {
+describe("My Test Suite", () => {
   // ... the tests
 })
 ```
@@ -32,14 +32,14 @@ npm run jest --preset baserun test_module.spec.ts
 It's often helpful to exercise the same test over multiple examples. To do this, we suggest doing a simple for loop to autogenerate your tests and for larger numbers of examples you can read from a file or other data structure.
 
 ```typescript my-test.test.ts
-import { baserun } from 'baserun'
+import { baserun } from "baserun"
 
 const examples = [
-  { place: 'Paris', expected: 'Eiffel Tower' },
-  { place: 'Rome', expected: 'Colosseum' },
+  { place: "Paris", expected: "Eiffel Tower" },
+  { place: "Rome", expected: "Colosseum" },
 ]
 
-describe('Baserun end-to-end', () => {
+describe("Baserun end-to-end", () => {
   beforeAll(async () => {
     // the only thing needed to make baserun work
     await baserun.init()
@@ -48,11 +48,11 @@ describe('Baserun end-to-end', () => {
   for (const { place, expected } of examples) {
     it(`should suggest the ${expected}`, async () => {
       const chatCompletion = await openai.chat.completions.create({
-        model: 'gpt-3.5-turbo',
+        model: "gpt-3.5-turbo",
         temperature: 0.7,
         messages: [
           {
-            role: 'user',
+            role: "user",
             content: `What are three activities to do in ${place}?`,
           },
         ],
@@ -71,8 +71,8 @@ If you are already using a Jest preset such as ts-jest you will need to merge th
 ```js
 // jest.config.js or jest.config.baserun.js
 
-const tsPreset = require('ts-jest/jest-preset')
-const baserunPreset = require('baserun/jest-preset')
+const tsPreset = require("ts-jest/jest-preset")
+const baserunPreset = require("baserun/jest-preset")
 
 module.exports = {
   ...tsPreset,
