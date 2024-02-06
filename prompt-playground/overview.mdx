@@ -11,23 +11,16 @@ description: Iterating, evaluating, and versioning prompts as a team.
 - **Iterate prompts with version controls**: Iterating and evaluating prompt templates, never lose a good prompt.
 - **Collaboration**: Jam on prompts together with your team, share templates and good practices, and streamline your workflow.
 
-<Accordion title="Supported LLM models">
-  * OpenAI 
-  * Anthropic 
-  * Llama 
-  * Mistral
-</Accordion>
+<Frame>![Custom model](/images/prompt-playground-add-custom-model.png)</Frame>
 
 ### Key features
 
 - Version controls
 - Copy prompt with inputs from Monitoring
-- OpenAI vision model (Coming soon)
 - OpenAI Tool calls
 - Chat mode
-- Cost and duration
-- Compare prompts side by side
-- Annotation in UI (Coming soon)
+- Compare prompt versions
+- Bulk testing & evaluation in UI (Coming soon)
 
 ### Instruction
 
@@ -39,35 +32,40 @@ By default, you can see all the prompts created by all users in the shared works
   ![Prompt Playground](/images/prompt-playground-list-grid-toggle.gif)
 </Frame>
 
-### Creating a prompt
+### Creating a playground session
 
 <Steps>
-<Step title="Click the 'New Prompt' button at the top right, or duplicate an existing prompt.">
+<Step title="Click the 'New Session' button at the top right, or duplicate an existing session.">
 <Frame>
-  ![New Prompt](/images/prompt-playground-new-prompt.gif)
+  ![New session](/images/prompt-playground-new-prompt.gif)
 </Frame>
 </Step>
-<Step title="Enter the prompt template name">
-Then, you will be redirected to the prompt detail view.
+<Step title="Enter the session name">
+Then, you will be redirected to the edit view.
 
-The left side is the editor panel, where you can edit the prompts. On the right side is the test panel, where you can create multiple test cases to test the prompt. Baserun will automatically save all prompt versions and tests. You can access past versions through the "Version History" button on the top right and restore any previous versions.
+The left side is the editor panel, where you can edit the prompts. On the right side is the test panel, where you can create multiple test cases to test the prompt. Baserun will automatically save all session versions and tests. You can access past versions through the "Version History" button on the top right and restore any previous versions.
 
 </Step>
 <Step title="Select the model you want to use">
-Currently, we support OpenAI, Anthropic, Llama, and Mistral. Please add your API keys in the Settings tab to access the OpenAI 16k and Claude 16K models.
+Baserun support OpenAI, Anthropic, Llama, and Gemini by default.You can also add custom models by clicking the "Add custom model" button.
 </Step>
 <Step title="Optional to insert dynamic input variables into your prompt template using curly brackets {{ and }}.">
-You'll use these variables to trace LLM requests, run evaluations, and create datasets for fine-tuning later.
+You will use these variables to track LLM requests inputs, conduct evaluations, and compile datasets for future fine-tuning.
 </Step>
 <Step title="Start testing">
-Enter the input variables in the test run panel and click the run button to test the prompt output.You can manually enter the testing data sets into the test run panels or upload testing datasets via CSV in the comparison table, which we'll cover later.
-
+Type a user and press 'Enter' or click the 'Run' button to submit.
+</Step>
+<Step title="Rerun a thread">
+You can edit a previous message in a thread. Clicking 'Rerun' will create a new thread, allowing you to preserve the history of your previous conversation.
+<Frame>
+  ![Rerun](/images/prompt-playground-rerun.gif)
+</Frame>
 </Step>
 </Steps>
 
 ## Version management
 
-Baserun automatically creates a new version of the prompts as you edit the prompt template and run tests. A new version is created when you click "Run Tests."
+Baserun automatically creates a new version of the session as you edit the prompt template and run tests. A new version is created when you click "Run Tests."
 
 You can view a previous version by clicking on a past version inside the version history panel; all past versions are read-only. To restore an earlier version, hover over the version name, open the dropdown menu, and click the "Restore" button. This action will duplicate the past version and add it to the top.
 
