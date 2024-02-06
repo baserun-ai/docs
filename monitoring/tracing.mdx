@@ -7,15 +7,16 @@ Tracing is useful for debugging and monitoring chained LLM calls (workflow) or a
 
 ### Features
 
-- Automatically logs OpenAI and Anthropic LLM calls
+- Is model and framework agnostic
+- Provides token usage, estimated cost, duration, input, and output
 - UI to show sequence of events
-- Provides generative token usage, context token usage, estimated cost, duration
-- Automatic evaluation
+- Supports evaluation
+- Supports annotation
+- Supports user feedback
 - Supports async functions
 - Option to add custom trace name
 - Option to log custom metadata
 - Option to set trace result
-- Support for collecting user feedback
 
 ## Logging LLM requests
 
@@ -101,14 +102,14 @@ You can use Baserun with tests while iterating on your features, utilizing it fo
 For more information refer to [Testing](/testing/overview).
 </Note>
 
-## Tracing multi-step LLM workflows
+## Tracing end-to-end pipeline
 
-A Trace comprises a series of events executed within a LLM chain (workflow). Tracing enables Baserun to capture and display the workflow's entire lifecycle, whether synchronous or asynchronous.
+A Trace comprises a series of events executed within a pipeline. Tracing enables Baserun to capture and display the workflow's entire lifecycle, whether synchronous or asynchronous.
 
 For example, consider the case of an AI bot used to automate phone calls. The process begins with the bot initiating a call to the user. While the call is in progress, the conversation is transcribed into text. Subsequently, the bot analyzes the transcribed text to produce a response or message. Once the response is crafted, it is converted into audio. Finally, the AI system transmits the audio message.
 
 <Frame> 
-![Trace a LLM chain](/images/monitor-trace-details.png)
+![Trace a pipeline](/images/monitor-trace-details.png)
 </Frame>
 
 <Note>
