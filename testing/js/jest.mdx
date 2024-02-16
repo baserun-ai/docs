@@ -1,5 +1,5 @@
 ---
-title: 'jest integration'
+title: "jest integration"
 ---
 
 Baserun offers a [jest](https://jestjs.io/docs) preset, which will automatically add the `beforeAll` to your
@@ -16,11 +16,11 @@ yarn add baserun
 There is no particular change needed in your actual tests, just add the `--preset baserun` flag to your jest command.
 
 ```typescript test_module.spec.ts
-import { baserun } from "baserun"
+import { baserun } from "baserun";
 
 describe("My Test Suite", () => {
   // ... the tests
-})
+});
 ```
 
 ```bash
@@ -32,18 +32,18 @@ npm run jest --preset baserun test_module.spec.ts
 It's often helpful to exercise the same test over multiple examples. To do this, we suggest doing a simple for loop to autogenerate your tests and for larger numbers of examples you can read from a file or other data structure.
 
 ```typescript my-test.test.ts
-import { baserun } from "baserun"
+import { baserun } from "baserun";
 
 const examples = [
   { place: "Paris", expected: "Eiffel Tower" },
   { place: "Rome", expected: "Colosseum" },
-]
+];
 
 describe("Baserun end-to-end", () => {
   beforeAll(async () => {
     // the only thing needed to make baserun work
-    await baserun.init()
-  })
+    await baserun.init();
+  });
 
   for (const { place, expected } of examples) {
     it(`should suggest the ${expected}`, async () => {
@@ -56,12 +56,12 @@ describe("Baserun end-to-end", () => {
             content: `What are three activities to do in ${place}?`,
           },
         ],
-      })
+      });
 
-      expect(chatCompletion.choices[0].message!.content!).toContain(expected)
-    })
+      expect(chatCompletion.choices[0].message!.content!).toContain(expected);
+    });
   }
-})
+});
 ```
 
 ## Existing presets
@@ -71,14 +71,14 @@ If you are already using a Jest preset such as ts-jest you will need to merge th
 ```js
 // jest.config.js or jest.config.baserun.js
 
-const tsPreset = require("ts-jest/jest-preset")
-const baserunPreset = require("baserun/jest-preset")
+const tsPreset = require("ts-jest/jest-preset");
+const baserunPreset = require("baserun/jest-preset");
 
 module.exports = {
   ...tsPreset,
   ...baserunPreset,
   testTimeout: 10000,
-}
+};
 ```
 
 ## Naming
@@ -89,7 +89,7 @@ Baserun lets you compare test results and debug each step side by side. We consi
   <Card
     title="Automatic evaluations"
     icon="scale-balanced"
-    href="/evaluation/Automatic-evaluation"
+    href="/evaluation/automatic-evaluation"
   >
     Evaluate tests' outputs.
   </Card>
