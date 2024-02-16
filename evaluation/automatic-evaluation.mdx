@@ -222,6 +222,24 @@ describe("Baserun end-to-end", () => {
                     A custom function that takes the `submission` and returns a promise that resolves to a boolean.
                 </ParamField>
             </Accordion>
+            <Accordion title="model_graded_custom(name: str, prompt: str, choices: dict[str, float], **variables) -> bool">
+                Evaluates the model's response based on a prompt and a set of choices.
+
+                Returns the choice given by the model.
+
+                <ParamField path="name" type="str">
+                    Name of the evaluation.
+                </ParamField>
+                <ParamField path="prompt" type="str">
+                    The prompt passed to the model.
+                </ParamField>
+                <ParamField path="choices" type="dict[str, float]">
+                    A dictionary of choices and their scores.
+                </ParamField>
+                <ParamField path="variables" type="dict[str, str]">
+                    Variables that will be substituted in the formatted prompt.
+                </ParamField>
+            </Accordion>
             <Accordion title="model_graded_fact(name: str, question: str, expert: str, submission: str) -> str">
                 Checks a submitted answer against an expert answer for factual consistency using gpt-4-0613.
 
