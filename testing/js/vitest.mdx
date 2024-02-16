@@ -1,5 +1,5 @@
 ---
-title: 'vitest integration'
+title: "vitest integration"
 ---
 
 When using typescript and [vitest](https://vitest.dev/), the only thing you need to add is `beforeAll` in your test file.
@@ -13,17 +13,17 @@ yarn add baserun
 ```
 
 ```typescript test_module.spec.ts
-import { baserun } from "baserun"
-import { describe, beforeAll } from "vitest"
+import { baserun } from "baserun";
+import { describe, beforeAll } from "vitest";
 
 describe("My Test Suite", () => {
   beforeAll(async () => {
     // the only thing needed to make baserun work
-    await baserun.init()
-  })
+    await baserun.init();
+  });
 
   // ... the tests
-})
+});
 ```
 
 ```bash
@@ -38,39 +38,49 @@ It's often helpful to exercise the same test over multiple examples. To do this,
 import { baserun } from "baserun";
 
 const examples = [
-	{ place: "Paris", expected: "Eiffel Tower" },
-	{ place: "Rome", expected: "Colosseum" },
+  { place: "Paris", expected: "Eiffel Tower" },
+  { place: "Rome", expected: "Colosseum" },
 ];
 
 describe("Baserun end-to-end", () => {
-	beforeAll(async () => {
-		// add this
-		await baserun.init();
-	});
+  beforeAll(async () => {
+    // add this
+    await baserun.init();
+  });
 
-	for (const { place, expected } of examples) {
-		it(`should suggest the ${expected}`, async () => {
-			await baserun.trace(async () => {
-      // Use baserun.trace here if your test involves multiple LLM calls or if you want to include any custom logs
-				const chatCompletion = await openai.chat.completions.create({
-					model: "gpt-3.5-turbo",
-					temperature: 0.7,
-					messages: [
-						{
-							role: "user",
-							content: `What are three activities to do in ${place}?`,
-						},
-					],
-				});
+  for (const { place, expected } of examples) {
+    it(`should suggest the ${expected}`, async () => {
+      await baserun.trace(async () => {
+        // Use baserun.trace here if your test involves multiple LLM calls or if you want to include any custom logs
+        const chatCompletion = await openai.chat.completions.create({
+          model: "gpt-3.5-turbo",
+          temperature: 0.7,
+          messages: [
+            {
+              role: "user",
+              content: `What are three activities to do in ${place}?`,
+            },
+          ],
+        });
 
-				expect(chatCompletion.choices[0].message!.content!).toContain(expected);
-				return chatCompletion;
-			})();
-		});
-	}
+        expect(chatCompletion.choices[0].message!.content!).toContain(expected);
+        return chatCompletion;
+      })();
+    });
+  }
 });
 ```
 
 ## Naming
 
 Baserun lets you compare test results and debug each step side by side. We consider the full path of the describe and it names of the jest test as a unique identifier for the test. In the example above, two tests would be run and identified by `("Baserun end-to-end", "should suggest the Eiffel Tower")` and `("Baserun end-to-end", "should suggest the Colosseum")`
+
+<CardGroup cols={2}>
+  <Card
+    title="Automatic evaluations"
+    icon="scale-balanced"
+    href="/evaluation/Automatic-evaluation"
+  >
+    Evaluate tests' outputs.
+  </Card>
+</CardGroup>

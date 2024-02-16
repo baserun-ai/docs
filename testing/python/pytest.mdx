@@ -6,7 +6,6 @@ When using python and [pytest](https://docs.pytest.org/) you can simply install 
 
 The plugin works by automatically collecting and aggregating all LLM and baserun logs during the course of a test and then uploading them to baserun to review and collaborate on with your team.
 
-
 ## Setup
 
 ```bash
@@ -19,6 +18,7 @@ Test results available at: https://app.baserun.ai/runs/<id>
 ```
 
 ### Automatically using Baserun in tests
+
 You can automatically include the `--baserun` option on every invocation of `pytest` by creating or updating your `pytest.ini` file with:
 
 ```
@@ -51,3 +51,13 @@ def test_trip(place, expected):
 ## Naming
 
 Baserun lets you compare test results and debug each step side by side. We consider the name of the pytest function and its parameters as a unique identifier for the test. In the example above, two tests would be run and identified by `(test_trip, "Paris", "Eiffel Tower")` and `(test_trip, "Rome", "Colosseum")`
+
+<CardGroup cols={2}>
+  <Card
+    title="Automatic evaluations"
+    icon="scale-balanced"
+    href="/evaluation/Automatic-evaluation"
+  >
+    Evaluate tests' outputs.
+  </Card>
+</CardGroup>
