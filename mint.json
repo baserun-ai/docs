@@ -93,20 +93,14 @@
       "pages": ["templates/overview", "templates/deploy", "templates/register"]
     },
     {
-      "group": "Integrations",
-      "pages": ["integrations/langchain", "integrations/promptarmor"]
-    },
-    {
       "group": "Evaluation",
       "pages": [
         "evaluation/overview",
-        "datasets/overview",
         "evaluation/automatic-evaluation",
         "evaluation/human-evaluation",
         "evaluation/user-feedback"
       ]
     },
-
     {
       "group": "Testing",
       "pages": [
@@ -116,8 +110,17 @@
       ]
     },
     {
+      "group": "Datasets",
+      "pages": ["datasets/overview"]
+    },
+
+    {
       "group": "Fine-tune",
       "pages": ["fine-tune/overview"]
+    },
+    {
+      "group": "Integrations",
+      "pages": ["integrations/langchain", "integrations/promptarmor"]
     }
   ],
   "footerSocials": {
