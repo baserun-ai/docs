@@ -20,6 +20,10 @@ We provide plugins for the most popular testing frameworks. Check out the [pytes
 
 To validate the behavior of your code you can make assertions like you normally would to cause the test to pass or fail. In the following example, the test will fail if the string "Eiffel Tower" is not present in the LLM output.
 
+<Frame>
+  ![Offline testing assertion](/images/offline_testing_assertion.png)
+</Frame>
+
 <CodeGroup>
 
 ```python python
@@ -72,6 +76,8 @@ describe("Baserun end-to-end", () => {
 ### Automatic evaluation
 
 When working with LLMs, it is also helpful to gain more visibility into the outputs using a series of checks or evaluations. Evaluations capture information about the output but will not cause the test to fail by default. Eval results are then aggregated and displayed in your Baserun dashboard.
+
+<Frame>![Offline testing assertion](/images/offline_testing_evals.png)</Frame>
 
 In the following example, we add an eval to check if the output has the phrase "AI Language Model". See the [evaluation](/evaluation) documentation for more information.
 
