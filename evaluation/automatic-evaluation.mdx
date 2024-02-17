@@ -222,7 +222,7 @@ describe("Baserun end-to-end", () => {
                     A custom function that takes the `submission` and returns a promise that resolves to a boolean.
                 </ParamField>
             </Accordion>
-            <Accordion title="model_graded_custom(name: str, prompt: str, choices: dict[str, float], **variables) -> bool">
+            <Accordion title="model_graded_custom(name: str, prompt: str, choices: dict[str, float], **variables) -> str">
                 Evaluates the model's response based on a prompt and a set of choices.
 
                 Returns the choice given by the model.
