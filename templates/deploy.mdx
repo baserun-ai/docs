@@ -19,7 +19,7 @@ import openai
 
 async def answer_question(question: str):
     # Download the template from Baserun based on the name and environment (`ENVIRONMENT` environment variable)
-    template = baserun.get_template("Question and Answer")
+    template = baserun.get_template("question_and_answer")
     # Format the prompt, then send it to OpenAI
     prompt = await baserun.format_prompt(
         template_name=template.name,
@@ -36,7 +36,23 @@ async def answer_question(question: str):
 ```
 
 ```typescript typescript
-// Support for templates in the Javascript SDK is coming soon
-````
+import OpenAI from "openai";
+import {baserun} from "baserun";
+
+async function answerQuestion(question: string) {
+  // Automatically downloads the template from Baserun based on the name and
+  // environment (`ENVIRONMENT` environment variable) and formats the prompt
+  const prompt = await baserun.formatPromptFromTemplateName(
+    "question_and_answer", {question: question}
+  )
+  // Send it to OpenAI
+  const openai = new OpenAI();
+  const completion = await openai.chat.completions.create({
+    model: "gpt-3.5-turbo",
+    messages: prompt,
+  });
+  return completion.choices[0].message.content;
+}
+```
 
 </CodeGroup>
