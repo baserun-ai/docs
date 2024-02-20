@@ -38,7 +38,25 @@ async def answer_question(question: str) -> str:
 ```
 
 ```typescript typescript
-// Support for templates in the Javascript SDK is coming soon
+import OpenAI from "openai";
+import {baserun} from "baserun";
+
+const TEMPLATE: { role: "user" | "system"; content: string }[] = [
+  { role: "system", content: "you're a helpful assistant" },
+  { role: "user", content: "answer this question: {question}" },
+];
+
+async function answerQuestion(question: string) {
+  // Register a template with your list of messages
+  await baserun.registerTemplate(TEMPLATE, "question_and_answer");
+  // Use the template to format the prompt, then send it to OpenAI
+  const prompt = baserun.formatPrompt(TEMPLATE, { question: question });
+  const completion = await openai.chat.completions.create({
+    model: "gpt-3.5-turbo",
+    messages: prompt,
+  });
+  return completion.choices[0].message.content;
+}
 ````
 
 </CodeGroup>
