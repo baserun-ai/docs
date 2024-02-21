@@ -227,6 +227,19 @@ describe("Baserun end-to-end", () => {
 
                 Returns the choice given by the model.
 
+                Example:
+
+                <CodeGroup>
+                  ```python python
+                      result = Baserun.evals.model_graded_custom(
+                      name="Truth",
+                      prompt="How true is this statement? {statement}.",
+                      choices={"True": 1, "Somewhat true": 0.5, "Not true": 0},
+                      statement=statement,
+                  )
+                  ```
+                </CodeGroup>
+
                 <ParamField path="name" type="str">
                     Name of the evaluation.
                 </ParamField>
