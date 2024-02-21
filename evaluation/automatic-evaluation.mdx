@@ -231,8 +231,8 @@ describe("Baserun end-to-end", () => {
 
                 <CodeGroup>
                   ```python python
-                      result = Baserun.evals.model_graded_custom(
-                      name="Truth",
+                  result = Baserun.evals.model_graded_custom(
+                      name="Truthiness",
                       prompt="How true is this statement? {statement}.",
                       choices={"True": 1, "Somewhat true": 0.5, "Not true": 0},
                       statement=statement,
