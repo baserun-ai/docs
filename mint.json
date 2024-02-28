@@ -97,6 +97,7 @@
       "pages": [
         "evaluation/overview",
         "evaluation/automatic-evaluation",
+        "evaluation/online-evaluation",
         "evaluation/human-evaluation",
         "evaluation/user-feedback"
       ]

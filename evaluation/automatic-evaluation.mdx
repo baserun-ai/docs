@@ -1,11 +1,11 @@
 ---
-title: Automatic evaluation
-sidebarTitle: Automatic evaluation
+title: Automatic / offline evaluation
+sidebarTitle: Automatic / offline  evaluation
 ---
 
-<Frame>![Trace Details](/images/annotating-overview.png)</Frame>
+<Frame>![Automatic Evaluation](/images/annotating-overview.png)</Frame>
 
-Our evaluation framework is heavily inspired by the [OpenAI Evals](https://github.com/openai/evals) project and offers a number of built-in evaluations which we record and aggregate in the Baserun dashboard.
+Automatic evaluation, sometimes referred to as "offline" evaluation, are evaluations that are performed in your code and submitted to Baserun via the SDK. Baserun offers a number of pre-built evaluators (see below), as well as the ability to perform custom evals with your own prompt or your own function.
 
 ### Setup
 
@@ -30,7 +30,7 @@ def test_paris_trip():
 
     output = response["choices"][0]["message"]["content"]
     not_has_ai_language_model = baserun.evals.not_includes("AI Language Model", output, ["AI language model"])
-    # Optional: will fail the test if "AI language model" is present in the output
+    # Optional: The test will fail if the eval failed
     assert not_has_ai_language_model
 ```
 
