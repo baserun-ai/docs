@@ -1,0 +1,44 @@
+---
+title: Online evaluation
+sidebarTitle: Online evaluation
+---
+
+<Frame>![Online Evaluation](/images/annotating-overview.png)</Frame>
+
+Online evaluation are evaluations which are triggered in the Baserun user interface. No code is required to create or run these evaluations, they happen completely within Baserun.
+
+## Components of an Online Evaluation
+
+An online evaluation is composed of three components:
+
+- One or more [prompt template](/templates/overview) versions
+- One or more model configurations
+- A dataset of test cases. This is created by uploading a CSV file.
+
+## Creating an Evaluation Run
+
+On the left menu bar, click expand "Evaluation" and click "Evaluation Runs". Here you will see a list of previously-created runs. To create a new run, click "+ New evaluation run".
+
+<Frame>![Evaluation Runs](/images/evaluation-runs.png)</Frame>
+
+Then, you will be presented with a wizard to create your evaluation run. Here, we are going to be comparing the results between two prompt template versions.
+
+First, you will select the prompt template versions to compare.
+
+<Frame>![Prompt Version](/images/create-evaluation-prompt-version.png)</Frame>
+
+Next, you will configure the model to be used in the evaluation.
+
+<Frame>![Model Config](/images/create-evaluation-model-config.png)</Frame>
+
+Then, you will upload a CSV file containing your testing cases.
+
+<Frame>![Upload Dataset](/images/create-evaluation-upload-dataset.png)</Frame>
+
+Finally, you will select the evaluators you wish to run. Here, we will do a simple evaluation to ensure that the completion does not include "AI Language Model".
+
+<Frame>![Select Evaluators](/images/create-evaluation-select-evaluators.png)</Frame>
+
+The evaluation run is then run in the Baserun back-end, and the results will be available in a few seconds, depending on the number of test cases and whether the evaluations are model-graded.
+
+<Frame>![View Results](/images/create-evaluation-results.png)</Frame>

@@ -25,16 +25,14 @@ In order to trace in production you must first `init` baserun. This should be do
 ```python python
 import baserun
 
-if env == 'production':
+def main():
     baserun.init()
 ```
 
 ```typescript typescript
 import { baserun } from 'baserun';
 
-if (process.env.NODE_ENV === 'production') {
-    baserun.init();
-}
+await baserun.init();
 ```
 
 </CodeGroup>
