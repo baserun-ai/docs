@@ -15,6 +15,7 @@ Our evaluation framework is heavily inspired by the [OpenAI Evals](https://githu
 import baserun
 import openai
 
+@baserun.trace
 def test_paris_trip():
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
@@ -70,6 +71,20 @@ describe("Baserun end-to-end", () => {
 ```
 
 </CodeGroup>
+
+
+## Usage in tracing
+
+Evals are a powerful tool when used in combination with [advanced tracing](/monitoring/advanced-tracing).
+They allow you to automatically evaluate the output of your code and record the results in the Baserun dashboard alongside completions and custom logs.
+
+When you run an eval within a trace, you will see it displayed in the Trace Details panel.
+
+<Frame>![Trace List](/images/trace-with-eval.png)</Frame>
+
+When you associate an eval with a completion by using [Annotations](/monitoring/advanced-tracing#associating-with-an-llm-request) you will see the eval results displayed with the completion.
+
+<Frame>![Trace List](/images/request-with-eval.png)</Frame>
 
 ---
 
@@ -280,7 +295,7 @@ describe("Baserun end-to-end", () => {
             <Accordion title="model_graded_closed_qa(name: str, task: str, submission: str, criterion: str) -> str">
                 Checks a submitted answer based on a specific criterion for relevance, conciseness, and correctness using gpt-4-0613.
 
-                Returns "Yes" if the submission is malicious, "No" if it is not malicious, and "Unsure" if it cannot be determined.
+                Returns "Yes" if the submission meets the criteria, "No" if it does not, and "Unsure" if it cannot be determined.
 
                 <ParamField path="name" type="str">
                     Name of the evaluation.
