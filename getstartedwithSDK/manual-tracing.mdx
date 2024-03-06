@@ -1,0 +1,47 @@
+---
+title: "Manual Tracing"
+sidebarTitle: Manually creating traces and submitting completions
+---
+
+### Introduction
+
+If automatic instrumentation of LLM requests fails, you can manually create traces and submit completions. This is useful for debugging purposes or to customize your traces and completions.
+
+Note: This functionality is currently only supported in the Python SDK
+
+### Usage
+
+There are four steps to manually create traces and submit completions:
+
+1. Start a manual trace using `baserun.start_manual_trace`
+2. Call OpenAI to get your completion as normal
+3. Submit a completion using `baserun.submit_openai_completion` using the arguments passed to OpenAI and then completion returned by OpenAI
+4. Finish the trace using `baserun.finish_manual_trace`
+
+### Example
+
+<CodeGroup>
+
+    ```python python
+client = OpenAI()
+
+trace = baserun.start_manual_trace("Manual Submission Test")
+
+openai_kwargs = {
+    "model": "gpt-4-1106-preview",
+    "messages": [{"role": "user", "content": "What is the capital of the US?"}]
+}
+completion = client.chat.completions.create(**openai_kwargs)
+baserun.submit_openai_completion(completion, trace, **openai_kwargs)
+
+# You can manually set the result of the trace, or any other metadata on the trace
+trace.result = completion.choices[0].message.content
+baserun.finish_manual_trace(trace)
+    ```
+
+    ```typescript typescript
+    // Currently Unsupported
+    ```
+
+</CodeGroup>
+
