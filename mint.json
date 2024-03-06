@@ -71,7 +71,8 @@
         "getstartedwithSDK/authentication",
         "getstartedwithSDK/logging-LLM-requests",
         "getstartedwithSDK/tracing-workflows",
-        "getstartedwithSDK/testing-and-automatic-eval"
+        "getstartedwithSDK/testing-and-automatic-eval",
+        "getstartedwithSDK/manual-tracing"
       ]
     },
 
