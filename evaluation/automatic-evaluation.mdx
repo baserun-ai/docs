@@ -237,7 +237,7 @@ When you associate an eval with a completion by using [Annotations](/monitoring/
                     A custom function that takes the `submission` and returns a promise that resolves to a boolean.
                 </ParamField>
             </Accordion>
-            <Accordion title="model_graded_custom(name: str, prompt: str, choices: dict[str, float], **variables) -> str">
+            <Accordion title="model_graded_custom(name: str, prompt: str, choices: dict[str, float], model: str, metadata: Optional[Dict[str, Any]], **variables) -> str">
                 Evaluates the model's response based on a prompt and a set of choices.
 
                 Returns the choice given by the model.
@@ -263,6 +263,12 @@ When you associate an eval with a completion by using [Annotations](/monitoring/
                 </ParamField>
                 <ParamField path="choices" type="dict[str, float]">
                     A dictionary of choices and their scores.
+                </ParamField>
+                <ParamField path="model" type="str" default="gpt-4-0125-preview">
+                    OpenAI model that you want to use for the evaluation.
+                </ParamField>
+                <ParamField path="metadata" type="Optional[dict[str, Any]]" default="None">
+                    Any metadata that might be useful for you.
                 </ParamField>
                 <ParamField path="variables" type="dict[str, str]">
                     Variables that will be substituted in the formatted prompt.
@@ -474,6 +480,39 @@ When you associate an eval with a completion by using [Annotations](/monitoring/
                 </ParamField>
                 <ParamField path="fn" type="(submission: string) => Promise<boolean>">
                     A custom function that takes the `submission` and returns a promise that resolves to a boolean.
+                </ParamField>
+            </Accordion>
+            <Accordion title="modelGradedCustom(name: str, prompt: string, choices: Record<string, number>, model: string = 'gpt-4-0125-preview', metadata?: Record<string, any>): Promise<string>">
+                Evaluates the model's response based on a prompt and a set of choices.
+
+                Returns the choice given by the model.
+
+                Example:
+
+                <CodeGroup>
+                  ```typescript typescript
+                  const result = await baserun.evals.modelGradedCustom(
+                      "Truthiness",
+                      `How true is this statement? ${statement}.`,
+                      {"True": 1, "Somewhat true": 0.5, "Not true": 0},
+                  )
+                  ```
+                </CodeGroup>
+
+                <ParamField path="name" type="string">
+                    Name of the evaluation.
+                </ParamField>
+                <ParamField path="prompt" type="string">
+                    The prompt passed to the model.
+                </ParamField>
+                <ParamField path="choices" type="Record<string, number>">
+                    A dictionary of choices and their scores.
+                </ParamField>
+                <ParamField path="model" type="string" default="gpt-4-0125-preview">
+                    OpenAI model that you want to use for the evaluation.
+                </ParamField>
+                <ParamField path="metadata" type="Record<string, any>">
+                    Any metadata that might be useful for you.
                 </ParamField>
             </Accordion>
             <Accordion title="modelGradedFact(name: string, question: string, expert: string, submission: string): Promise<string>">
