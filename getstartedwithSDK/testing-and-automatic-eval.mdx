@@ -3,7 +3,9 @@ title: "Offline testing and evaluation"
 sidebarTitle: "Offline testing and evaluation"
 ---
 
-<Frame>![Test run report](/images/testing.png)</Frame>
+<Frame>
+  ![Offline evaluation run report](/images/offline_evaluation_run_report.png)
+</Frame>
 
 ### Introduction
 
@@ -11,9 +13,8 @@ We leverage existing testing frameworks like pytest and Jest so you don’t have
 
 ### Features
 
-- pytest integration
-- jest integration
-- vitest integration
+- pytest, jest, vitest integration
+- supports end-to-end testing
 
 ### Instruction
 
@@ -49,9 +50,10 @@ baserun.api_key = "br-..."
 ```
 
 </Step>
+
 <Step title="Define the test">
 
-Use our [pytest](/testing/python/pytest) plugin and immediately start testing with Baserun. By default all OpenAI and Anthropic requests will be automatically logged. <br/>
+Use our [pytest](/testing/python/pytest) plugin and immediately start testing with Baserun. By default all LLM calls will be automatically logged. <br/>
 In TS/JS you don't need to use a plugin, just add `await baserun.init()` to the `beforeAll` hook.
 In TS/JS we support both [Jest](/testing/js/jest) and [Vitest](/testing/js/vitest).
 
@@ -74,7 +76,8 @@ def test_paris_trip():
         ],
     )
 
-    assert "Eiffel Tower" in response['choices'][0]['message']['content']
+    output = response["choices"][0]["message"]["content"]
+    assert "Eiffel Tower" in output
 ```
 
 ```typescript typescript
@@ -101,9 +104,82 @@ describe("end-to-end tests", () => {
       ],
     });
 
-    expect(chatCompletion.choices[0].message!.content!).toContain(
-      "Eiffel Tower"
+    const output = chatCompletion.choices[0].message!.content!;
+
+    expect(output).toContain("Eiffel Tower");
+  });
+});
+```
+
+</CodeGroup>
+</Step>
+<Step title="Add evaluators">
+
+Baserun offers a number of pre-built evaluators, as well as the ability to perform custom evaluations with your own prompt or function.
+
+To add an evaluator, simply give the evaluator a name, use baserun.eval.evaluator_name to select which evaluator to use, and pass the expected input variables for the evaluator.
+
+Each evaluator has its own set of expected input variables, so be sure to check the [automatic evaluator documentation](/evaluation/automatic-evaluation) for the specific evaluator you are using.
+
+In the following example, we use the `not_includes` evaluator as an example.
+
+<CodeGroup>
+
+```python python
+# test_module.py
+
+import openai
+
+def test_paris_trip():
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": "What are three activities to do in Paris?"
+            }
+        ],
+    )
+    output = response["choices"][0]["message"]["content"]
+    not_has_ai_language_model = baserun.evals.not_includes("AI Language Model", output, ["AI language model"])
+
+    # Optional: The test will fail if the eval failed
+    assert not_has_ai_language_model
+```
+
+```typescript typescript
+import OpenAI from "openai";
+import { baserun } from "baserun";
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+describe("end-to-end tests", () => {
+  beforeAll(async () => {
+    await baserun.init();
+  });
+  it("should suggest the Eiffel Tower", async () => {
+    const chatCompletion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      temperature: 0.7,
+      messages: [
+        {
+          role: "user",
+          content: "What are three activities to do in Paris?",
+        },
+      ],
+    });
+
+    const output = chatCompletion.choices[0].message!.content!;
+    const notHasLanguageModel = baserun.evals.notIncludes(
+      "AI Language Model",
+      output,
+      ["AI language model"]
     );
+    // Optional: will fail the test if "AI language model" is present in the output
+    expect(notHasLanguageModel).toBeTruthy();
   });
 });
 ```
@@ -111,8 +187,7 @@ describe("end-to-end tests", () => {
 </CodeGroup>
 </Step>
 <Step title="Run test">
-
-<CodeGroup>
+  <CodeGroup>
 
 ```bash python
 pytest --baserun test_module.py
@@ -132,12 +207,100 @@ Test results available at: https://app.baserun.ai/runs/<id>
 =======================================================
 ```
 
-</CodeGroup>
+  </CodeGroup>
 </Step>
-
 </Steps>
 
-click on the link to open the test run report in Baserun.
+### Running multiple tests
+
+It’s often helpful to exercise the same test over multiple examples. To do this:<br/>
+In python, we suggest using the parametrize decorator and for larger numbers of examples you can read from a file or other data structure.<br/>
+
+In TS/JS, you can use a simple for loop to autogenerate your tests and for larger numbers of examples you can read from a file or other data structure.
+
+See the [Testing](/testing) section for more information.
+
+<CodeGroup>
+
+```bash python
+
+import openai
+
+@pytest.mark.parametrize("place,expected", [("Paris", "Eiffel Tower"), ("Rome", "Colosseum")])
+
+def test_paris_trip(place, expected):
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": "What are three activities to do in Paris?"
+            }
+        ],
+    )
+    output = response["choices"][0]["message"]["content"]
+    not_has_ai_language_model = baserun.evals.not_includes("AI Language Model", output, ["AI language model"])
+
+    # Optional: The test will fail if the eval failed
+    assert not_has_ai_language_model
+```
+
+```bash typescript
+npm run vitest
+// or
+npm run jest
+...
+import OpenAI from "openai";
+import { baserun } from "baserun";
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+const examples = [
+  { place: "Paris", expected: "Eiffel Tower" },
+  { place: "Rome", expected: "Colosseum" },
+];
+
+describe("end-to-end tests", () => {
+  beforeAll(async () => {
+    // the only thing needed to make baserun work
+    await baserun.init();
+  });
+  for (const { place, expected } of examples) {
+    it("should suggest the Eiffel Tower", async () => {
+      const chatCompletion = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        temperature: 0.7,
+        messages: [
+          {
+            role: "user",
+            content: "What are three activities to do in Paris?",
+          },
+        ],
+      });
+
+      const output = chatCompletion.choices[0].message!.content!;
+      const notHasLanguageModel = baserun.evals.notIncludes(
+        "AI Language Model",
+        output,
+        ["AI language model"]
+      );
+      // Optional: will fail the test if "AI language model" is present in the output
+      expect(notHasLanguageModel).toBeTruthy();
+    });
+  }
+});
+```
+
+</CodeGroup>
+
+Click on the link to open the offline evaluation run report in Baserun.
+
+<Frame>
+  ![Offline evaluation run report](/images/offline_evaluation_run_report.png)
+</Frame>
 
 ### Demo projects
 
@@ -145,3 +308,21 @@ For your reference, we have example apps using LangChain to implement an agent:
 
 - [Python](https://github.com/baserun-ai/testing-agent/)
 - [Typescript](https://github.com/baserun-ai/testing-agent-js/)
+
+<CardGroup cols={2}>
+
+<Card
+  title="Automatic evaluation"
+  icon="scale-balanced"
+  href="/evaluation/automatic-evaluation"
+>
+  Explore automatic evaluators
+</Card>
+<Card
+  title="Testing"
+  icon="play"
+  href="/testing/overview"
+>
+  Learn more about supported testing frameworks
+</Card>
+</CardGroup>
