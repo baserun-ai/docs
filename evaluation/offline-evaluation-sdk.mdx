@@ -1,10 +1,10 @@
 ---
-title: "Offline testing and evaluation"
-sidebarTitle: "Offline testing and evaluation"
+title: "Offline testing via SDK"
+sidebarTitle: "Offline testing via SDK"
 ---
 
 <Frame>
-  ![Offline evaluation run report](/images/offline_evaluation_run_report.png)
+  ![Offline evaluation run report](/images/offline_testing_report.gif)
 </Frame>
 
 ### Introduction
@@ -65,7 +65,7 @@ In TS/JS we support both [Jest](/testing/js/jest) and [Vitest](/testing/js/vites
 import openai
 
 def test_paris_trip():
-    response = openai.ChatCompletion.create(
+    response = openai.chat.completions.create(
         model="gpt-3.5-turbo",
         temperature=0.7,
         messages=[
@@ -75,9 +75,9 @@ def test_paris_trip():
             }
         ],
     )
+    output = response.choices[0].message.content
+    return output
 
-    output = response["choices"][0]["message"]["content"]
-    assert "Eiffel Tower" in output
 ```
 
 ```typescript typescript
@@ -104,9 +104,7 @@ describe("end-to-end tests", () => {
       ],
     });
 
-    const output = chatCompletion.choices[0].message!.content!;
-
-    expect(output).toContain("Eiffel Tower");
+    return chatCompletion.choices[0].message.content;
   });
 });
 ```
@@ -131,7 +129,7 @@ In the following example, we use the `not_includes` evaluator as an example.
 import openai
 
 def test_paris_trip():
-    response = openai.ChatCompletion.create(
+    response = openai.chat.completions.create(
         model="gpt-3.5-turbo",
         temperature=0.7,
         messages=[
@@ -141,11 +139,11 @@ def test_paris_trip():
             }
         ],
     )
-    output = response["choices"][0]["message"]["content"]
-    not_has_ai_language_model = baserun.evals.not_includes("AI Language Model", output, ["AI language model"])
+    output = response.choices[0].message.content
+    includes_effier_tower = baserun.evals.includes("includes_effier_tower", output, ["Effier Tower"])
 
-    # Optional: The test will fail if the eval failed
-    assert not_has_ai_language_model
+    # Optional:The test will fail if the eval failed
+    assert includes_effier_tower
 ```
 
 ```typescript typescript
@@ -173,13 +171,10 @@ describe("end-to-end tests", () => {
     });
 
     const output = chatCompletion.choices[0].message!.content!;
-    const notHasLanguageModel = baserun.evals.notIncludes(
-      "AI Language Model",
-      output,
-      ["AI language model"]
-    );
-    // Optional: will fail the test if "AI language model" is present in the output
-    expect(notHasLanguageModel).toBeTruthy();
+    const includes_effier_tower = baserun.evals.includes("includes_effier_tower", output, ["Effier Tower"]);
+
+    # Optional: The test will fail if the eval failed
+    expect(includes_effier_tower).toBe(true);
   });
 });
 ```
@@ -239,11 +234,12 @@ def test_paris_trip(place, expected):
             }
         ],
     )
-    output = response["choices"][0]["message"]["content"]
-    not_has_ai_language_model = baserun.evals.not_includes("AI Language Model", output, ["AI language model"])
 
-    # Optional: The test will fail if the eval failed
-    assert not_has_ai_language_model
+    output = response.choices[0].message.content
+    includes_effier_tower = baserun.evals.includes("includes_effier_tower", output, ["Effier Tower"])
+
+    # Optional:The test will fail if the eval failed
+    assert includes_effier_tower
 ```
 
 ```bash typescript
@@ -282,13 +278,11 @@ describe("end-to-end tests", () => {
       });
 
       const output = chatCompletion.choices[0].message!.content!;
-      const notHasLanguageModel = baserun.evals.notIncludes(
-        "AI Language Model",
-        output,
-        ["AI language model"]
-      );
-      // Optional: will fail the test if "AI language model" is present in the output
-      expect(notHasLanguageModel).toBeTruthy();
+      const includes_effier_tower = baserun.evals.includes("includes_effier_tower", output, ["Effier Tower"]);
+
+      # Optional: The test will fail if the eval failed
+      expect(includes_effier_tower).toBe(true);
+
     });
   }
 });
@@ -314,7 +308,7 @@ For your reference, we have example apps using LangChain to implement an agent:
 <Card
   title="Automatic evaluation"
   icon="scale-balanced"
-  href="/evaluation/automatic-evaluation"
+  href="/evaluation/automatic-evaluators"
 >
   Explore automatic evaluators
 </Card>

@@ -167,7 +167,7 @@ def get_activities():
             }
         ],
     )
-    return response.choices[0].message
+    return response.choices[0].message.content
 
 @baserun.trace
 def find_best_activity():
@@ -182,7 +182,7 @@ def find_best_activity():
             }
         ],
     )
-    return response.choices[0].message
+    return response.choices[0].message.content
 
 
 if __name__ == "__main__":
@@ -209,7 +209,7 @@ async function get_activities() {
 			},
 		],
 	});
-	return response.choices[0].message;
+	return response.choices[0].message.content;
 }
 
 async function find_best_activity() {
@@ -226,7 +226,7 @@ async function find_best_activity() {
 			},
 		],
 	});
-	return response.choices[0].message;
+	return response.choices[0].message.content;
 }
 
 async function main() {

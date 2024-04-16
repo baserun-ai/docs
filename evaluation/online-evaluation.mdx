@@ -3,42 +3,179 @@ title: Online evaluation
 sidebarTitle: Online evaluation
 ---
 
-<Frame>![Online Evaluation](/images/annotating-overview.png)</Frame>
+### Evalaute an LLM completion.
 
-Online evaluation are evaluations which are triggered in the Baserun user interface. No code is required to create or run these evaluations, they happen completely within Baserun.
+When running evaluation on an LLM completion, baserun will automatically create a trace to associate the evaluation with the completion.
+So its recommend to use the `baserun.trace` decorator when evaluating completions so each trace will have a proper name.
 
-## Components of an Online Evaluation
+In the following example, we use the `includes` evaluator as an example.
 
-An online evaluation is composed of three components:
+<CodeGroup>
 
-- One or more [prompt template](/templates/overview) versions
-- One or more model configurations
-- A dataset of test cases. This is created by uploading a CSV file.
+```python python
+import baserun
+import openai
 
-## Creating an Evaluation Run
+@baserun.trace
+def example():
+    response = openai.chat.completions.create(
+        model="gpt-3.5-turbo",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": "What are three activities to do in Paris?"
+            }
+        ],
+    )
+    output = response.choices[0].message.content
+    baserun.eval.includes("include_eiffel_tower", output, "Eiffel Tower")
+    return output
 
-On the left menu bar, click expand "Evaluation" and click "Evaluation Runs". Here you will see a list of previously-created runs. To create a new run, click "+ New evaluation run".
 
-<Frame>![Evaluation Runs](/images/evaluation-runs.png)</Frame>
+if __name__ == "__main__":
+    baserun.api_key = YOUR_BASERUN_API_KEY_HERE
+    openai.api_key = YOUR_OPEANI_API_KEY_HERE
 
-Then, you will be presented with a wizard to create your evaluation run. Here, we are going to be comparing the results between two prompt template versions.
+    baserun.init()
+    print(example())
 
-First, you will select the prompt template versions to compare.
+```
 
-<Frame>![Prompt Version](/images/create-evaluation-prompt-version.png)</Frame>
+```typescript typescript
+import { baserun } from "baserun";
+import OpenAI from "openai";
 
-Next, you will configure the model to be used in the evaluation.
+async function main() {
+  await baserun.init();
 
-<Frame>![Model Config](/images/create-evaluation-model-config.png)</Frame>
+  const openai = new OpenAI();
 
-Then, you will upload a CSV file containing your testing cases.
+  const chatCompletion = await openai.chat.completions.create({
+    messages: [
+      { role: "user", content: "What are three activities to do in Paris?" },
+    ],
+    model: "gpt-3.5-turbo",
+  });
 
-<Frame>![Upload Dataset](/images/create-evaluation-upload-dataset.png)</Frame>
+  const output = chatCompletion.choices[0].message!.content!;
+  baserun.eval.includes("include_eiffel_tower", output, ["Eiffel Tower"]);
 
-Finally, you will select the evaluators you wish to run. Here, we will do a simple evaluation to ensure that the completion does not include "AI Language Model".
+  // response
+  return chatCompletion.choices[0].message.content;
+}
 
-<Frame>![Select Evaluators](/images/create-evaluation-select-evaluators.png)</Frame>
+main();
+```
 
-The evaluation run is then run in the Baserun back-end, and the results will be available in a few seconds, depending on the number of test cases and whether the evaluations are model-graded.
+</CodeGroup>
+<Frame>![Online Evaluation](/images/request-with-eval.png)</Frame>
 
-<Frame>![View Results](/images/create-evaluation-results.png)</Frame>
+### Evalaute a trace.
+
+You can use evaluation in combination with [Advanced tracing](/monitoring/advanced-tracing) features such as annotation. They allow you to automatically evaluate the output of your code and record the results in the Baserun dashboard alongside completions and custom logs.
+
+When you run an eval within a trace, you will see it displayed in the Trace Details panel.
+
+<CodeGroup>
+
+```python python
+import baserun
+import openai
+
+def get_activities():
+    response = openai.chat.completions.create(
+        model="gpt-3.5-turbo",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": "What are three activities to do on the Moon?"
+            }
+        ],
+    )
+    return response.choices[0].message.content
+
+@baserun.trace
+def find_best_activity():
+    moon_activities = get_activities()
+    response = openai.chat.completions.create(
+        model="gpt-3.5-turbo",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": "Pick the best activity to do on the moon from the following, including a convincing reason to do so.\n + {moon_activities}"
+            }
+        ],
+    )
+    output = response.choices[0].message.content
+    baserun.eval.includes("include_eiffel_tower", output, "Eiffel Tower")
+    return output
+
+
+if __name__ == "__main__":
+    baserun.api_key = YOUR_BASERUN_API_KEY_HERE
+    openai.api_key = YOUR_OPEANI_API_KEY_HERE
+    baserun.init()
+    print(find_best_activity())
+```
+
+```typescript typescript
+import OpenAI from "openai";
+import { baserun } from "baserun";
+
+const openai = new OpenAI();
+
+async function get_activities() {
+  const response = await openai.chat.completions.create({
+    model: "gpt-3.5-turbo",
+    temperature: 0.7,
+    messages: [
+      {
+        role: "user",
+        content: "What are three activities to do on the Moon?",
+      },
+    ],
+  });
+  return response.choices[0].message.content;
+}
+
+async function find_best_activity() {
+  const moon_activities = await get_activities();
+
+  const response = await openai.chat.completions.create({
+    model: "gpt-3.5-turbo",
+    temperature: 0.7,
+    messages: [
+      {
+        role: "user",
+        content: `Pick the best activity to do on the moon from the following, including a convincing reason to do so.
+				${moon_activities.content}`,
+      },
+    ],
+  });
+
+  const output = chatCompletion.choices[0].message!.content!;
+  baserun.eval.includes("include_eiffel_tower", output, ["Eiffel Tower"]);
+
+  return response.choices[0].message.content;
+}
+
+async function main() {
+  await baserun.init({
+    apiKey: YOUR_BASERUN_API_KEY_HERE,
+  });
+  const workflow = baserun.trace(async () => {
+    const best_activity = await find_best_activity();
+    console.log(best_activity);
+    return best_activity;
+  }, "Tracing multi-Step");
+  await workflow();
+}
+
+main();
+```
+
+</CodeGroup>
+<Frame>![Online Evaluation](/images/trace-with-eval.png)</Frame>
