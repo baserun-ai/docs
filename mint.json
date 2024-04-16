@@ -91,7 +91,11 @@
     },
     {
       "group": "Prompt templates",
-      "pages": ["templates/overview", "templates/deploy", "templates/register"]
+      "pages": [
+        "prompt templates/overview",
+        "prompt templates/deploy",
+        "prompt templates/register"
+      ]
     },
     {
       "group": "Evaluation",
