@@ -1,10 +1,10 @@
 ---
-title: "Offline testing and evaluation"
-sidebarTitle: "Offline testing and evaluation"
+title: "Offline testing via SDK"
+sidebarTitle: "Offline testing via SDK"
 ---
 
 <Frame>
-  ![Offline evaluation run report](/images/offline_evaluation_run_report.png)
+  ![Offline evaluation run report](/images/offline_testing_report.gif)
 </Frame>
 
 ### Introduction
@@ -65,7 +65,7 @@ In TS/JS we support both [Jest](/testing/js/jest) and [Vitest](/testing/js/vites
 import openai
 
 def test_paris_trip():
-    response = openai.ChatCompletion.create(
+    response = openai.chat.completions.create(
         model="gpt-3.5-turbo",
         temperature=0.7,
         messages=[
@@ -75,8 +75,9 @@ def test_paris_trip():
             }
         ],
     )
-
-    output = response["choices"][0]["message"]["content"]
+    output = response.choices[0].message.content
+    baserun.eval.includes("include_eiffel_tower", output, "Eiffel Tower")
+    //optional
     assert "Eiffel Tower" in output
 ```
 
@@ -105,7 +106,7 @@ describe("end-to-end tests", () => {
     });
 
     const output = chatCompletion.choices[0].message!.content!;
-
+    baserun.eval.includes("include_eiffel_tower", output, ["Eiffel Tower"]);
     expect(output).toContain("Eiffel Tower");
   });
 });

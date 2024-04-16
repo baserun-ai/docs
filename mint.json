@@ -71,7 +71,7 @@
         "getstartedwithSDK/authentication",
         "getstartedwithSDK/logging-LLM-requests",
         "getstartedwithSDK/tracing-workflows",
-        "getstartedwithSDK/testing-and-automatic-eval",
+        "getstartedwithSDK/offline-evaluation-sdk",
         "getstartedwithSDK/manual-tracing"
       ]
     },
@@ -90,17 +90,18 @@
       ]
     },
     {
-      "group": "Templates",
+      "group": "Prompt templates",
       "pages": ["templates/overview", "templates/deploy", "templates/register"]
     },
     {
       "group": "Evaluation",
       "pages": [
         "evaluation/overview",
-        "evaluation/automatic-evaluation",
+        "evaluation/offline-evaluation-sdk",
+        "evaluation/offline-evaluation-ui",
         "evaluation/online-evaluation",
-        "evaluation/human-evaluation",
-        "evaluation/user-feedback"
+        "evaluation/automatic-evaluators",
+        "evaluation/human-evaluators"
       ]
     },
     {

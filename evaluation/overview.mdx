@@ -3,9 +3,11 @@ title: Overview
 sidebarTitle: Overview
 ---
 
-<Frame>![Trace Details](/images/annotating-overview.png)</Frame>
+<Frame>![Trace Details](/images/offline_testing_report.gif)</Frame>
 
 ### Why evaluate:
+
+Compared to traditional software, which is deterministic, LLM applications are unpredictable and require different evaluation methods and tools.
 
 - **Unpredictable outputs:** Before deploying an LLM feature, teams need to ensure that it meets certain performance benchmarks. Evaluating the LLM on various datasets and scenarios can give an idea of its accuracy and how well it's likely to perform in real-world situations.
 - **Safety and Ethical Considerations:** LLMs sometimes produce biased, inaccurate, or unsafe outputs. Rigorous evaluation helps identify potential risks and take preventive measures.
@@ -18,18 +20,22 @@ Testing and evaluation help identify issues, quantify app performance, provide i
 
 ### How to evaluate:
 
-There are two primary ways to evaluate:
+Automatic evaluation and Human evaluations are two primary ways to evaluate:
 
 - **Automatic evaluation:** Automatic evaluation involves creating structured testing datasets, which contain predefined input values and their expected outputs. Using tools like the Baserun SDK, you can programmatically compare the LLM’s outputs against these expected results. This can be done by executing specific functions or use AI to grade the outputs. For instance, in a customer service scenario, the testing dataset might include various customer queries and the ideal responses.
+  Automatic evaluation can be rule-based or model-graded.
 
 - **Human evaluation:** In situations where creativity and nuanced understanding are crucial, such as drafting a marketing email, manual review becomes essential. Here, a human evaluator would read and assess the content for its creativity, tone, and alignment with brand values. Manual review serves as a vital initial step to understand which aspects of the LLM’s outputs require closer programmatic examination.
 
-- **User feedback:** Collecting feedback from your end users. This can be done by asking them to rate the quality of the LLM’s outputs or by asking them to provide feedback on specific aspects of the outputs. For example, you can ask users to rate the relevance of the LLM’s responses on a scale of 1 to 5.
+Human evaluation can be done by having internal users grade the outputs (annotation) or by collecting feedback from end-users (feedback).
 
-- **Rules & checks:** You can also evaluate the LLM’s outputs by checking them against a set of rules. For example, you can check if the LLM’s outputs contain any profanity or if they are longer than a certain number of words.
-
-The choice between automatic evaluation and manual review depends on the specific Use cases. In some scenarios, a combination of both methods might be most effective, creating a comprehensive diagnostic workflow. For example, in content creation, automatic checks can assess basic grammar and relevance, while manual reviews can fine-tune the content for style and engagement.
+The choice between automatic evaluation and manual review depends on the specific use cases. In some scenarios, a combination of both methods might be most effective, creating a comprehensive diagnostic workflow. For example, in content creation, automatic checks can assess basic grammar and relevance, while manual reviews can fine-tune the content for style and engagement.
 
 ### When to evaluate:
 
-Baserun SDK enables users to evaluate LLM features’ outputs at all levels, including user sessions (e.g., a message thread), traces (an LLM chain), LLM requests, or even input variables of an LLM call.
+There are many terminologies currently been used for evaluting LLMs. To simplify, we will categories them by development stages:
+
+<Frame>![Evaluation stages](/images/evaluation_stage.png)</Frame>
+
+- **Offline evaluation:** Evaluation runs during the development stage and run on a set of predefined testing data, we refer them as offline evaluation.
+- **Online evaluation:** Evaluation runs after release and run on production data, which we refer them as online evaluation.
