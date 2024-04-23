@@ -1,0 +1,76 @@
+---
+title: LlamaIndex
+sidebarTitle: Integrating with LlamaIndex
+description: Integrating with LlamaIndex
+---
+
+## Scope of the integration
+
+If you use LlamaIndex with OpenAI or Anthropic as the LLM backend then Baserun will log API calls
+generating embeddings and text completions for indexing, querying, retrieval, and response synthesis.
+Additionally, Baserun will add logs to a trace with more information on a retrieval e.g.
+which nodes were selected and what score they were assigned.
+
+### Example
+
+<CodeGroup>
+```python python
+import baserun
+from llama_index.core import VectorStoreIndex, SimpleDirectoryReader
+
+
+@baserun.trace
+def llama():
+    # load documents
+    documents = SimpleDirectoryReader("recipes").load_data()
+    # create index
+    index = VectorStoreIndex.from_documents(documents)
+    # make a query
+    query_engine = index.as_query_engine()
+    response = query_engine.query("I have flour, sugar and butter. What am I missing if I want to bake oatmeal cookies?")
+    print(response)
+
+
+if __name__ == "__main__":
+    baserun.init()
+    llama()
+```
+
+```typescript typescript
+import { baserun } from "baserun";
+import fs from "node:fs/promises";
+import {VectorStoreIndex, Document} from "llamaindex";
+
+async function llama() {
+  // load documents
+  const dir = "recipes"
+  const documents: Document[] = []
+  for (const path of await fs.readdir(dir)) {
+    const recipe = await fs.readFile(dir + "/" + path, "utf-8");
+    const document = new Document({ text: recipe, id_: path });
+    documents.push(document)
+  }
+  // create index
+  const index = await VectorStoreIndex.fromDocuments(documents);
+  // make a query
+  const queryEngine = index.asQueryEngine();
+  const response = await queryEngine.query({
+    query: "I have flour, sugar and butter. What am I missing if I want to bake oatmeal cookies?",
+  });
+  console.log(response.toString());
+}
+
+async function main() {
+
+  await baserun.init();
+
+  await baserun.trace(async () => {
+    await llama();
+  })();
+}
+
+main();
+```
+</CodeGroup>
+Running this code should result in a trace looking like this:
+<Frame>![Trace Details](/images/integrations-llamaindex-trace.png)</Frame>
