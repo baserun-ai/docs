@@ -127,7 +127,7 @@
     },
     {
       "group": "Integrations",
-      "pages": ["integrations/langchain", "integrations/promptarmor"]
+      "pages": ["integrations/langchain", "integrations/promptarmor", "integrations/llamaindex"]
     }
   ],
   "footerSocials": {
