@@ -84,35 +84,38 @@ def ask_question(question="What is the capital of the US?") -> str:
         trace.metadata = {
           "answer_id": answer_id
         }
-
 ```
 
-{/* TODO: change this example to make it do the same thing as python code, where you put some result in the metadata, once it's possible to do so with ts sdk */}
 ```typescript typescript
-import { baserun } from "baserun"
+import { AssignMetadataFunc, baserun } from "baserun"
 
-const workflow = baserun.trace(
-  async () => {
-    
-    const openai = new OpenAI();
+async function askQuestion(question: string = "What is the capital of the US?"): Promise<string> {
+  const workflow = baserun.trace(
+    // You can add additional last parameter in the callback to get a function for setting trace metadata
+    async (fn: AssignMetadataFunc) => {
+      // Make a completion
+      const openai = new OpenAI();
+      const completion = await openai.chat.completions.create({
+        messages: [
+          { role: "user", content: question },
+        ],
+        model: "gpt-3.5-turbo",
+      });
 
-    const chatCompletion = await openai.chat.completions.create({
-      messages: [
-        { role: "user", content: "What are is the capital of the US?" },
-      ],
-      model: "gpt-3.5-turbo",
-    });
+      // Your code here, for example:
+      const answerId = await persistAnswer(question, completion);
 
-    return chatCompletion.choices[0].message.content
-  },
-  {
-    name: "Answer question",
-    metadata: {
-      requestId: "1234",
+      // Add whatever metadata you like
+      fn({ answer_id: answerId });
+
+      return completion.choices[0].message.content ?? "";
     },
-  }
-)
-
+    {
+      name: "Answer question",
+    }
+  )
+  return await workflow();
+}
 ```
 
 </CodeGroup>
