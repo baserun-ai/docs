@@ -1,0 +1,176 @@
+---
+title: "Upgrading to Python SDK Version 1.0"
+sidebarTitle: "Upgrading to Python SDK Version 1.0"
+description: "Start logging your LLM requests with 1 line of code."
+---
+
+### Introduction
+
+To use Baserun, all you need to do is replace your import statements from `openai` to `baserun`. This will automatically log all your LLM requests with no additional code changes.
+
+For an in-depth overview of how our logging data is structured, please see our Logging Overview page.
+
+<Frame>![Logging LLM requests](/images/trace_llm_request.png)</Frame>
+
+### Use cases
+
+Get insight into individual LLM requests, including prompt templates, input, output, duration, token usage cost, and duration.
+
+### Features
+
+- Is model and framework agnostic
+- Provides token usage, estimated cost, duration, input, and output
+- Supports evaluation
+- Supports annotation
+- Supports user feedback
+- Supports async functions
+
+### Instructions
+
+<Steps>
+<Step title="Install Baserun SDK">
+
+<CodeGroup>
+
+    ```bash python
+    pip install baserun==1.0.0b4
+    ```
+
+</CodeGroup>
+</Step>
+<Step title="Generate an API key">
+
+Create an account at [https://app.baserun.ai/sign-up](https://app.baserun.ai/sign-up). Then generate an API key for your project in the [settings](https://app.baserun.ai/settings) tab. Set it as an environment variable:
+
+```bash
+export BASERUN_API_KEY="your_api_key_here"
+```
+
+## Usage
+
+In order to have Baserun trace your LLM Requests, all you need to do is import `OpenAI` from `baserun` instead of `openai`.
+
+<CodeGroup>
+
+```python python
+from baserun import OpenAI
+
+
+def example():
+    client = OpenAI()
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": "What are three activities to do in Paris?"
+            }
+        ],
+    )
+    return response.choices[0].message.content
+
+
+if __name__ == "__main__":
+    print(example())
+```
+
+</CodeGroup>
+
+## Configuring the trace
+
+When you start a trace by initializing an OpenAI object, there are several _optional_ parameters you can set for that trace:
+
+- `result`: Some end result or output for the trace
+- `user`: A username or user ID to associate with this trace.
+- `session`: A session ID to associate with this trace.
+- `trace_id`: A previously-generated trace ID (e.g. to continue a previous trace)
+- `api_key`: An API key to use for this trace (if different from the environment variable)
+
+```python
+from baserun import OpenAI
+
+def example():
+    client = OpenAI(result="What are three activities to do in Paris?")
+    client.user = "user123"
+    client.session = "session123"
+    client.api_key = "br-***"
+
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": "What are three activities to do in Paris?"
+            }
+        ],
+    )
+    client.result = "Done"
+    return response.choices[0].message.content
+```
+
+## Evals
+
+You can perform evals directly on a completion object. The `includes` eval is used here as an example, and checks if a string is included in the completion's output.
+
+```python
+from baserun import OpenAI
+
+def example():
+    client = OpenAI()
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": "What are three activities to do in Paris?"
+            }
+        ],
+    )
+    output = response.choices[0].message.content
+    client.eval("include_eiffel_tower").includes("Eiffel Tower")
+    return output
+```
+
+## Annotations
+
+You can add annotations either to the OpenAI object or to the completion. There are several different types of annotations:
+
+- `log`: Any arbitrary logs you want to attach to a trace or completion
+- `feedback`: Any score-based feedback given from users (e.g. thumbs up/down, star rating)
+- `variable`: Any variables used, e.g. while rendering a template
+- `annotate`: Any arbitrary attributes you want to attach to a trace or completion
+
+```python
+from baserun import OpenAI
+
+def example():
+    client = OpenAI()
+    client.log("Gathering user input")
+    city = input()
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": f"What are three activities to do in {city}?"
+            }
+        ],
+    )
+    response.variable("city", city)
+    user_score = input()
+    client.feedback("User Score", score=user_score)
+```
+
+Congrats, you are done! Now, you can navigate to the monitoring tab. You should see your request logged in the monitoring tab.
+
+
+## Demo projects
+
+[Python example repo](https://github.com/baserun-ai/testing-agent/), <br />
+[Typescript example repo](https://github.com/baserun-ai/testing-agent-js)
+
+If you have any questions or feature requests, join our [Discord channel](https://discord.com/invite/xEPFsvSmkb) or send us an email at [hello@baserun.ai](mailto:hello@baserun.ai)
