@@ -1,0 +1,211 @@
+---
+title: "Tracing"
+sidebarTitle: "Tracing"
+---
+
+## Logging LLM requests
+
+Get insight into individual LLM request, including prompt templates, input, output, duration, token usage cost, etc. Collect datasets for continuous iterations (fine-tune, testing).
+
+<Frame>![Logging LLM requests](/images/2.0-python-llm_request.gif)</Frame>
+
+An <code>LLM request</code> represents a single query to an LLM provider. Baserun refers to the returned object as a <code>completion</code>.
+If the request is successful, Baserun logs the completion in the UI as shown above. A completion includes the input and output of the request, along with metadata such as the user, request ID, and model configurations.
+If the request fails, Baserun logs the error code and message in the LLM requests table.
+
+In addition to the default properties within a completion, users have the flexibility to define the following custom properties to enhance the analysis and data collection experience.
+
+### Properties
+
+<ParamField path="name" type="string">
+  Custom name of the LLM request
+</ParamField>
+
+<ParamField path="completion_id" type="UUID">
+  Created by Baserun but can be overridden by the user.
+</ParamField>
+
+<ParamField path="user" type="string">
+  Inherited from the parent trace if there is one, unless users provide a user
+  ID in the LLM request.
+</ParamField>
+
+<ParamField path="tag" type="Tag Object">
+  Tag object includes the tag key, and the tag value. The tag value contains one
+  or multiple pieces of <code>metadata</code>. For example, User feedback can
+  have a score and a comment. <br />
+  Learn more about [Tags](../python/tags.mdx)
+</ParamField>
+
+<ParamField path="log, user feedback, input variables" type="Tag Object">
+  All these objects are pre-defined tags. <br />
+  Learn more about [Tags](../python/tags.mdx)
+</ParamField>
+
+### Instruction
+
+<Steps>
+<Step title="Install Baserun SDK">
+```bash
+pip install baserun==1.0.0b7
+```
+</Step>
+<Step title="Set the Baserun API key">
+
+Create an account at [https://app.baserun.ai/sign-up](https://app.baserun.ai/sign-up). Then generate an API key for your project in the [settings](https://app.baserun.ai/settings) tab. Set it as an environment variable:
+
+```bash
+export BASERUN_API_KEY="your_api_key_here"
+```
+
+</Step>
+<Step title="Import and Init">
+In order to have Baserun trace your LLM Requests, all you need to do is import <code>OpenAI</code> from <code>baserun</code> instead of <code>openAI</code>. Creating an <code>OpenAI</code> client object automatically starts the trace, and all future LLM requests made with this client object will be captured.
+
+```python
+from baserun import OpenAI
+
+
+def example():
+    client = OpenAI()
+    completion = client.chat.completions.create(
+        name="Paris Activities", //optional name
+        model="gpt-4o",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": "What are three activities to do in Paris?"
+            }
+        ],
+    )
+
+
+if __name__ == "__main__":
+    print(example())
+
+```
+
+</Step>
+<Step title="Alternate init method">
+If you don't wish to use Baserun's OpenAI client, you can simply wrap your normal OpenAI client using init.
+
+```python
+from baserun import init
+
+
+def example():
+    client = init(OpenAI())
+    completion = client.chat.completions.create(
+        ...
+    )
+```
+
+</Step>
+</Steps>
+
+## Tracing end-to-end pipelines
+
+A <code>Trace</code> comprises a series of events executed within an LLM chain(workflow). Tracing enables Baserun to capture and display the LLM chain’s entire lifecycle, whether synchronous or asynchronous.
+
+<Frame>![Logging LLM requests](/images/2.0-python-llm_request.gif)</Frame>
+
+### Properties
+
+<ParamField path="name" type="string">
+  Custom name of the trace
+</ParamField>
+
+<ParamField path="trace_id" type="UUID">
+  Created by Baserun but can be overridden by the user. Users can use trace_id
+  to associate events or tags with an existing trace.
+</ParamField>
+
+<ParamField path="result" type="JSON Object">
+  Output of the trace. Default to be the last event's ouput within a trace.
+</ParamField>
+
+<ParamField path="user" type="string">
+  A username or user ID to associate with this trace.
+</ParamField>
+
+<ParamField path="session" type="string">
+  Users can use session to associate multiple traces into one session.
+</ParamField>
+
+<ParamField path="tag" type="Tag Object">
+  Tag object includes the tag key, and the tag value. The tag value contains one
+  or multiple pieces of <code>metadata</code>. For example, User feedback can
+  have a score and a comment. <br />
+  Learn more about [Tags](../python/tags.mdx)
+</ParamField>
+
+<ParamField path="custom log, user feedback, input variables" type="Tag Object">
+  All these objects are pre-defined tags. <br />
+  Learn more about [Tags](../python/tags.mdx)
+</ParamField>
+
+### Instruction
+
+In the following example, this pipeline has two LLM calls. Create a client at the beginning of the function you want to trace, and pass the client into the nested function as an argument.
+
+```python
+from baserun import OpenAI
+
+def get_activities(client: OpenAI):
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": "What are three activities to do on the Moon?"
+            }
+        ],
+    )
+    return response.choices[0].message
+
+def find_best_activity():
+    client = OpenAI()
+    client.name = "find_best_activity"
+    client.user = "user123"
+    client.session = "session123"
+
+    moon_activities = get_activities(client)
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": "Pick the best activity to do on the moon from the following, including a convincing reason to do so.\n + {moon_activities}"
+            }
+        ],
+    )
+    client.result = "success"
+    return response.choices[0].message
+```
+
+Alternatively, you can also associate two events with the same trace or resume a trace using the trace_id. A common use case is when you want to add user feedback to a trace after the pipeline finishes executing.
+
+```python
+
+Add an example
+
+```
+
+### Log
+
+Logs are a way to provide additional context to your LLM traces. They can be used to log any information that you think would be useful to have alongside your LLM calls, whether it’s third-party API calls or custom functions.
+
+You can attach a <code>log</code> to a trace or an LLM request within a trace. The <code>log</code> will displayed as a step in the trace detail view.
+
+<code>log</code> is a special type of tag, so it contains the same properties as
+a tag.
+<ParamField path="key" type="string" optional></ParamField>
+<ParamField
+  path="value"
+  type="string/numeric/enum/boolean"
+  required
+></ParamField>
+```python client.log("user_input", user_input) ```

@@ -1,0 +1,21 @@
+---
+title: "Tags"
+sidebarTitle: "Tags"
+---
+
+Tag object includes the tag key, and the tag value. The tag value contains one
+or multiple pieces of <code>metadata</code>. For example, <code>user feedback</code> can
+have a <code>score</code> and a <code>comment</code>.
+
+Tags will displayed in the metadata tab inside the trace detail or request detail panel.
+
+<ParamField path="key" type="string" required></ParamField>
+<ParamField
+  path="value"
+  type="string/numeric/enum/boolean"
+  required
+></ParamField>
+
+```python 
+client.log("key", value) 
+```

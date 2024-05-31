@@ -1,0 +1,32 @@
+---
+title: "Variables"
+sidebarTitle: "Variables"
+---
+
+You can store pairs of input variables and output datasets in Baserun Datasets, which can be utilized for fine-tuning and evaluation in the future.
+
+````python
+<ParamField path="key" type="string" required></ParamField>
+<ParamField
+  path="value"
+  type="string/numeric/enum/boolean"
+  required
+></ParamField>
+```python
+from baserun import OpenAI
+
+def example():
+    client = OpenAI()
+    city = input()
+    completion = client.chat.completions.create(
+        model="gpt-4o",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": f"What are three activities to do in {city}?"
+            }
+        ],
+    )
+    completion.variable("city", city)
+````

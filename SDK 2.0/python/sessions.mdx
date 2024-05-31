@@ -1,0 +1,20 @@
+---
+title: "Session"
+sidebarTitle: "Session"
+---
+
+## Introduction
+
+A <code>session</code> is a collection of events that are related to long-term user interactions. A session can be started, resumed, and ended at any time and may contain many traces; traces can have many LLM requests.
+
+For the use cases of a chatbot, a session may be the entire conversation. For an agent, a session may encompass a single task execution. The scope of the session is specific to your application and what is most useful for you.
+
+Baserun users <code>session</code> id to group traces and LLM requests together into a session.
+
+<ParamField path="session" type="string"></ParamField>
+
+To create a session, simple passing the session id to the trace client.
+
+```python
+client.session = "session123"
+```

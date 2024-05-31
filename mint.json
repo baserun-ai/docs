@@ -76,6 +76,21 @@
         "getstartedwithSDK/v1"
       ]
     },
+    {
+      "group": "Python SDK 2.0",
+      "pages": [
+        {
+          "group": "Monitoring",
+          "pages": [
+            "SDK 2.0/python/tracing",
+            "SDK 2.0/python/sessions",
+            "SDK 2.0/python/tags",
+            "SDK 2.0/python/variables",
+            "SDK 2.0/python/user-feedback"
+          ]
+        }
+      ]
+    },
 
     {
       "group": "Monitoring",
@@ -128,7 +143,11 @@
     },
     {
       "group": "Integrations",
-      "pages": ["integrations/langchain", "integrations/promptarmor", "integrations/llamaindex"]
+      "pages": [
+        "integrations/langchain",
+        "integrations/promptarmor",
+        "integrations/llamaindex"
+      ]
     }
   ],
   "footerSocials": {
