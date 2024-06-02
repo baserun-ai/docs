@@ -64,18 +64,6 @@
         "prompt-playground/compare-prompts"
       ]
     },
-
-    {
-      "group": "Get started with SDK",
-      "pages": [
-        "getstartedwithSDK/authentication",
-        "getstartedwithSDK/logging-LLM-requests",
-        "getstartedwithSDK/tracing-workflows",
-        "getstartedwithSDK/offline-evaluation-sdk",
-        "getstartedwithSDK/manual-tracing",
-        "getstartedwithSDK/v1"
-      ]
-    },
     {
       "group": "Python SDK 2.0",
       "pages": [
@@ -89,6 +77,17 @@
             "SDK 2.0/python/user-feedback"
           ]
         }
+      ]
+    },
+    {
+      "group": "Get started with SDK",
+      "pages": [
+        "getstartedwithSDK/authentication",
+        "getstartedwithSDK/logging-LLM-requests",
+        "getstartedwithSDK/tracing-workflows",
+        "getstartedwithSDK/offline-evaluation-sdk",
+        "getstartedwithSDK/manual-tracing",
+        "getstartedwithSDK/v1"
       ]
     },
 
