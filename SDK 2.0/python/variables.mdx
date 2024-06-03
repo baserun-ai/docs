@@ -5,13 +5,9 @@ sidebarTitle: "Variables"
 
 You can store pairs of input variables and output datasets in Baserun Datasets, which can be utilized for fine-tuning and evaluation in the future.
 
-````python
-<ParamField path="key" type="string" required></ParamField>
-<ParamField
-  path="value"
-  type="string/numeric/enum/boolean"
-  required
-></ParamField>
+<ParamField path="name" type="string" required></ParamField>
+<ParamField path="value" type="JSON-serializable" required></ParamField>
+
 ```python
 from baserun import OpenAI
 

@@ -37,9 +37,8 @@ In addition to the default properties within a completion, users have the flexib
   Learn more about [Tags](../python/tags.mdx)
 </ParamField>
 
-<ParamField path="log, user feedback, input variables" type="Tag Object">
+<ParamField path="log, user feedback, variables" type="Tag Object">
   All these objects are pre-defined tags. <br />
-  Learn more about [Tags](../python/tags.mdx)
 </ParamField>
 
 ### Instruction
@@ -69,7 +68,7 @@ from baserun import OpenAI
 def example():
     client = OpenAI()
     completion = client.chat.completions.create(
-        name="Paris Activities", //optional name
+        name="Paris Activities", #optional name
         model="gpt-4o",
         temperature=0.7,
         messages=[
@@ -119,7 +118,7 @@ A <code>Trace</code> comprises a series of events executed within an LLM chain(w
   to associate events or tags with an existing trace.
 </ParamField>
 
-<ParamField path="result" type="JSON Object">
+<ParamField path="result" type="JSON-serializable">
   Output of the trace. Default to be the last event's ouput within a trace.
 </ParamField>
 
@@ -138,9 +137,8 @@ A <code>Trace</code> comprises a series of events executed within an LLM chain(w
   Learn more about [Tags](../python/tags.mdx)
 </ParamField>
 
-<ParamField path="custom log, user feedback, input variables" type="Tag Object">
+<ParamField path="custom log, user feedback, variables" type="Tag Object">
   All these objects are pre-defined tags. <br />
-  Learn more about [Tags](../python/tags.mdx)
 </ParamField>
 
 ### Instruction
@@ -184,12 +182,46 @@ def find_best_activity():
     return response.choices[0].message
 ```
 
-Alternatively, you can also associate two events with the same trace or resume a trace using the trace_id. A common use case is when you want to add user feedback to a trace after the pipeline finishes executing.
+Alternatively, you can associate two events with the same trace or resume a <code>trace</code> using the <code>trace_id</code>. If you wish to associate an LLM request with a trace after the trace has completed, see the example below. Another common use case is when you want to add user feedback or tags to a trace after the pipeline has finished executing.
 
 ```python
+from baserun import OpenAI
 
-Add an example
+def main ():
+    main_trace_id = str(uuid4())
+    activities = get_activities(main_trace_id)
+    find_best_activity(main_trace_id, activities)
 
+
+def get_activities(trace_id):
+    client = OpenAI(trace_id)
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": "What are three activities to do on the Moon?"
+            }
+        ],
+    )
+    return response.choices[0].message
+
+def find_best_activity(trace_id = main_trace_id, activities):
+    client = OpenAI(trace_id = main_trace_id)
+    client.name = "find_best_activity"
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        temperature=0.7,
+        messages=[
+            {
+                "role": "user",
+                "content": "Pick the best activity to do on the moon from the following, including a convincing reason to do so.\n + {activities}"
+            }
+        ],
+    )
+    client.result = "success"
+    return response.choices[0].message
 ```
 
 ### Log
@@ -200,10 +232,6 @@ You can attach a <code>log</code> to a trace or an LLM request within a trace. T
 
 <code>log</code> is a special type of tag, so it contains the same properties as
 a tag.
-<ParamField path="key" type="string" optional></ParamField>
-<ParamField
-  path="value"
-  type="string/numeric/enum/boolean"
-  required
-></ParamField>
+<ParamField path="name" type="string" optional></ParamField>
+<ParamField path="value" type="JSON-serializable" required></ParamField>
 ```python client.log("user_input", user_input) ```
