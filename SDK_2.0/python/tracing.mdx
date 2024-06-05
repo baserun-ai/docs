@@ -34,7 +34,7 @@ In addition to the default properties within a completion, users have the flexib
   Tag object includes the tag key, and the tag value. The tag value contains one
   or multiple pieces of <code>metadata</code>. For example, User feedback can
   have a score and a comment. <br />
-  Learn more about [Tags](../python/tags.mdx)
+  Learn more about [Tags](/SDK_2.0/python/tags)
 </ParamField>
 
 <ParamField path="log, user feedback, variables" type="Tag Object">
@@ -134,7 +134,7 @@ A <code>Trace</code> comprises a series of events executed within an LLM chain(w
   Tag object includes the tag key, and the tag value. The tag value contains one
   or multiple pieces of <code>metadata</code>. For example, User feedback can
   have a score and a comment. <br />
-  Learn more about [Tags](../python/tags.mdx)
+  Learn more about [Tags](/SDK_2.0/python/tags)
 </ParamField>
 
 <ParamField path="custom log, user feedback, variables" type="Tag Object">
@@ -234,4 +234,6 @@ You can attach a <code>log</code> to a trace or an LLM request within a trace. T
 a tag.
 <ParamField path="name" type="string" optional></ParamField>
 <ParamField path="value" type="JSON-serializable" required></ParamField>
-```python client.log("user_input", user_input) ```
+```python
+client.log("user_input", user_input)
+```

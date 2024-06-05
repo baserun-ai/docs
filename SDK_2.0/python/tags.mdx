@@ -1,0 +1,43 @@
+---
+title: "Tags"
+sidebarTitle: "Tags"
+---
+
+Tag object includes the tag key, and the tag value. You can use tags to add extra information to a trace or request.
+
+Tags will displayed in the metadata tab inside the trace detail or request detail panel.
+
+<ParamField path="key" type="string" required></ParamField>
+<ParamField
+  path="value"
+  type="string/numeric/enum/boolean"
+  required
+></ParamField>
+
+```python
+client.tag("friendliness", 0.6)
+```
+
+
+### Adding tags to a completed trace or completion
+After a trace has been completed you may wish to add additional tags to a trace or completion. For example, you might have user feedback that is gathered well after the fact. To add these tags, you need to store the <code>trace_id</code>, and, if the tag is for a completion, the completion_id. You can then use the <code>tag</code>, <code>log</code>, or <code>feedback</code> functions to submit those tags.
+
+```python
+from baserun import OpenAI, log, feedback
+
+client = OpenAI(name="trace to be resumed")
+completion = client.chat.completions.create(
+    name="completion to be resumed",
+    model="gpt-4o",
+    messages=[{"role": "user", "content": "What are three activities to do in Paris?"}],
+)
+
+# Store these values
+trace_id = client.trace_id
+completion_id = completion.completion_id
+
+# A few moments later...
+log("Tagging resumed", trace_id=trace_id, completion_id=completion_id)
+feedback("User satisfaction", 0.9, trace_id=trace_id, completion_id=completion_id)
+
+```

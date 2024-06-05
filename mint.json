@@ -70,11 +70,11 @@
         {
           "group": "Monitoring",
           "pages": [
-            "SDK 2.0/python/tracing",
-            "SDK 2.0/python/sessions",
-            "SDK 2.0/python/tags",
-            "SDK 2.0/python/variables",
-            "SDK 2.0/python/user-feedback"
+            "SDK_2.0/python/tracing",
+            "SDK_2.0/python/sessions",
+            "SDK_2.0/python/tags",
+            "SDK_2.0/python/variables",
+            "SDK_2.0/python/user-feedback"
           ]
         }
       ]
