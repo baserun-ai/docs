@@ -1,9 +1,9 @@
 ---
-title: "Tags"
-sidebarTitle: "Tags"
+title: "Log"
+sidebarTitle: "Log"
 ---
 
-Logs are a way to provide additional context to your LLM traces. They can be used to log any information that you think would be useful to have alongside your LLM calls, whether it’s third-party API calls or custom functions.
+Logging function is a way to provide additional context to your LLM traces. They can be used to log any information that you think would be useful to have alongside your LLM calls, whether it’s third-party API calls or custom functions.
 You can attach a <code>log</code> to a trace or an LLM request within a trace. The <code>log</code> will displayed as a step in the trace detail view.
 
 <code>log</code> is a special type of tag, so it contains the same properties as
@@ -16,5 +16,5 @@ a tag.
 Within a LLM request or a trace, after create an client
 
 ```python 
-client.log("user_input", user_input) 
+client.log("Other API call", return_of_other_api_call) 
 ```
