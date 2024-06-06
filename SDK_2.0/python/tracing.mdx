@@ -5,15 +5,15 @@ sidebarTitle: "Tracing"
 
 ## Logging LLM requests
 
-Get insight into individual LLM request, including prompt templates, input, output, duration, token usage cost, etc. Collect datasets for continuous iterations (fine-tune, testing).
+Get insight into individual LLM request, including prompt templates, input, output, duration, token usage cost, etc. Collect datasets for continuous iterations (fine-tuning, testing).
 
 <Frame>![Logging LLM requests](/images/2.0-python-llm_request.gif)</Frame>
 
-An <code>LLM request</code> represents a single query to an LLM provider. Baserun refers to the returned object as a <code>completion</code>.
+An <code>LLM request</code> represents a single query to an LLM provider. Baserun refers to the returned object as a <code>Completion</code>.
 If the request is successful, Baserun logs the completion in the UI as shown above. A completion includes the input and output of the request, along with metadata such as the user, request ID, and model configurations.
 If the request fails, Baserun logs the error code and message in the LLM requests table.
 
-In addition to the default properties within a completion, users have the flexibility to define the following custom properties to enhance the analysis and data collection experience.
+In addition to the underlying library's default arguments when creating a completion, users have the flexibility to define the following custom arguments to enhance the analysis and data collection experience.
 
 ### Arguments
 
@@ -33,17 +33,21 @@ completion = client.chat.completions.create(
 )
 ```
 
-<ParamField path="name" type="string">
-  Custom name of the LLM request
-</ParamField>
+<Accordion title="client.chat.completions.create(name: Optional[string], user: Optional[string], session: Optional[string], metadata: optional[Dict]): Completion">
+    <ParamField path="name" type="string">
+      Custom name of the LLM request
+    </ParamField>
 
-<ParamField path="completion_id" type="UUID">
-  Created by Baserun but can be overridden by the user.
-</ParamField>
+    <ParamField path="completion_id" type="UUID">
+      Created by Baserun but can be overridden by the user.
+    </ParamField>
 
-<ParamField path="user" type="string">
-  Inherited from the parent trace if there is one, unless a `user` argument is passed when creating the completion.
-</ParamField>
+    <ParamField path="user" type="string">
+      Inherited from the parent trace if there is one, unless a `user` argument is passed when creating the completion.
+    </ParamField>
+</Accordion>
+
+These arguments also apply to other completion-generating functions such as `stream`.
 
 ### Tagging functions
 
@@ -51,46 +55,50 @@ These functions can be called on the completion object to add tags to the comple
 
 
 <Accordion title="completion.tag(key: string, value: string, metadata: Dict, tag_type: string): Tag">
-    <ResponseField type="Tag" name="tag" />
-    <br />
     <ParamField path="key" type="string" required />
     <ParamField path="value" type="string/numeric/boolean/object/array" required />
     <ParamField path="metadata" type="object" />
     <ParamField path="tag_type" type="string">
       The type of tag. Default tag types are `tag`, `log`, `variable`, and `feedback`.
     </ParamField>
+    <br />
+    **Return type**
+    <ResponseField type="Tag" name="tag" />
 </Accordion>
 
 There are also convenience functions for the built-in tag types:
 
 <Accordion title="completion.log(message: string, name: Optional[string] = None, metadata: Optional[Dict] = None): Tag">
-    <ResponseField type="Tag" name="tag" />
-    <br />
     <ParamField path="message" type="string" required />
     <ParamField path="name" type="string">An optional name that will show up in the trace detail view in the UI</ParamField>
     <ParamField path="metadata" type="object" />
+    <br />
+    **Return type**
+    <ResponseField type="Tag" name="tag" />
 </Accordion>
 
 <Accordion title="completion.variable(key: string, value: string, metadata: Optional[Dict] = None): Tag">
-    <ResponseField type="Tag" name="tag" />
-    <br />
     <ParamField path="key" type="string" required />
     <ParamField path="value" type="string" required />
     <ParamField path="metadata" type="object" />
+    <br />
+    **Return type**
+    <ResponseField type="Tag" name="tag" />
 </Accordion>
 
 <Accordion title="completion.feedback(name: string, score: float, metadata: Optional[Dict] = None): Tag">
-    <ResponseField type="Tag" name="tag" />
-    <br />
     <ParamField path="name" type="string">An optional name that will show up in the trace detail view in the UI</ParamField>
     <ParamField path="score" type="float" required >A score between 0 and 1</ParamField>
     <ParamField path="metadata" type="object" />
+    <br />
+    **Return type**
+    <ResponseField type="Tag" name="tag" />
 </Accordion>
 
 
 ### Adding tags to a completed trace or completion
 
-After a trace has been completed you may wish to add additional tags to a trace or completion. For example, you might have user feedback that is gathered well after the fact. To add these tags, you need to store the <code>trace_id</code>, and, if the tag is for a completion, the completion_id. You can then use the <code>tag</code>, <code>log</code>, or <code>feedback</code> functions to submit those tags. These functions are equivalent to the functions on the `Completion` object, but they take the `trace_id` and `completion_id` as arguments.
+After a trace has been completed you may wish to add additional tags to a trace or completion. For example, you might have user feedback that is gathered well after the fact. To add these tags, you need to store the <code>trace_id</code>, and, if the tag is for a completion, the `completion_id`. You can then use the <code>tag</code>, <code>log</code>, or <code>feedback</code> functions to submit those tags. These functions are equivalent to the functions on the `Completion` object, but they take the `trace_id` and `completion_id` as arguments.
 
 ```python
 from baserun import OpenAI, log, feedback
@@ -112,27 +120,30 @@ feedback("User satisfaction", 0.9, trace_id=trace_id, completion_id=completion_i
 ```
 
 <Accordion title="log(message: string, name: Optional[string] = None, metadata: Optional[Dict] = None): Tag">
-    <ResponseField type="Tag" name="tag" />
-    <br />
     <ParamField path="message" type="string" required />
     <ParamField path="name" type="string">An optional name that will show up in the trace detail view in the UI</ParamField>
     <ParamField path="metadata" type="object" />
+    <br />
+    **Return type**
+    <ResponseField type="Tag" name="tag" />
 </Accordion>
 
 <Accordion title="variable(key: string, value: string, metadata: Optional[Dict] = None): Tag">
-    <ResponseField type="Tag" name="tag" />
-    <br />
     <ParamField path="key" type="string" required />
     <ParamField path="value" type="string" required />
     <ParamField path="metadata" type="object" />
+    <br />
+    **Return type**
+    <ResponseField type="Tag" name="tag" />
 </Accordion>
 
 <Accordion title="feedback(name: string, score: float, metadata: Optional[Dict] = None): Tag">
-    <ResponseField type="Tag" name="tag" />
-    <br />
     <ParamField path="name" type="string">An optional name that will show up in the trace detail view in the UI</ParamField>
     <ParamField path="score" type="float" required >A score between 0 and 1</ParamField>
     <ParamField path="metadata" type="object" />
+    <br />
+    **Return type**
+    <ResponseField type="Tag" name="tag" />
 </Accordion>
 
 ### Instructions
@@ -197,7 +208,7 @@ completion = client.chat.completions.create(
 
 ## Tracing end-to-end pipelines
 
-A **Trace** comprises a series of events executed within an LLM chain(workflow). Tracing enables Baserun to capture and display the LLM chain's entire lifecycle, whether synchronous or asynchronous.
+A **Trace** comprises a series of events executed within an LLM chain (also called a workflow, among other names). Tracing enables Baserun to capture and display the LLM chain's entire lifecycle, whether synchronous or asynchronous.
 
 Using Baserun, traces are tied to the client object of the library you are using. For example, if you are using the OpenAI library, you would create an `OpenAI` client object imported from `baserun`. When that client object is used all completions are automatically traced.
 
@@ -206,7 +217,6 @@ Using Baserun, traces are tied to the client object of the library you are using
 These arguments can be passed when instantiating your client object, or can be set after instantiation.
 
 <Accordion title="OpenAI(name: string, **kwargs): OpenAI">
-    <ResponseField type="OpenAI" name="OpenAI client object" />
 
     <ParamField path="name" type="string">
       Custom name of the LLM request
@@ -233,6 +243,10 @@ These arguments can be passed when instantiating your client object, or can be s
     </ParamField>
 
     <ParamField path="metadata" type="object" />
+
+    <br />
+    **Return type**
+    <ResponseField type="OpenAI" name="OpenAI client object" />
 </Accordion>
 
 ### Instructions
@@ -288,7 +302,7 @@ def main():
 
 
 def get_activities(trace_id: str) -> str:
-    client = OpenAI(trace_id)
+    client = OpenAI(trace_id=trace_id)
     response = client.chat.completions.create(
         model="gpt-4o",
         temperature=0.7,
@@ -355,38 +369,42 @@ Much like the completion object, these functions can be called on the trace obje
 
 
 <Accordion title="client.tag(key: string, value: string, metadata: Dict, tag_type: string): Tag">
-    <ResponseField type="Tag" name="tag" />
-    <br />
     <ParamField path="key" type="string" required />
     <ParamField path="value" type="string/numeric/boolean/object/array" required />
     <ParamField path="metadata" type="object" />
     <ParamField path="tag_type" type="string">
       The type of tag. Default tag types are `tag`, `log`, `variable`, and `feedback`.
     </ParamField>
+    <br />
+    **Return type**
+    <ResponseField type="Tag" name="tag" />
 </Accordion>
 
 There are also convenience functions for the built-in tag types:
 
 <Accordion title="client.log(message: string, name: Optional[string] = None, metadata: Optional[Dict] = None): Tag">
-    <ResponseField type="Tag" name="tag" />
-    <br />
     <ParamField path="message" type="string" required />
     <ParamField path="name" type="string">An optional name that will show up in the trace detail view in the UI</ParamField>
     <ParamField path="metadata" type="object" />
+    <br />
+    **Return type**
+    <ResponseField type="Tag" name="tag" />
 </Accordion>
 
 <Accordion title="client.variable(key: string, value: string, metadata: Optional[Dict] = None): Tag">
-    <ResponseField type="Tag" name="tag" />
-    <br />
     <ParamField path="key" type="string" required />
     <ParamField path="value" type="string" required />
     <ParamField path="metadata" type="object" />
+    <br />
+    **Return type**
+    <ResponseField type="Tag" name="tag" />
 </Accordion>
 
 <Accordion title="client.feedback(name: string, score: float, metadata: Optional[Dict] = None): Tag">
-    <ResponseField type="Tag" name="tag" />
-    <br />
     <ParamField path="name" type="string">An optional name that will show up in the trace detail view in the UI</ParamField>
     <ParamField path="score" type="float" required >A score between 0 and 1</ParamField>
     <ParamField path="metadata" type="object" />
+    <br />
+    **Return type**
+    <ResponseField type="Tag" name="tag" />
 </Accordion>
