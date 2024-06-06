@@ -13,40 +13,40 @@ These functions can be called on the completion object to add tags to completion
 
 
 <Accordion title="completion_or_client.tag(key: str, value: str, metadata: Dict, tag_type: str): Tag">
-    <ResponseField type="Tag" name="tag" />
-    <br />
     <ParamField path="key" type="string" required />
     <ParamField path="value" type="string/numeric/boolean/object/array" required />
     <ParamField path="metadata" type="object" />
     <ParamField path="tag_type" type="string">
       The type of tag. Default tag types are `tag`, `log`, `variable`, and `feedback`.
     </ParamField>
+    **Returns**
+    <ResponseField type="Tag" name="tag" />
 </Accordion>
 
 There are also convenience functions for the built-in tag types:
 
 <Accordion title="completion_or_client.log(message: str, name: Optional[string] = None, metadata: Optional[Dict] = None): Tag">
-    <ResponseField type="Tag" name="tag" />
-    <br />
     <ParamField path="message" type="string" required />
     <ParamField path="name" type="string">An optional name that will show up in the trace detail view in the UI</ParamField>
     <ParamField path="metadata" type="object" />
+    **Returns**
+    <ResponseField type="Tag" name="tag" />
 </Accordion>
 
 <Accordion title="completion_or_client.variable(key: str, value: str, metadata: Optional[Dict] = None): Tag">
-    <ResponseField type="Tag" name="tag" />
-    <br />
     <ParamField path="key" type="string" required />
     <ParamField path="value" type="string" required />
     <ParamField path="metadata" type="object" />
+    **Returns**
+    <ResponseField type="Tag" name="tag" />
 </Accordion>
 
 <Accordion title="completion_or_client.feedback(name: str, score: float, metadata: Optional[Dict] = None): Tag">
-    <ResponseField type="Tag" name="tag" />
-    <br />
     <ParamField path="name" type="string">An optional name that will show up in the trace detail view in the UI</ParamField>
     <ParamField path="score" type="float" required >A score between 0 and 1</ParamField>
     <ParamField path="metadata" type="object" />
+    **Returns**
+    <ResponseField type="Tag" name="tag" />
 </Accordion>
 
 
@@ -74,25 +74,25 @@ feedback("User satisfaction", 0.9, trace_id=trace_id, completion_id=completion_i
 ```
 
 <Accordion title="log(message: str, name: Optional[str] = None, metadata: Optional[Dict] = None): Tag">
-    <ResponseField type="Tag" name="tag" />
-    <br />
     <ParamField path="message" type="string" required />
     <ParamField path="name" type="string">An optional name that will show up in the trace detail view in the UI</ParamField>
     <ParamField path="metadata" type="object" />
+    **Returns**
+    <ResponseField type="Tag" name="tag" />
 </Accordion>
 
 <Accordion title="variable(key: str, value: str, metadata: Optional[Dict] = None): Tag">
-    <ResponseField type="Tag" name="tag" />
-    <br />
     <ParamField path="key" type="string" required />
     <ParamField path="value" type="string" required />
     <ParamField path="metadata" type="object" />
+    **Returns**
+    <ResponseField type="Tag" name="tag" />
 </Accordion>
 
-<Accordion title="feedback(name: str, score: float, metadata: Optional[Dict] = None): Tag">
-    <ResponseField type="Tag" name="tag" />
-    <br />
+<Accordion title="`feedback(name: str, score: float, metadata: Optional[Dict] = None): Tag`">
     <ParamField path="name" type="string">An optional name that will show up in the trace detail view in the UI</ParamField>
     <ParamField path="score" type="float" required >A score between 0 and 1</ParamField>
     <ParamField path="metadata" type="object" />
+    **Returns**
+    <ResponseField type="Tag" name="tag" />
 </Accordion>
