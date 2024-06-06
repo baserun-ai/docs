@@ -230,6 +230,13 @@ If you use another provider or library, you can still use Baserun by manually cr
 
 
 ```python
+    from baserun.wrappers.generic import (
+        GenericChoice,
+        GenericClient,
+        GenericCompletion,
+        GenericCompletionMessage,
+        GenericInputMessage,
+    )
     question = "What is the capital of the US?"
     response = call_my_custom_model(question)
 
