@@ -15,7 +15,23 @@ If the request fails, Baserun logs the error code and message in the LLM request
 
 In addition to the default properties within a completion, users have the flexibility to define the following custom properties to enhance the analysis and data collection experience.
 
-### Properties
+### Arguments
+
+These properties can be passed, in addition to the normal arguments passed to your client, as keyword arguments when creating an LLM request (e.g. when using `completions.create`). They can also be set on the completions object returned from the client.
+
+```python
+completion = client.chat.completions.create(
+    name="Paris Activities", # optional name
+    model="gpt-4o",
+    temperature=0.7,
+    messages=[
+        {
+            "role": "user",
+            "content": "What are three activities to do in Paris?"
+        }
+    ],
+)
+```
 
 <ParamField path="name" type="string">
   Custom name of the LLM request
@@ -26,27 +42,105 @@ In addition to the default properties within a completion, users have the flexib
 </ParamField>
 
 <ParamField path="user" type="string">
-  Inherited from the parent trace if there is one, unless users provide a user
-  ID in the LLM request.
+  Inherited from the parent trace if there is one, unless a `user` argument is passed when creating the completion.
 </ParamField>
 
-<ParamField path="tag" type="Tag Object">
-  Tag object includes the tag key, and the tag value. The tag value contains one
-  or multiple pieces of <code>metadata</code>. For example, User feedback can
-  have a score and a comment. <br />
-  Learn more about [Tags](/SDK_2.0/python/tags)
-</ParamField>
+### Tagging functions
 
-<ParamField path="log, user feedback, variables" type="Tag Object">
-  All these objects are pre-defined tags. <br />
-</ParamField>
+These functions can be called on the completion object to add tags to the completion. Tags are key-value pairs that can be used to add extra information to a completion.
 
-### Instruction
+
+<Accordion title="completion.tag(key: string, value: string, metadata: Dict, tag_type: string): Tag">
+    <ResponseField type="Tag" name="tag" />
+    <br />
+    <ParamField path="key" type="string" required />
+    <ParamField path="value" type="string/numeric/boolean/object/array" required />
+    <ParamField path="metadata" type="object" />
+    <ParamField path="tag_type" type="string">
+      The type of tag. Default tag types are `tag`, `log`, `variable`, and `feedback`.
+    </ParamField>
+</Accordion>
+
+There are also convenience functions for the built-in tag types:
+
+<Accordion title="completion.log(message: string, name: Optional[string] = None, metadata: Optional[Dict] = None): Tag">
+    <ResponseField type="Tag" name="tag" />
+    <br />
+    <ParamField path="message" type="string" required />
+    <ParamField path="name" type="string">An optional name that will show up in the trace detail view in the UI</ParamField>
+    <ParamField path="metadata" type="object" />
+</Accordion>
+
+<Accordion title="completion.variable(key: string, value: string, metadata: Optional[Dict] = None): Tag">
+    <ResponseField type="Tag" name="tag" />
+    <br />
+    <ParamField path="key" type="string" required />
+    <ParamField path="value" type="string" required />
+    <ParamField path="metadata" type="object" />
+</Accordion>
+
+<Accordion title="completion.feedback(name: string, score: float, metadata: Optional[Dict] = None): Tag">
+    <ResponseField type="Tag" name="tag" />
+    <br />
+    <ParamField path="name" type="string">An optional name that will show up in the trace detail view in the UI</ParamField>
+    <ParamField path="score" type="float" required >A score between 0 and 1</ParamField>
+    <ParamField path="metadata" type="object" />
+</Accordion>
+
+
+### Adding tags to a completed trace or completion
+
+After a trace has been completed you may wish to add additional tags to a trace or completion. For example, you might have user feedback that is gathered well after the fact. To add these tags, you need to store the <code>trace_id</code>, and, if the tag is for a completion, the completion_id. You can then use the <code>tag</code>, <code>log</code>, or <code>feedback</code> functions to submit those tags. These functions are equivalent to the functions on the `Completion` object, but they take the `trace_id` and `completion_id` as arguments.
+
+```python
+from baserun import OpenAI, log, feedback
+
+client = OpenAI(name="trace to be resumed")
+completion = client.chat.completions.create(
+    name="completion to be resumed",
+    model="gpt-4o",
+    messages=[{"role": "user", "content": "What are three activities to do in Paris?"}],
+)
+
+# Store these values
+trace_id = client.trace_id
+completion_id = completion.completion_id
+
+# A few moments later...
+log("Tagging resumed", trace_id=trace_id, completion_id=completion_id)
+feedback("User satisfaction", 0.9, trace_id=trace_id, completion_id=completion_id)
+```
+
+<Accordion title="log(message: string, name: Optional[string] = None, metadata: Optional[Dict] = None): Tag">
+    <ResponseField type="Tag" name="tag" />
+    <br />
+    <ParamField path="message" type="string" required />
+    <ParamField path="name" type="string">An optional name that will show up in the trace detail view in the UI</ParamField>
+    <ParamField path="metadata" type="object" />
+</Accordion>
+
+<Accordion title="variable(key: string, value: string, metadata: Optional[Dict] = None): Tag">
+    <ResponseField type="Tag" name="tag" />
+    <br />
+    <ParamField path="key" type="string" required />
+    <ParamField path="value" type="string" required />
+    <ParamField path="metadata" type="object" />
+</Accordion>
+
+<Accordion title="feedback(name: string, score: float, metadata: Optional[Dict] = None): Tag">
+    <ResponseField type="Tag" name="tag" />
+    <br />
+    <ParamField path="name" type="string">An optional name that will show up in the trace detail view in the UI</ParamField>
+    <ParamField path="score" type="float" required >A score between 0 and 1</ParamField>
+    <ParamField path="metadata" type="object" />
+</Accordion>
+
+### Instructions
 
 <Steps>
 <Step title="Install Baserun SDK">
 ```bash
-pip install baserun==1.0.0b7
+pip install baserun
 ```
 </Step>
 <Step title="Set the Baserun API key">
@@ -68,7 +162,7 @@ from baserun import OpenAI
 def example():
     client = OpenAI()
     completion = client.chat.completions.create(
-        name="Paris Activities", #optional name
+        name="Paris Activities", # optional name
         model="gpt-4o",
         temperature=0.7,
         messages=[
@@ -92,12 +186,10 @@ If you don't wish to use Baserun's OpenAI client, you can simply wrap your norma
 ```python
 from baserun import init
 
-
-def example():
-    client = init(OpenAI())
-    completion = client.chat.completions.create(
-        ...
-    )
+client = init(OpenAI())
+completion = client.chat.completions.create(
+    ...
+)
 ```
 
 </Step>
@@ -105,45 +197,47 @@ def example():
 
 ## Tracing end-to-end pipelines
 
-A <code>Trace</code> comprises a series of events executed within an LLM chain(workflow). Tracing enables Baserun to capture and display the LLM chain’s entire lifecycle, whether synchronous or asynchronous.
+A **Trace** comprises a series of events executed within an LLM chain(workflow). Tracing enables Baserun to capture and display the LLM chain's entire lifecycle, whether synchronous or asynchronous.
 
-### Properties
+Using Baserun, traces are tied to the client object of the library you are using. For example, if you are using the OpenAI library, you would create an `OpenAI` client object imported from `baserun`. When that client object is used all completions are automatically traced.
 
-<ParamField path="name" type="string">
-  Custom name of the trace
-</ParamField>
+### Arguments
 
-<ParamField path="trace_id" type="UUID">
-  Created by Baserun but can be overridden by the user. Users can use trace_id
-  to associate events or tags with an existing trace.
-</ParamField>
+These arguments can be passed when instantiating your client object, or can be set after instantiation.
 
-<ParamField path="result" type="JSON-serializable">
-  Output of the trace. Default to be the last event's ouput within a trace.
-</ParamField>
+<Accordion title="OpenAI(name: string, **kwargs): OpenAI">
+    <ResponseField type="OpenAI" name="OpenAI client object" />
 
-<ParamField path="user" type="string">
-  A username or user ID to associate with this trace.
-</ParamField>
+    <ParamField path="name" type="string">
+      Custom name of the LLM request
+    </ParamField>
 
-<ParamField path="session" type="string">
-  Users can use session to associate multiple traces into one session.
-</ParamField>
+    <ParamField path="completion_id" type="UUID">
+      Created by Baserun but can be overridden by the user.
+    </ParamField>
 
-<ParamField path="tag" type="Tag Object">
-  Tag object includes the tag key, and the tag value. The tag value contains one
-  or multiple pieces of <code>metadata</code>. For example, User feedback can
-  have a score and a comment. <br />
-  Learn more about [Tags](/SDK_2.0/python/tags)
-</ParamField>
+    <ParamField path="trace_id" type="UUID">
+      Created by Baserun but can be overridden by the user.
+    </ParamField>
 
-<ParamField path="custom log, user feedback, variables" type="Tag Object">
-  All these objects are pre-defined tags. <br />
-</ParamField>
+    <ParamField path="user" type="string">
+      An identifier for the end user. Can be any string, e.g. a user ID or email.
+    </ParamField>
 
-### Instruction
+    <ParamField path="session" type="string">
+      An identifier for the current session. For example, you might user a session ID from your application framework or authenticiation library.
+    </ParamField>
 
-In the following example, this pipeline has two LLM calls. Create a client at the beginning of the function you want to trace, and pass the client into the nested function as an argument.
+    <ParamField path="result" type="string">
+      The output or outcome of the trace, will be shown in the "Output" field in the Baserun UI.
+    </ParamField>
+
+    <ParamField path="metadata" type="object" />
+</Accordion>
+
+### Instructions
+
+In the following example, this pipeline has two LLM calls. Create a client at the beginning of the function you want to trace, and pass the client anywhere you want to use the same trace.
 
 ```python
 from baserun import OpenAI
@@ -182,18 +276,18 @@ def find_best_activity():
     return response.choices[0].message
 ```
 
-Alternatively, you can associate two events with the same trace or resume a <code>trace</code> using the <code>trace_id</code>. If you wish to associate an LLM request with a trace after the trace has completed, see the example below. Another common use case is when you want to add user feedback or tags to a trace after the pipeline has finished executing.
+Alternatively, you can associate two events with the same trace or resume a trace using the <code>trace_id</code>. If you wish to associate an LLM request with a trace after the trace has completed, see the example below. Another common use case is when you want to add user feedback or tags to a trace after the pipeline has finished executing.
 
 ```python
 from baserun import OpenAI
 
-def main ():
+def main():
     main_trace_id = str(uuid4())
     activities = get_activities(main_trace_id)
     find_best_activity(main_trace_id, activities)
 
 
-def get_activities(trace_id):
+def get_activities(trace_id: str) -> str:
     client = OpenAI(trace_id)
     response = client.chat.completions.create(
         model="gpt-4o",
@@ -207,8 +301,8 @@ def get_activities(trace_id):
     )
     return response.choices[0].message
 
-def find_best_activity(trace_id = main_trace_id, activities):
-    client = OpenAI(trace_id = main_trace_id)
+def find_best_activity(trace_id: str, activities: str) -> str:
+    client = OpenAI(trace_id=trace_id)
     client.name = "find_best_activity"
     response = client.chat.completions.create(
         model="gpt-4o",
@@ -223,45 +317,76 @@ def find_best_activity(trace_id = main_trace_id, activities):
     client.result = "success"
     return response.choices[0].message
 ```
+
 ### Supported Models
-At the moment, the Baserun Python SDK 2.0 supports all models using OpenAI library and Anthropic models, regardless of the provider. We are continuously adding support for new models. If you have a specific model you would like to use, please reach out to us at [hello@baserun.ai](mailto:hello@baserun.ai) or [join our community](https://discord.gg/EtR7NFQ4).
 
-If you use another provider or library, you can still use Baserun by manually creating "generic" objects. Notably, generic completions must be submitted explicitly using submit_to_baserun. Here's what that looks like:
+At the moment, the Baserun Python SDK 2.0 supports all models using OpenAI library and Anthropic library, regardless of the underlying model's provider. We are continuously adding support for new models. If you have a specific model you would like to use, please reach out to us at [hello@baserun.ai](mailto:hello@baserun.ai) or [join our community](https://discord.gg/EtR7NFQ4).
+
+If you use another provider or library, you can still use Baserun by manually creating "generic" objects. Notably, generic completions must be submitted explicitly using `submit_to_baserun()`. Here's what that looks like:
 
 
 ```python
-    from baserun.wrappers.generic import (
-        GenericChoice,
-        GenericClient,
-        GenericCompletion,
-        GenericCompletionMessage,
-        GenericInputMessage,
-    )
-    question = "What is the capital of the US?"
-    response = call_my_custom_model(question)
+from baserun.wrappers.generic import (
+    GenericChoice,
+    GenericClient,
+    GenericCompletion,
+    GenericCompletionMessage,
+    GenericInputMessage,
+)
 
-    client = GenericClient(name="My Traced Client")
-    completion = GenericCompletion(
-        model="my custom model",
-        name="My Completion",
-        input_messages=[GenericInputMessage(content=question, role="user")],
-        choices=[GenericChoice(message=GenericCompletionMessage(content=response))],
-        client=client,
-        trace_id=client.trace_id,
-    )
-    completion.submit_to_baserun()
+question = "What is the capital of the US?"
+response = call_my_custom_model(question)
+
+client = GenericClient(name="My Traced Client")
+completion = GenericCompletion(
+    model="my custom model",
+    name="My Completion",
+    input_messages=[GenericInputMessage(content=question, role="user")],
+    choices=[GenericChoice(message=GenericCompletionMessage(content=response))],
+    client=client,
+    trace_id=client.trace_id,
+)
+completion.submit_to_baserun()
 ```
 
-### Log
+### Tagging functions
 
-Logs are a way to provide additional context to your LLM traces. They can be used to log any information that you think would be useful to have alongside your LLM calls, whether it’s third-party API calls or custom functions.
+Much like the completion object, these functions can be called on the trace object to add tags to the trace. Tags are key-value pairs that can be used to add extra information to a trace.
 
-You can attach a <code>log</code> to a trace or an LLM request within a trace. The <code>log</code> will displayed as a step in the trace detail view.
 
-<code>log</code> is a special type of tag, so it contains the same properties as
-a tag.
-<ParamField path="name" type="string" optional></ParamField>
-<ParamField path="value" type="JSON-serializable" required></ParamField>
-```python
-client.log("user_input", user_input)
-```
+<Accordion title="client.tag(key: string, value: string, metadata: Dict, tag_type: string): Tag">
+    <ResponseField type="Tag" name="tag" />
+    <br />
+    <ParamField path="key" type="string" required />
+    <ParamField path="value" type="string/numeric/boolean/object/array" required />
+    <ParamField path="metadata" type="object" />
+    <ParamField path="tag_type" type="string">
+      The type of tag. Default tag types are `tag`, `log`, `variable`, and `feedback`.
+    </ParamField>
+</Accordion>
+
+There are also convenience functions for the built-in tag types:
+
+<Accordion title="client.log(message: string, name: Optional[string] = None, metadata: Optional[Dict] = None): Tag">
+    <ResponseField type="Tag" name="tag" />
+    <br />
+    <ParamField path="message" type="string" required />
+    <ParamField path="name" type="string">An optional name that will show up in the trace detail view in the UI</ParamField>
+    <ParamField path="metadata" type="object" />
+</Accordion>
+
+<Accordion title="client.variable(key: string, value: string, metadata: Optional[Dict] = None): Tag">
+    <ResponseField type="Tag" name="tag" />
+    <br />
+    <ParamField path="key" type="string" required />
+    <ParamField path="value" type="string" required />
+    <ParamField path="metadata" type="object" />
+</Accordion>
+
+<Accordion title="client.feedback(name: string, score: float, metadata: Optional[Dict] = None): Tag">
+    <ResponseField type="Tag" name="tag" />
+    <br />
+    <ParamField path="name" type="string">An optional name that will show up in the trace detail view in the UI</ParamField>
+    <ParamField path="score" type="float" required >A score between 0 and 1</ParamField>
+    <ParamField path="metadata" type="object" />
+</Accordion>

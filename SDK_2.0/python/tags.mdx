@@ -1,4 +1,4 @@
----
+
 title: "Tags"
 sidebarTitle: "Tags"
 ---
@@ -7,20 +7,52 @@ Tag object includes the tag key, and the tag value. You can use tags to add extr
 
 Tags will displayed in the metadata tab inside the trace detail or request detail panel.
 
-<ParamField path="key" type="string" required></ParamField>
-<ParamField
-  path="value"
-  type="string/numeric/enum/boolean"
-  required
-></ParamField>
+### Tagging functions
 
-```python
-client.tag("friendliness", 0.6)
-```
+These functions can be called on the completion object to add tags to completions or traces. Tags are key-value pairs that can be used to add extra information to a completion or trace.
+
+
+<Accordion title="completion_or_client.tag(key: string, value: string, metadata: Dict, tag_type: string): Tag">
+    <ResponseField type="Tag" name="tag" />
+    <br />
+    <ParamField path="key" type="string" required />
+    <ParamField path="value" type="string/numeric/boolean/object/array" required />
+    <ParamField path="metadata" type="object" />
+    <ParamField path="tag_type" type="string">
+      The type of tag. Default tag types are `tag`, `log`, `variable`, and `feedback`.
+    </ParamField>
+</Accordion>
+
+There are also convenience functions for the built-in tag types:
+
+<Accordion title="completion_or_client.log(message: string, name: Optional[string] = None, metadata: Optional[Dict] = None): Tag">
+    <ResponseField type="Tag" name="tag" />
+    <br />
+    <ParamField path="message" type="string" required />
+    <ParamField path="name" type="string">An optional name that will show up in the trace detail view in the UI</ParamField>
+    <ParamField path="metadata" type="object" />
+</Accordion>
+
+<Accordion title="completion_or_client.variable(key: string, value: string, metadata: Optional[Dict] = None): Tag">
+    <ResponseField type="Tag" name="tag" />
+    <br />
+    <ParamField path="key" type="string" required />
+    <ParamField path="value" type="string" required />
+    <ParamField path="metadata" type="object" />
+</Accordion>
+
+<Accordion title="completion_or_client.feedback(name: string, score: float, metadata: Optional[Dict] = None): Tag">
+    <ResponseField type="Tag" name="tag" />
+    <br />
+    <ParamField path="name" type="string">An optional name that will show up in the trace detail view in the UI</ParamField>
+    <ParamField path="score" type="float" required >A score between 0 and 1</ParamField>
+    <ParamField path="metadata" type="object" />
+</Accordion>
 
 
 ### Adding tags to a completed trace or completion
-After a trace has been completed you may wish to add additional tags to a trace or completion. For example, you might have user feedback that is gathered well after the fact. To add these tags, you need to store the <code>trace_id</code>, and, if the tag is for a completion, the completion_id. You can then use the <code>tag</code>, <code>log</code>, or <code>feedback</code> functions to submit those tags.
+
+After a trace has been completed you may wish to add additional tags to a trace or completion. For example, you might have user feedback that is gathered well after the fact. To add these tags, you need to store the <code>trace_id</code>, and, if the tag is for a completion, the completion_id. You can then use the <code>tag</code>, <code>log</code>, or <code>feedback</code> functions to submit those tags. These functions are equivalent to the functions on the `Completion` object, but they take the `trace_id` and `completion_id` as arguments.
 
 ```python
 from baserun import OpenAI, log, feedback
@@ -39,5 +71,28 @@ completion_id = completion.completion_id
 # A few moments later...
 log("Tagging resumed", trace_id=trace_id, completion_id=completion_id)
 feedback("User satisfaction", 0.9, trace_id=trace_id, completion_id=completion_id)
-
 ```
+
+<Accordion title="log(message: string, name: Optional[string] = None, metadata: Optional[Dict] = None): Tag">
+    <ResponseField type="Tag" name="tag" />
+    <br />
+    <ParamField path="message" type="string" required />
+    <ParamField path="name" type="string">An optional name that will show up in the trace detail view in the UI</ParamField>
+    <ParamField path="metadata" type="object" />
+</Accordion>
+
+<Accordion title="variable(key: string, value: string, metadata: Optional[Dict] = None): Tag">
+    <ResponseField type="Tag" name="tag" />
+    <br />
+    <ParamField path="key" type="string" required />
+    <ParamField path="value" type="string" required />
+    <ParamField path="metadata" type="object" />
+</Accordion>
+
+<Accordion title="feedback(name: string, score: float, metadata: Optional[Dict] = None): Tag">
+    <ResponseField type="Tag" name="tag" />
+    <br />
+    <ParamField path="name" type="string">An optional name that will show up in the trace detail view in the UI</ParamField>
+    <ParamField path="score" type="float" required >A score between 0 and 1</ParamField>
+    <ParamField path="metadata" type="object" />
+</Accordion>
