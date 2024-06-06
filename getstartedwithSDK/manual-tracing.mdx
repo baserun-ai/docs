@@ -5,43 +5,32 @@ sidebarTitle: Manual Tracing
 
 ### Introduction
 
-If automatic instrumentation of LLM requests fails, you can manually create traces and submit completions. This is useful for debugging purposes or to customize your traces and completions.
+At the moment, the Baserun Python SDK 2.0 supports all models using OpenAI library and Anthropic library, regardless of the underlying model's provider. We are continuously adding support for new models. If you have a specific model you would like to use, please reach out to us at [hello@baserun.ai](mailto:hello@baserun.ai) or [join our community](https://discord.gg/EtR7NFQ4).
 
-Note: This functionality is currently only supported in the Python SDK
-
-### Usage
-
-There are four steps to manually create traces and submit completions:
-
-1. Start a manual trace using `baserun.start_manual_trace`
-2. Call OpenAI to get your completion as normal
-3. Submit a completion using `baserun.submit_openai_completion` using the arguments passed to OpenAI and then completion returned by OpenAI
-4. Finish the trace using `baserun.finish_manual_trace`
+If you use another provider or library, you can still use Baserun by manually creating "generic" objects. Notably, generic completions must be submitted explicitly using `submit_to_baserun()`. Here's what that looks like:
 
 ### Example
 
-<CodeGroup>
+```python
+from baserun.wrappers.generic import (
+    GenericChoice,
+    GenericClient,
+    GenericCompletion,
+    GenericCompletionMessage,
+    GenericInputMessage,
+)
 
-    ```python python
-client = OpenAI()
+question = "What is the capital of the US?"
+response = call_my_custom_model(question)
 
-trace = baserun.start_manual_trace("Manual Submission Test")
-
-openai_kwargs = {
-    "model": "gpt-4-1106-preview",
-    "messages": [{"role": "user", "content": "What is the capital of the US?"}]
-}
-completion = client.chat.completions.create(**openai_kwargs)
-baserun.submit_openai_completion(completion, trace, **openai_kwargs)
-
-# You can manually set the result of the trace, or any other metadata on the trace
-trace.result = completion.choices[0].message.content
-baserun.finish_manual_trace(trace)
-    ```
-
-    ```typescript typescript
-    // Currently Unsupported
-    ```
-
-</CodeGroup>
-
+client = GenericClient(name="My Traced Client")
+completion = GenericCompletion(
+    model="my custom model",
+    name="My Completion",
+    input_messages=[GenericInputMessage(content=question, role="user")],
+    choices=[GenericChoice(message=GenericCompletionMessage(content=response))],
+    client=client,
+    trace_id=client.trace_id,
+)
+completion.submit_to_baserun()
+```
