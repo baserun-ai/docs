@@ -1,0 +1,20 @@
+---
+title: "Tags"
+sidebarTitle: "Tags"
+---
+
+Logs are a way to provide additional context to your LLM traces. They can be used to log any information that you think would be useful to have alongside your LLM calls, whether it’s third-party API calls or custom functions.
+You can attach a <code>log</code> to a trace or an LLM request within a trace. The <code>log</code> will displayed as a step in the trace detail view.
+
+<code>log</code> is a special type of tag, so it contains the same properties as
+a tag.
+<ParamField path="name" type="string" optional></ParamField>
+<ParamField path="value" type="JSON-serializable" required></ParamField>
+
+### Instructions
+
+Within a LLM request or a trace, after create an client
+
+```python 
+client.log("user_input", user_input) 
+```

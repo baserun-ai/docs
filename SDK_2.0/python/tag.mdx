@@ -1,0 +1,55 @@
+---
+title: "Tags"
+sidebarTitle: "Tags"
+---
+
+Tag object includes the tag key, and the tag value. You can use tags to add extra information to a trace or request.
+
+```python
+client.tag(key: str, value: str, metadata: Dict, tag_type: str): Tag
+```
+
+### Arguments
+
+<ParamField path="key" type="string" required></ParamField>
+<ParamField
+  path="value"
+  type="string/numeric/boolean/object/array"
+  required
+></ParamField>
+<ParamField path="metadata" type="object"></ParamField>
+<ParamField path="tag_type" type="string">
+  The type of tag. Default tag types are `tag`, `log`, `variable`, and
+  `feedback`.
+</ParamField>
+
+### Instructions
+
+Within the LLM request or a trace, after create an client
+
+```python
+client.tag (key="project", value="customer support")
+```
+
+### Adding tags to a completed trace or completion
+
+After a trace or completion, you may want to add extra tags based on feedback collected later. To do this, store the <code>trace_id</code> and, for completions, the <code>completion_id</code>. Use the <code>tag</code>, <code>log</code>, or <code>feedback</code> functions to add tags, specifying trace_id and completion_id as needed.
+
+```python
+from baserun import OpenAI, log, feedback
+
+client = OpenAI(name="trace to be resumed")
+completion = client.chat.completions.create(
+    name="completion to be resumed",
+    model="gpt-4o",
+    messages=[{"role": "user", "content": "What are three activities to do in Paris?"}],
+)
+
+# Store these values
+trace_id = client.trace_id
+completion_id = completion.completion_id
+
+# A few moments later...
+log("Tagging resumed", trace_id=trace_id, completion_id=completion_id)
+feedback("User satisfaction", 0.9, trace_id=trace_id, completion_id=completion_id)
+```

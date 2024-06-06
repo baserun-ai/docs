@@ -5,14 +5,18 @@ sidebarTitle: "Variables"
 
 You can store pairs of input variables and output datasets in Baserun Datasets, which can be utilized for fine-tuning and evaluation in the future.
 
-<Accordion title="completion.variable(key: str, value: str, metadata: Optional[Dict] = None): Tag">
-    <ParamField path="key" type="string" required />
-    <ParamField path="value" type="string" required />
-    <ParamField path="metadata" type="object" />
-    **Returns**
-    <ResponseField type="Tag" name="tag" />
-</Accordion>
+```python
+completion.variable(key: str, value: str, metadata: Optional[Dict] = None): Tag
+```
 
+### Arguments
+
+{" "}
+<ParamField path="key" type="string" required />
+<ParamField path="value" type="string" required />
+<ParamField path="metadata" type="object" />
+
+### Instructions
 
 ```python
 from baserun import OpenAI
@@ -31,4 +35,4 @@ def example():
         ],
     )
     completion.variable("city", city)
-````
+```

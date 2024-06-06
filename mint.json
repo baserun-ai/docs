@@ -72,9 +72,12 @@
           "pages": [
             "SDK_2.0/python/tracing",
             "SDK_2.0/python/sessions",
-            "SDK_2.0/python/tags",
+            "SDK_2.0/python/log",
+            "SDK_2.0/python/user-feedback",
             "SDK_2.0/python/variables",
-            "SDK_2.0/python/user-feedback"
+            "SDK_2.0/python/tag"
+
+            
           ]
         }
       ]
