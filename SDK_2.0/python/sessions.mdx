@@ -3,13 +3,7 @@ title: "Sessions"
 sidebarTitle: "Sessions"
 ---
 
-## Introduction
-
-A <code>session</code> is a collection of events that are related to long-term user interactions. A session can be started, resumed, and ended at any time and may contain many traces; similarly, traces can have many LLM requests.
-
-For the use case of a chatbot, a session may be the entire conversation. For an agent, a session may encompass a single task execution. The scope of the session is specific to your application and what is most useful for you.
-
-Baserun uses a <code>session</code> identifier to group traces and LLM requests together into a session.
+A <code>session</code> groups events related to long-term user interactions and can include multiple traces, with each trace potentially having many LLM requests. In a chatbot, a session might represent the whole conversation, while for an agent, it might cover a single task execution. The session's scope depends on your application's needs. Baserun uses a session identifier to organize traces and LLM requests into sessions.
 
 ```python
 OpenAI(session: Optional[str], **kwargs): OpenAI
