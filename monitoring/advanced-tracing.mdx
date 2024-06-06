@@ -4,6 +4,11 @@ sidebarTitle: Advanced tracing features
 description: Tracing additional data such as trace name, custom log, session ID, etc.
 ---
 
+<Tip>
+  Update your Python SDK to version 2.0 for enhanced stability and easier
+  integration. [Learn more](../SDK_2.0/python/tracing)
+</Tip>
+
 This page goes over some advanced tracing features.
 
 ## Adding a trace name
@@ -24,7 +29,7 @@ const askQuestion = baserun.trace(
     // Your code here
   },
   "General knowledge question" // Trace name
-)
+);
 ```
 
 </CodeGroup>
@@ -33,7 +38,9 @@ const askQuestion = baserun.trace(
 </Frame>
 
 <Note>
-Currently, when using python sdk, you can name a trace only when using `baserun.start_trace` context manager and it's not possible to do so when using `@baserun.trace` decorator.
+  Currently, when using python sdk, you can name a trace only when using
+  `baserun.start_trace` context manager and it's not possible to do so when
+  using `@baserun.trace` decorator.
 </Note>
 
 ## Setting a trace's result
@@ -48,7 +55,8 @@ def ask_question(question="What is the capital of the US?") -> str:
         answer_id = answer_question(question)
 
         trace.result = my_result
-```
+
+````
 
 ```typescript typescript
 const workflow = baserun.trace(async () => {
@@ -56,7 +64,7 @@ const workflow = baserun.trace(async () => {
 
   return "my result"
 }, "trace name")
-```
+````
 
 </CodeGroup>
 <Frame>
@@ -85,7 +93,7 @@ def ask_question(question="What is the capital of the US?") -> str:
           "answer_id": answer_id
         }
 
-```
+````
 
 {/* TODO: change this example to make it do the same thing as python code, where you put some result in the metadata, once it's possible to do so with ts sdk */}
 ```typescript typescript
@@ -93,7 +101,7 @@ import { baserun } from "baserun"
 
 const workflow = baserun.trace(
   async () => {
-    
+
     const openai = new OpenAI();
 
     const chatCompletion = await openai.chat.completions.create({
@@ -113,7 +121,7 @@ const workflow = baserun.trace(
   }
 )
 
-```
+````
 
 </CodeGroup>
 
@@ -142,7 +150,8 @@ def ask_question(question="What is the capital of the US?") -> str:
 
     # Make sure to submit the annotation
     annotation.submit()
-```
+
+````
 
 ```typescript typescript
 const workflow = baserun.trace(async (question="What is the capital of the US?") => {
@@ -170,16 +179,16 @@ const workflow = baserun.trace(async (question="What is the capital of the US?")
 });
 
 await workflow();
-```
+````
 
 </CodeGroup>
 
 Here is how the user feedback will look like in Baserun dashboard:
-<Frame>
-![User feedback](/images/eval_user_feedback.png)
-</Frame>
+
+<Frame>![User feedback](/images/eval_user_feedback.png)</Frame>
 
 ## Example
+
 <CodeGroup>
 ```python python
 import baserun
@@ -188,11 +197,10 @@ import openai
 PROMPT = """As a customer service representative for an online pet product retailer, your main goal is to
 provide a positive and informative chat experience for customers..."""
 
-
 def run_chatbot():
-    """A basic chatbot"""
-    client = openai.OpenAI()
-    conversation = [{"role": "system", "content": PROMPT}]
+"""A basic chatbot"""
+client = openai.OpenAI()
+conversation = [{"role": "system", "content": PROMPT}]
 
     print(f"Start your conversation. Type `exit` to end the conversation.")
     user_input = input(">")
@@ -216,13 +224,13 @@ def run_chatbot():
         # Set the trace result for display in the Baserun UI (here it is set to the last content of the conversation)
         trace.result = conversation[-1]["content"]
 
+if **name** == "**main**":
+baserun.api_key = YOUR_BASERUN_API_KEY_HERE
+openai.api_key = YOUR_OPENAI_API_KEY_HERE
+baserun.init()
+run_chatbot()
 
-if __name__ == "__main__":
-    baserun.api_key = YOUR_BASERUN_API_KEY_HERE
-    openai.api_key = YOUR_OPENAI_API_KEY_HERE
-    baserun.init()
-    run_chatbot()
-```
+````
 
 ```typescript typescript
 import OpenAI from "openai";
@@ -263,7 +271,6 @@ async function main() {
 }
 
 main();
-```
-
+````
 
 </CodeGroup>

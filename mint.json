@@ -86,8 +86,7 @@
         "getstartedwithSDK/logging-LLM-requests",
         "getstartedwithSDK/tracing-workflows",
         "getstartedwithSDK/offline-evaluation-sdk",
-        "getstartedwithSDK/manual-tracing",
-        "getstartedwithSDK/v1"
+        "getstartedwithSDK/manual-tracing"
       ]
     },
 

@@ -223,6 +223,27 @@ def find_best_activity(trace_id = main_trace_id, activities):
     client.result = "success"
     return response.choices[0].message
 ```
+### Supported Models
+At the moment, the Baserun Python SDK 2.0 supports all models using OpenAI library and Anthropic models, regardless of the provider. We are continuously adding support for new models. If you have a specific model you would like to use, please reach out to us at [hello@baserun.ai](mailto:hello@baserun.ai) or [join our community](https://discord.gg/EtR7NFQ4).
+
+If you use another provider or library, you can still use Baserun by manually creating "generic" objects. Notably, generic completions must be submitted explicitly using submit_to_baserun. Here's what that looks like:
+
+
+```python
+    question = "What is the capital of the US?"
+    response = call_my_custom_model(question)
+
+    client = GenericClient(name="My Traced Client")
+    completion = GenericCompletion(
+        model="my custom model",
+        name="My Completion",
+        input_messages=[GenericInputMessage(content=question, role="user")],
+        choices=[GenericChoice(message=GenericCompletionMessage(content=response))],
+        client=client,
+        trace_id=client.trace_id,
+    )
+    completion.submit_to_baserun()
+```
 
 ### Log
 
