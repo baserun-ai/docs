@@ -11,9 +11,11 @@ For the use case of a chatbot, a session may be the entire conversation. For an 
 
 Baserun uses a <code>session</code> identifier to group traces and LLM requests together into a session.
 
-<ParamField path="session" type="string">
-  An identifier for the current session. For example, you might user a session ID from your application framework or authenticiation library.
-</ParamField>
+<Accordion title="OpenAI(session: Optional[str], **kwargs): OpenAI" defaultOpen="true">
+  <ParamField path="session" type="string">
+    An identifier for the current session. For example, you might user a session ID from your application framework or authenticiation library.
+  </ParamField>
+</Accordion>
 
 To create a session, simply pass the session when creating the client, or set the property post-instantiation.
 
