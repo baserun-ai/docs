@@ -12,7 +12,7 @@ Tags will displayed in the metadata tab inside the trace detail or request detai
 These functions can be called on the completion object to add tags to completions or traces. Tags are key-value pairs that can be used to add extra information to a completion or trace.
 
 
-<Accordion title="completion_or_client.tag(key: string, value: string, metadata: Dict, tag_type: string): Tag">
+<Accordion title="completion_or_client.tag(key: str, value: str, metadata: Dict, tag_type: str): Tag">
     <ResponseField type="Tag" name="tag" />
     <br />
     <ParamField path="key" type="string" required />
@@ -25,7 +25,7 @@ These functions can be called on the completion object to add tags to completion
 
 There are also convenience functions for the built-in tag types:
 
-<Accordion title="completion_or_client.log(message: string, name: Optional[string] = None, metadata: Optional[Dict] = None): Tag">
+<Accordion title="completion_or_client.log(message: str, name: Optional[string] = None, metadata: Optional[Dict] = None): Tag">
     <ResponseField type="Tag" name="tag" />
     <br />
     <ParamField path="message" type="string" required />
@@ -33,7 +33,7 @@ There are also convenience functions for the built-in tag types:
     <ParamField path="metadata" type="object" />
 </Accordion>
 
-<Accordion title="completion_or_client.variable(key: string, value: string, metadata: Optional[Dict] = None): Tag">
+<Accordion title="completion_or_client.variable(key: str, value: str, metadata: Optional[Dict] = None): Tag">
     <ResponseField type="Tag" name="tag" />
     <br />
     <ParamField path="key" type="string" required />
@@ -41,7 +41,7 @@ There are also convenience functions for the built-in tag types:
     <ParamField path="metadata" type="object" />
 </Accordion>
 
-<Accordion title="completion_or_client.feedback(name: string, score: float, metadata: Optional[Dict] = None): Tag">
+<Accordion title="completion_or_client.feedback(name: str, score: float, metadata: Optional[Dict] = None): Tag">
     <ResponseField type="Tag" name="tag" />
     <br />
     <ParamField path="name" type="string">An optional name that will show up in the trace detail view in the UI</ParamField>
@@ -73,7 +73,7 @@ log("Tagging resumed", trace_id=trace_id, completion_id=completion_id)
 feedback("User satisfaction", 0.9, trace_id=trace_id, completion_id=completion_id)
 ```
 
-<Accordion title="log(message: string, name: Optional[string] = None, metadata: Optional[Dict] = None): Tag">
+<Accordion title="log(message: str, name: Optional[str] = None, metadata: Optional[Dict] = None): Tag">
     <ResponseField type="Tag" name="tag" />
     <br />
     <ParamField path="message" type="string" required />
@@ -81,7 +81,7 @@ feedback("User satisfaction", 0.9, trace_id=trace_id, completion_id=completion_i
     <ParamField path="metadata" type="object" />
 </Accordion>
 
-<Accordion title="variable(key: string, value: string, metadata: Optional[Dict] = None): Tag">
+<Accordion title="variable(key: str, value: str, metadata: Optional[Dict] = None): Tag">
     <ResponseField type="Tag" name="tag" />
     <br />
     <ParamField path="key" type="string" required />
@@ -89,7 +89,7 @@ feedback("User satisfaction", 0.9, trace_id=trace_id, completion_id=completion_i
     <ParamField path="metadata" type="object" />
 </Accordion>
 
-<Accordion title="feedback(name: string, score: float, metadata: Optional[Dict] = None): Tag">
+<Accordion title="feedback(name: str, score: float, metadata: Optional[Dict] = None): Tag">
     <ResponseField type="Tag" name="tag" />
     <br />
     <ParamField path="name" type="string">An optional name that will show up in the trace detail view in the UI</ParamField>

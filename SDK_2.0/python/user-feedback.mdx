@@ -5,16 +5,16 @@ sidebarTitle: "User feedback"
 
 User feedback is an excellent source for assessing the quality of an LLM application. In Baserun, feedback is collected either as a 0-1 score or custom defined metadata. The feedback is then displayed in the input/output tab inside the trace detail or request detail panel.
 
-<ParamField path="score" type="numeric">
-  The score is a number between 0 and 1. It is used to rate the quality of the
-  LLM response.
-</ParamField>
-<ParamField path="metadata" type="JSON-serializable">
-  Extra information about the feedback. For example, a user comment.
-</ParamField>
-```python
-    client.feedback(1, metadata = {("comment", user_comment)})
-```
+<Accordion title="client.feedback(name: str, score: float, metadata: Optional[Dict] = None): Tag">
+    <ParamField path="name" type="string">An optional name that will show up in the trace detail view in the UI</ParamField>
+    <ParamField path="score" type="float" required >A score between 0 and 1</ParamField>
+    <ParamField path="metadata" type="object">
+      Extra information about the feedback. For example, a user comment.
+    </ParamField>
+    **Returns**
+    <ResponseField type="Tag" name="tag" />
+</Accordion>
+
 
 ### Adding feedback to a completed trace or completion
 
