@@ -21,8 +21,12 @@ Beyond the default settings, users can customize additional arguments to improve
 Specify the following properties as keyword arguments when creating an LLM request (e.g., using completions.create). These can also be adjusted on the completions object returned by the client.
 
 ```python
-client.chat.completions.create(name: Optional[str], user: Optional[str],
-session: Optional[str], metadata: Optional[Dict]): Completion
+client.chat.completions.create(
+    name: Optional[str],
+    user: Optional[str],
+    session: Optional[str],
+    metadata: Optional[Dict]
+) -> Completion:
 ```
 
 <Accordion title="Arguments: name, completion_id, user">
@@ -113,8 +117,7 @@ Using Baserun, traces are tied to the client object of the library you are using
 These arguments can be passed when instantiating your <code>client</code> object, or can be set after instantiation.
 
 ```python
-OpenAI(name: str, **kwargs): OpenAI
-#return an OpenAI client object
+OpenAI(name: str, **kwargs) -> OpenAI:
 ```
 
 <Accordion title="Arguments: name, completion_id, trace_id, user, session, result, metadata">

@@ -3,21 +3,21 @@ title: "Tags"
 sidebarTitle: "Tags"
 ---
 
-Tag object includes the tag key, and the tag value. You can use tags to add extra information to a trace or request.
+A Tag object includes the tag's key, and its value. You can use tags to add extra information to a trace or request.
 
 ```python
-client.tag(key: str, value: str, metadata: Dict, tag_type: str): Tag
+client.tag(key: str, value: str, metadata: Dict, tag_type: str) -> Tag:
 ```
 
 ### Arguments
 
-<ParamField path="key" type="string" required></ParamField>
+<ParamField path="key" type="string" required />
 <ParamField
   path="value"
   type="string/numeric/boolean/object/array"
   required
-></ParamField>
-<ParamField path="metadata" type="object"></ParamField>
+ />
+<ParamField path="metadata" type="object" />
 <ParamField path="tag_type" type="string">
   The type of tag. Default tag types are `tag`, `log`, `variable`, and
   `feedback`.
@@ -25,7 +25,7 @@ client.tag(key: str, value: str, metadata: Dict, tag_type: str): Tag
 
 ### Instructions
 
-Within the LLM request or a trace, after create an client
+With a traced OpenAI client, after it is created:
 
 ```python
 client.tag (key="project", value="customer support")
@@ -33,7 +33,7 @@ client.tag (key="project", value="customer support")
 
 ### Adding tags to a completed trace or completion
 
-After a trace or completion, you may want to add extra tags based on feedback collected later. To do this, store the <code>trace_id</code> and, for completions, the <code>completion_id</code>. Use the <code>tag</code>, <code>log</code>, or <code>feedback</code> functions to add tags, specifying trace_id and completion_id as needed.
+After a trace or completion has completed, you may want to add extra tags based on feedback collected later. To do this, store the <code>trace_id</code> and, for completions, the <code>completion_id</code>. Use the <code>tag</code>, <code>log</code>, or <code>feedback</code> functions to add tags, specifying `trace_id` and `completion_id` as needed.
 
 ```python
 from baserun import OpenAI, log, feedback

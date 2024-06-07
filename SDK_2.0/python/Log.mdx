@@ -8,13 +8,13 @@ You can attach a <code>log</code> to a trace or an LLM request within a trace. T
 
 <code>log</code> is a special type of tag, so it contains the same properties as
 a tag.
-<ParamField path="name" type="string" optional></ParamField>
-<ParamField path="value" type="JSON-serializable" required></ParamField>
+<ParamField path="name" type="string" optional />
+<ParamField path="value" type="JSON-serializable" required />
 
 ### Instructions
 
 Within a LLM request or a trace, after create an client
 
-```python 
-client.log("Other API call", return_of_other_api_call) 
+```python
+client.log("Other API call", return_of_other_api_call)
 ```
